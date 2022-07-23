@@ -8,4 +8,9 @@ export const colors = {
   purple: '#6f2ed6',
   darkOrange: '#D14c32',
   red: '#D83A34',
+  dark: '#000',
+  light: '#a5a5a5',
+  primary: '#28388f',
+  secondary: '#64beff',
+  pink: '#ff2d5f',
 };
