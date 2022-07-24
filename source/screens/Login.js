@@ -42,10 +42,10 @@ const Login = () => {
               secureTextEntry
             />
           </View>
-          <TouchableOpacity 
-        //   onPress={handleSignin} 
-        onPress={() => navigation.navigate('Home')}
-          style={STYLES.btnPrimary}>
+          <TouchableOpacity
+            //   onPress={handleSignin}
+            onPress={() => navigation.navigate('Home')}
+            style={STYLES.btnPrimary}>
             <Text style={{color: '#fff', fontWeight: 'bold', fontSize: 18}}>
               Login
             </Text>

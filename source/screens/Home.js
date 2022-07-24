@@ -14,7 +14,7 @@ const Home = () => {
   return (
     <SafeAreaView>
       <View style={styles.topBar}>
-        <TouchableOpacity>
+        <TouchableOpacity onPress={() => navigation.navigate('Profile')}>
           <Image
             style={styles.image}
             source={require('../../assets/images/profile.png')}
