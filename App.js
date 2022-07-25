@@ -12,6 +12,8 @@ import Topup from './source/screens/Topup';
 
 import AddtoWallet from './source/screens/AddtoWallet';
 import Profile from './source/screens/Profile';
+import UpdateProfile from './source/screens/UpdateProfile';
+import FoodDetails from './source/screens/FoodDetails';
 
 const Stack = createNativeStackNavigator();
 const App = () => {
@@ -25,6 +27,8 @@ const App = () => {
         <Stack.Screen name="Topup" component={Topup} />
         <Stack.Screen name="AddtoWallet" component={AddtoWallet} />
         <Stack.Screen name="Profile" component={Profile} />
+        <Stack.Screen name="UpdateProfile" component={UpdateProfile} />
+        <Stack.Screen name="FoodDetails" component={FoodDetails} />
       </Stack.Navigator>
     </NavigationContainer>
   );

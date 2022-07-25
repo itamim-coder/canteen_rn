@@ -1,6 +1,7 @@
 import {
   Image,
   SafeAreaView,
+  ScrollView,
   StyleSheet,
   Text,
   TouchableOpacity,
@@ -8,10 +9,11 @@ import {
 } from 'react-native';
 import React from 'react';
 import {colors} from '../theme/colors';
-import { Icon } from 'react-native-vector-icons/Icon';
-
+import {useNavigation} from '@react-navigation/native';
+// import {Icon} from 'react-native-vector-icons/Icon';
 
 const Profile = () => {
+  const navigation = useNavigation();
   return (
     <SafeAreaView style={{flex: 1}}>
       <View
@@ -25,7 +27,7 @@ const Profile = () => {
         }}>
         <View>
           <Text style={{fontSize: 28, fontWeight: 'bold'}}>Samantah</Text>
-          <TouchableOpacity>
+          <TouchableOpacity onPress={() => navigation.navigate('UpdateProfile')}>
             <Text
               style={{
                 fontSize: 18,
@@ -53,19 +55,91 @@ const Profile = () => {
           padding: 20,
           //   marginTop:50,
         }}>
-        <View>
+        <ScrollView>
           <TouchableOpacity
             style={{
               paddingVertical: 25,
 
               marginBottom: 5,
             }}>
-              {/* <Icon name="rocket" size={30} color="#900" /> */}
+            {/* <Icon name="rocket" size={30} color="#900" /> */}
             <Text style={{fontSize: 20, fontWeight: 'bold'}}>
               Change Language
             </Text>
           </TouchableOpacity>
-        </View>
+          <TouchableOpacity
+            style={{
+              paddingVertical: 25,
+
+              marginBottom: 5,
+            }}>
+            {/* <Icon name="rocket" size={30} color="#900" /> */}
+            <Text style={{fontSize: 20, fontWeight: 'bold'}}>FAQs</Text>
+            <Text
+              style={{
+                fontSize: 18,
+                fontWeight: 'bold',
+                color: colors.darkGrey,
+              }}>
+              Get your question answered
+            </Text>
+          </TouchableOpacity>
+          <TouchableOpacity
+            style={{
+              paddingVertical: 25,
+
+              marginBottom: 5,
+            }}>
+            {/* <Icon name="rocket" size={30} color="#900" /> */}
+            <Text style={{fontSize: 20, fontWeight: 'bold'}}>
+              Terms & Conditions
+            </Text>
+            <Text
+              style={{
+                fontSize: 18,
+                fontWeight: 'bold',
+                color: colors.darkGrey,
+              }}>
+              Know terms of use
+            </Text>
+          </TouchableOpacity>
+          <TouchableOpacity
+            style={{
+              paddingVertical: 25,
+
+              marginBottom: 5,
+            }}>
+            {/* <Icon name="rocket" size={30} color="#900" /> */}
+            <Text style={{fontSize: 20, fontWeight: 'bold'}}>
+              Privacy Policy
+            </Text>
+            <Text
+              style={{
+                fontSize: 18,
+                fontWeight: 'bold',
+                color: colors.darkGrey,
+              }}>
+              Companies privacy policy
+            </Text>
+          </TouchableOpacity>
+          <TouchableOpacity
+            style={{
+              paddingVertical: 25,
+
+              marginBottom: 5,
+            }}>
+            {/* <Icon name="rocket" size={30} color="#900" /> */}
+            <Text style={{fontSize: 20, fontWeight: 'bold'}}>Logout</Text>
+            <Text
+              style={{
+                fontSize: 18,
+                fontWeight: 'bold',
+                color: colors.darkGrey,
+              }}>
+              Sign out from account
+            </Text>
+          </TouchableOpacity>
+        </ScrollView>
       </View>
       {/* </View> */}
     </SafeAreaView>

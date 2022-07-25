@@ -11,7 +11,7 @@ const STYLES = StyleSheet.create({
     borderWidth: 1,
     borderColor: colors.light,
     flex: 1,
-    fontSize: 18,
+    fontSize: 15,
   },
   inputIcon: {marginTop: 7, position: 'absolute'},
   btnPrimary: {
