@@ -44,7 +44,7 @@ const Login = () => {
           </View>
           <TouchableOpacity
             //   onPress={handleSignin}
-            onPress={() => navigation.navigate('Home')}
+            onPress={() => navigation.navigate('TabNavigator')}
             style={STYLES.btnPrimary}>
             <Text style={{color: '#fff', fontWeight: 'bold', fontSize: 18}}>
               Login

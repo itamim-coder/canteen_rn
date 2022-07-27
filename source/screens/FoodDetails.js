@@ -12,7 +12,9 @@ import React from 'react';
 import {colors} from '../theme/colors';
 import {FOOD_LIST} from '../data/food-list';
 import {useNavigation} from '@react-navigation/native';
-
+import Statusbar from '../components/Statusbar';
+import FlashMessage from 'react-native-flash-message';
+import {showMessage, hideMessage} from 'react-native-flash-message';
 const FoodDetails = ({route}) => {
   const food = route.params.food;
   const {name, image, details, price} = food;
@@ -52,11 +54,7 @@ const FoodDetails = ({route}) => {
 
   return (
     <SafeAreaView style={{flex: 1, backgroundColor: colors.white}}>
-      <View style={styles.statusbar}>
-        <Text style={{fontSize: 20, textAlign: 'center', fontWeight: 'bold'}}>
-          {name}
-        </Text>
-      </View>
+      <Statusbar name={name} />
       <View style={{paddingHorizontal: 20, flex: 1.5}}>
         <ScrollView style={{flex: 1}} showsVerticalScrollIndicator={false}>
           <Image
@@ -80,7 +78,21 @@ const FoodDetails = ({route}) => {
               paddingVertical: 10,
             }}>
             <Text style={{fontSize: 25, fontWeight: 'bold'}}>${price}</Text>
-            <TouchableOpacity  onPress={() => navigation.navigate('MyCart')}
+            <TouchableOpacity
+              onPress={() => {
+                /* HERE IS WHERE WE'RE GOING TO SHOW OUR FIRST MESSAGE */
+                showMessage({
+                  message: 'Added Successfully',
+                  description: 'Click here to check cart',
+                  type: 'success',
+                  icon: 'success',
+
+                  onPress: () => {
+                    navigation.navigate('My Cart');
+                    /* THIS FUNC/CB WILL BE CALLED AFTER MESSAGE PRESS */
+                  },
+                });
+              }}
               style={{
                 backgroundColor: '#f5474a',
                 padding: 10,
@@ -127,6 +139,7 @@ const FoodDetails = ({route}) => {
           // contentInset={{right: 20, top: 0, left: 0, bottom: 0}}
         />
       </ScrollView>
+      <FlashMessage position="top" />
     </SafeAreaView>
   );
 };

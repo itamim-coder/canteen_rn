@@ -1,28 +1,22 @@
-import {
-  Image,
-  SafeAreaView,
-  StyleSheet,
-  Text,
-  TouchableOpacity,
-  View,
-} from 'react-native';
+import {SafeAreaView, StyleSheet, Text, View} from 'react-native';
 import React from 'react';
-import {colors} from '../theme/colors';
-import Wallet from '../components/Wallet';
 import Statusbar from '../components/Statusbar';
+import Wallet from '../components/Wallet';
+import {colors} from '../theme/colors';
 
-const AddtoWallet = () => {
+const Payment = () => {
   return (
     <SafeAreaView style={{backgroundColor: colors.black, flex: 1}}>
-      <Statusbar name="Add To Wallet" method="add" />
+      <Statusbar name="Payment Method" />
+
       <View
         style={{
           flexDirection: 'row',
           justifyContent: 'space-between',
-
+          padding:10,
           backgroundColor: colors.white,
         }}>
-        <Text style={styles.headText}>Amount to Add</Text>
+        <Text style={styles.headText}>Amount to Pay</Text>
         <Text style={[styles.headText, {color: colors.pink}]}>$100</Text>
       </View>
       <Wallet />
@@ -30,7 +24,7 @@ const AddtoWallet = () => {
   );
 };
 
-export default AddtoWallet;
+export default Payment;
 
 const styles = StyleSheet.create({
   headText: {

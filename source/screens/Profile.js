@@ -68,6 +68,18 @@ const Profile = () => {
             </Text>
           </TouchableOpacity>
           <TouchableOpacity
+          onPress={() => navigation.navigate('My Order')}
+            style={{
+              paddingVertical: 25,
+
+              marginBottom: 5,
+            }}>
+            {/* <Icon name="rocket" size={30} color="#900" /> */}
+            <Text style={{fontSize: 20, fontWeight: 'bold'}}>
+              My Orders
+            </Text>
+          </TouchableOpacity>
+          <TouchableOpacity
             style={{
               paddingVertical: 25,
 

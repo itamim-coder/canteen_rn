@@ -9,10 +9,14 @@ import {
 } from 'react-native';
 import React, {useState} from 'react';
 import {colors} from '../theme/colors';
+import {useNavigation} from '@react-navigation/native';
+import Statusbar from '../components/Statusbar';
+import FlashMessage from 'react-native-flash-message';
+import {showMessage, hideMessage} from 'react-native-flash-message';
 
 const MyCart = () => {
   const [count, setCount] = useState(0);
-
+  const navigation = useNavigation();
   const increament = () => {
     setCount(count + 1);
   };
@@ -23,11 +27,7 @@ const MyCart = () => {
   };
   return (
     <SafeAreaView style={{flex: 1, backgroundColor: colors.black}}>
-      <View style={styles.statusbar}>
-        <Text style={{fontSize: 20, textAlign: 'center', fontWeight: 'bold'}}>
-          My Cart
-        </Text>
-      </View>
+      <Statusbar name="My Cart" />
       <View
         style={{
           flex: 1,
@@ -36,8 +36,10 @@ const MyCart = () => {
           borderTopEndRadius: 40,
           paddingHorizontal: 20,
         }}>
-        <ScrollView style={{marginTop: 20, flex: 1}}>
-          <View style={{}}>
+        <ScrollView
+          showsVerticalScrollIndicator={false}
+          style={{marginTop: 20, flex: 1}}>
+          <View>
             <View
               style={{
                 flexDirection: 'row',
@@ -70,8 +72,23 @@ const MyCart = () => {
                 </View>
                 <View />
               </View>
+
               <View>
                 <Text style={{}}>${count * 10}</Text>
+              </View>
+              <View>
+                {/* <TouchableOpacity
+                  onPress={() => {
+                  
+                    showMessage({
+                      message: 'Order Cancel',
+
+                      type: 'danger',
+                      icon: 'danger',
+                    });
+                  }}>
+                  <Text style={{paddingBottom: 70, fontWeight: 'bold'}}>X</Text>
+                </TouchableOpacity> */}
               </View>
             </View>
             <View
@@ -106,8 +123,22 @@ const MyCart = () => {
                 </View>
                 <View />
               </View>
+
               <View>
                 <Text style={{}}>${count * 10}</Text>
+              </View>
+              <View>
+                {/* <TouchableOpacity
+                  onPress={() => {
+                  
+                    showMessage({
+                      message: 'Order Cancel',
+                      type: 'danger',
+                      icon: 'danger',
+                    });
+                  }}>
+                  <Text style={{paddingBottom: 70, fontWeight: 'bold'}}>X</Text>
+                </TouchableOpacity> */}
               </View>
             </View>
             <View
@@ -142,8 +173,23 @@ const MyCart = () => {
                 </View>
                 <View />
               </View>
+
               <View>
                 <Text style={{}}>${count * 10}</Text>
+              </View>
+              <View>
+                {/* <TouchableOpacity
+                  onPress={() => {
+                   
+                    showMessage({
+                      message: 'Order Cancel',
+
+                      type: 'danger',
+                      icon: 'danger',
+                    });
+                  }}>
+                  <Text style={{paddingBottom: 70, fontWeight: 'bold'}}>X</Text>
+                </TouchableOpacity> */}
               </View>
             </View>
           </View>
@@ -184,7 +230,7 @@ const MyCart = () => {
           justifyContent: 'space-between',
         }}>
         <Text style={{color: colors.white, fontSize: 25}}>${count * 10}</Text>
-        <TouchableOpacity>
+        <TouchableOpacity onPress={() => navigation.navigate('Checkout')}>
           <Text
             style={{
               color: colors.white,
@@ -194,10 +240,11 @@ const MyCart = () => {
               fontSize: 15,
               paddingHorizontal: 50,
             }}>
-            Continue to pay
+            Checkout
           </Text>
         </TouchableOpacity>
       </View>
+      <FlashMessage position="top" />
     </SafeAreaView>
   );
 };
