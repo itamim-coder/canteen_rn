@@ -2,25 +2,67 @@ import {StyleSheet} from 'react-native';
 import {colors} from '../colors';
 
 const STYLES = StyleSheet.create({
+  screen: {
+    padding: 15,
+    flex: 1,
+  },
+  h1: {
+    color: colors.black,
+    fontFamily: 'Poppins-Bold',
+    fontSize: 32,
+  },
+  h2: {
+    color: colors.black,
+    fontFamily: 'Poppins-Bold',
+    fontSize: 25,
+  },
+  h3: {
+    color: colors.black,
+    fontFamily: 'Poppins-SemiBold',
+    fontSize: 18,
+  },
+  h4: {
+    color: colors.black,
+    fontFamily: 'Poppins-Medium',
+    fontSize: 17,
+  },
+  h5: {
+    color: colors.black,
+    fontFamily: 'Poppins-Medium',
+    fontSize: 15,
+  },
+  primary: {
+    color: colors.black,
+    fontFamily: 'Poppins-Regular',
+  },
+  medium: {
+    color: colors.black,
+    fontFamily: 'Poppins-Medium',
+  },
   inputContainer: {
     flexDirection: 'row',
     marginTop: 10,
   },
   input: {
     color: colors.black,
-    borderWidth: 1,
+    fontFamily: 'Poppins-Regular',
+    borderWidth: 0.5,
     borderColor: colors.light,
     flex: 1,
     fontSize: 15,
   },
-  inputIcon: {marginTop: 7, position: 'absolute'},
   btnPrimary: {
-    backgroundColor: colors.primary,
+    backgroundColor: colors.red,
     height: 50,
     borderRadius: 5,
     justifyContent: 'center',
     alignItems: 'center',
     marginTop: 10,
+  },
+  btnFont: {
+    color: colors.white,
+    fontFamily: 'Poppins-Bold',
+    fontSize: 16,
   },
 
   btnSecondary: {

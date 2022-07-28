@@ -18,10 +18,10 @@ const Login = () => {
   const navigation = useNavigation();
 
   return (
-    <SafeAreaView style={styles.loginContainer}>
+    <SafeAreaView style={[STYLES.screen, styles.loginContainer]}>
       <View style={styles.loginBox}>
-        <Text style={styles.h1}>Create Account</Text>
-        <Text style={styles.primary}>
+        <Text style={[STYLES.h1, {textAlign: 'center'}]}>Create Account</Text>
+        <Text style={[STYLES.primary, {textAlign: 'center'}]}>
           If you don't have an account, please provide your email and phone to
           register.
         </Text>
@@ -55,18 +55,14 @@ const Login = () => {
           <TouchableOpacity
             onPress={() => navigation.navigate('Verification')}
             style={STYLES.btnPrimary}>
-            <Text style={{color: '#fff', fontWeight: 'bold', fontSize: 18}}>
+            <Text style={STYLES.btnFont}>
               Continue
             </Text>
           </TouchableOpacity>
-          <View style={styles.Bottom}>
+          <View style={{marginTop:10}}>
             <TouchableOpacity onPress={() => navigation.navigate('Login')}>
               <Text
-                style={{
-                  color: colors.darkGrey,
-                  fontWeight: 'bold',
-                  textAlign: 'center',
-                }}>
+                  style={{color: colors.light, fontFamily: 'Poppins-Regular', textAlign:'center'}}>
                 Back to Login
               </Text>
             </TouchableOpacity>
@@ -85,28 +81,9 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   loginBox: {
-    marginTop: 200,
-    marginLeft: 20,
-    marginRight: 20,
-  },
-  h1: {
-    color: colors.black,
-    fontSize: 36,
-    textAlign: 'center',
-  },
-  primary: {
-    color: colors.black,
-    textAlign: 'center',
-  },
-  btnPrimary: {
-    backgroundColor: colors.black,
-    height: 50,
-    borderRadius: 5,
+    flex: 1,
     justifyContent: 'center',
-    alignItems: 'center',
-    marginTop: 50,
   },
-  Bottom: {
-    marginTop: 10,
-  },
+
+ 
 });

@@ -30,7 +30,6 @@ const Topup = () => {
       <View style={styles.addMoneyBox}>
         <View
           style={{
-            // backgroundColor: colors.red,
             shadowColor: '#000',
             borderTopLeftRadius: 0.5,
             borderTopRightRadius: 0.5,
@@ -47,15 +46,17 @@ const Topup = () => {
             resizeMode="cover"
             imageStyle={{borderRadius: 6}}
             source={require('../../assets/images/wallet_bg.png')}>
-            <Text style={styles.bgtxt}>Wallet</Text>
-            <Text style={styles.balancetxt}>Total Balance{'\n'}$1000</Text>
+            <Text style={[STYLES.h1, styles.bgtxt]}>Wallet</Text>
+            <Text style={[STYLES.primary, styles.balancetxt]}>
+              Total Balance{'\n'}$1000
+            </Text>
           </ImageBackground>
           <TouchableOpacity
             onPress={toggleBottomNavigationView}
             style={{
               padding: 20,
             }}>
-            <Text style={styles.addtxt}>Add Money</Text>
+            <Text style={[STYLES.btnFont, styles.addtxt]}>Add Money</Text>
           </TouchableOpacity>
         </View>
         <View style={styles.addMoney}>
@@ -73,33 +74,32 @@ const Topup = () => {
                 style={{
                   flex: 1,
                   flexDirection: 'column',
-                  // justifyContent: 'space-between',
                 }}>
                 <Text
-                  style={{
-                    textAlign: 'center',
-                    margin: 5,
-                    fontSize: 25,
-                    fontWeight: 'bold',
-                    color: colors.pink,
-                  }}>
+                  style={[
+                    STYLES.h3,
+                    {
+                      textAlign: 'center',
+                      margin: 5,
+                      fontSize: 22,
+                      color: colors.pink,
+                    },
+                  ]}>
                   Wallet Topup
                 </Text>
-                <ScrollView
+                <ScrollView showsVerticalScrollIndicator = {false}
                   style={{
                     marginLeft: 15,
-                    marginRight: 15,
-
-                    color: colors.pink,
+                    marginRight: 15,                   
                   }}>
-                  <Text>
+                  <Text style={STYLES.primary}>
                     Wallet Balance will reflect in CI dollars. Enter topup
                     amount and choose currency. If you are paying in USD,
                     conversion rate is .80.
                     {'\n'}
                     Click continue, you'll be presented with our checkout form.
                   </Text>
-                  <Text style={[styles.title, {marginTop: 10}]}>
+                  <Text style={[STYLES.medium, {marginTop: 10}]}>
                     Account No
                   </Text>
                   <View style={styles.inputContainer}>
@@ -112,7 +112,7 @@ const Topup = () => {
                       style={styles.input}
                     />
                   </View>
-                  <Text style={styles.title}>Name of Acoount</Text>
+                  <Text style={STYLES.medium}>Name of Acoount</Text>
                   <View style={styles.inputContainer}>
                     <TextInput
                       // onChangeText={text => setEmail(text)}
@@ -122,7 +122,7 @@ const Topup = () => {
                       style={styles.input}
                     />
                   </View>
-                  <Text style={styles.title}>Enter Amount In KYD</Text>
+                  <Text style={STYLES.medium}>Enter Amount In KYD</Text>
                   <View style={styles.inputContainer}>
                     <TextInput
                       // onChangeText={text => setEmail(text)}
@@ -131,7 +131,7 @@ const Topup = () => {
                       style={styles.input}
                     />
                   </View>
-                  <Text style={styles.title}>Enter Amount In USD</Text>
+                  <Text style={STYLES.medium}>Enter Amount In USD</Text>
                   <View style={styles.inputContainer}>
                     <TextInput
                       // onChangeText={text => setPassword(text)}
@@ -141,7 +141,7 @@ const Topup = () => {
                       style={styles.input}
                     />
                   </View>
-                  <Text style={styles.title}>Choose Currency</Text>
+                  <Text style={STYLES.medium}>Choose Currency</Text>
                   <RadioButton.Group
                     onValueChange={newValue => setChecked(newValue)}
                     value={checked}>
@@ -159,7 +159,7 @@ const Topup = () => {
                     onPress={() => navigation.navigate('AddtoWallet')}
                     style={STYLES.btnPrimary}>
                     <Text
-                      style={{color: '#fff', fontWeight: 'bold', fontSize: 18}}>
+                      style={STYLES.btnFont}>
                       Continue
                     </Text>
                   </TouchableOpacity>
@@ -178,8 +178,8 @@ const Topup = () => {
           borderTopLeftRadius: 55,
           borderTopRightRadius: 55,
         }}>
-        <ScrollView showsVerticalScrollIndicator={false} style={{margin: 30}}>
-          <Text style={{fontSize: 20, fontWeight: 'bold'}}>Wallet History</Text>
+        <ScrollView showsVerticalScrollIndicator={false} style={{margin: 20}}>
+          <Text style={[STYLES.medium, {fontSize: 20}]}>Wallet History</Text>
           <View
             style={{
               backgroundColor: colors.white,
@@ -189,19 +189,14 @@ const Topup = () => {
               marginTop: 15,
             }}>
             <View>
-              <Text style={[styles.historytxt, {fontSize: 19}]}>
-                Order DT56565
-              </Text>
-              <Text style={[styles.historytxt, {color: colors.light}]}>
+              <Text style={[STYLES.h4]}>Order DT56565</Text>
+              <Text style={[STYLES.medium, {color: colors.light}]}>
                 Date 12 Jun
               </Text>
             </View>
             <View>
-              <Text
-                style={[styles.historytxt, {fontSize: 19, color: colors.red}]}>
-                $-21.50
-              </Text>
-              <Text style={[styles.historytxt, {color: colors.light}]}>
+              <Text style={[STYLES.h3, {color: colors.red}]}>$-21.50</Text>
+              <Text style={[STYLES.medium, {color: colors.light}]}>
                 3 Items
               </Text>
             </View>
@@ -215,19 +210,14 @@ const Topup = () => {
               marginTop: 15,
             }}>
             <View>
-              <Text style={[styles.historytxt, {fontSize: 19}]}>
-                Order DT56565
-              </Text>
-              <Text style={[styles.historytxt, {color: colors.light}]}>
+              <Text style={[STYLES.h4]}>Order DT56565</Text>
+              <Text style={[STYLES.medium, {color: colors.light}]}>
                 Date 12 Jun
               </Text>
             </View>
             <View>
-              <Text
-                style={[styles.historytxt, {fontSize: 19, color: colors.red}]}>
-                $-21.50
-              </Text>
-              <Text style={[styles.historytxt, {color: colors.light}]}>
+              <Text style={[STYLES.h3, {color: colors.red}]}>$-21.50</Text>
+              <Text style={[STYLES.medium, {color: colors.light}]}>
                 3 Items
               </Text>
             </View>
@@ -241,19 +231,14 @@ const Topup = () => {
               marginTop: 15,
             }}>
             <View>
-              <Text style={[styles.historytxt, {fontSize: 19}]}>
-                Order DT56565
-              </Text>
-              <Text style={[styles.historytxt, {color: colors.light}]}>
+              <Text style={[STYLES.h4]}>Order DT56565</Text>
+              <Text style={[STYLES.medium, {color: colors.light}]}>
                 Date 12 Jun
               </Text>
             </View>
             <View>
-              <Text
-                style={[styles.historytxt, {fontSize: 19, color: colors.red}]}>
-                $-21.50
-              </Text>
-              <Text style={[styles.historytxt, {color: colors.light}]}>
+              <Text style={[STYLES.h3, {color: colors.red}]}>$-21.50</Text>
+              <Text style={[STYLES.medium, {color: colors.light}]}>
                 3 Items
               </Text>
             </View>
@@ -267,19 +252,14 @@ const Topup = () => {
               marginTop: 15,
             }}>
             <View>
-              <Text style={[styles.historytxt, {fontSize: 19}]}>
-                Order DT56565
-              </Text>
-              <Text style={[styles.historytxt, {color: colors.light}]}>
+              <Text style={[STYLES.h4]}>Order DT56565</Text>
+              <Text style={[STYLES.medium, {color: colors.light}]}>
                 Date 12 Jun
               </Text>
             </View>
             <View>
-              <Text
-                style={[styles.historytxt, {fontSize: 19, color: colors.red}]}>
-                $-21.50
-              </Text>
-              <Text style={[styles.historytxt, {color: colors.light}]}>
+              <Text style={[STYLES.h3, {color: colors.red}]}>$-21.50</Text>
+              <Text style={[STYLES.medium, {color: colors.light}]}>
                 3 Items
               </Text>
             </View>
@@ -293,19 +273,14 @@ const Topup = () => {
               marginTop: 15,
             }}>
             <View>
-              <Text style={[styles.historytxt, {fontSize: 19}]}>
-                Order DT56565
-              </Text>
-              <Text style={[styles.historytxt, {color: colors.light}]}>
+              <Text style={[STYLES.h4]}>Order DT56565</Text>
+              <Text style={[STYLES.medium, {color: colors.light}]}>
                 Date 12 Jun
               </Text>
             </View>
             <View>
-              <Text
-                style={[styles.historytxt, {fontSize: 19, color: colors.red}]}>
-                $-21.50
-              </Text>
-              <Text style={[styles.historytxt, {color: colors.light}]}>
+              <Text style={[STYLES.h3, {color: colors.red}]}>$-21.50</Text>
+              <Text style={[STYLES.medium, {color: colors.light}]}>
                 3 Items
               </Text>
             </View>
@@ -319,19 +294,14 @@ const Topup = () => {
               marginTop: 15,
             }}>
             <View>
-              <Text style={[styles.historytxt, {fontSize: 19}]}>
-                Order DT56565
-              </Text>
-              <Text style={[styles.historytxt, {color: colors.light}]}>
+              <Text style={[STYLES.h4]}>Order DT56565</Text>
+              <Text style={[STYLES.medium, {color: colors.light}]}>
                 Date 12 Jun
               </Text>
             </View>
             <View>
-              <Text
-                style={[styles.historytxt, {fontSize: 19, color: colors.red}]}>
-                $-21.50
-              </Text>
-              <Text style={[styles.historytxt, {color: colors.light}]}>
+              <Text style={[STYLES.h3, {color: colors.red}]}>$-21.50</Text>
+              <Text style={[STYLES.medium, {color: colors.light}]}>
                 3 Items
               </Text>
             </View>
@@ -358,40 +328,29 @@ const styles = StyleSheet.create({
   bgimg: {
     justifyContent: 'center',
     height: 200,
-    // borderRadius: 200,
   },
   bgtxt: {
     color: 'white',
     fontSize: 35,
     margin: 15,
-    // marginTop: -100,
-    // lineHeight: 24,
-    fontWeight: 'bold',
-    // textAlign: 'center',
   },
   balancetxt: {
-    // color: colors.dar,
     color: '#D8D8D8',
     fontSize: 20,
     marginLeft: 15,
-    // marginTop: -110,
-    // lineHeight: 24,
-    fontWeight: 'bold',
-    // textAlign: 'center',
   },
   addMoney: {
     // padding: 15,
   },
   addtxt: {
     textAlign: 'center',
-    fontSize: 20,
-    fontWeight: 'bold',
+    fontSize: 17,
     color: colors.pink,
   },
   bottomNavigationView: {
     backgroundColor: '#fff',
     width: '100%',
-    height: 630,
+    height: 660,
 
     // justifyContent: 'center',
     // alignItems: 'center',

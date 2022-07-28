@@ -20,7 +20,7 @@ const UpdateProfile = () => {
   const [phone, setPhone] = useState('');
   const [selectedValue, setSelectedValue] = useState('no');
   return (
-    <SafeAreaView style={{flex: 1, padding: 20}}>
+    <SafeAreaView style={STYLES.screen}>
       <ScrollView showsVerticalScrollIndicator={false}>
         <View
           style={{
@@ -31,7 +31,7 @@ const UpdateProfile = () => {
             alignItems: 'center',
           }}>
           <View>
-            <Text style={{fontSize: 30, fontWeight: 'bold'}}>Profile</Text>
+            <Text style={[STYLES.primary, {fontSize: 28}]}>Profile</Text>
           </View>
           <Image
             style={{width: 80, height: 80}}
@@ -42,7 +42,7 @@ const UpdateProfile = () => {
         <View>
           <View style={{flexDirection: 'row'}}>
             <View style={{flex: 1, margin: 3}}>
-              <Text style={styles.inputTitle}>Full Name</Text>
+            <Text style={[STYLES.medium, styles.inputTitle]}>Full Name</Text>
               <View style={STYLES.inputContainer}>
                 <TextInput
                   onChangeText={text => setName(text)}
@@ -54,7 +54,7 @@ const UpdateProfile = () => {
               </View>
             </View>
             <View style={{flex: 1, margin: 3}}>
-              <Text style={styles.inputTitle}>Account</Text>
+            <Text style={[STYLES.medium, styles.inputTitle]}>Account</Text>
               <View style={STYLES.inputContainer}>
                 <TextInput
                   onChangeText={text => setName(text)}
@@ -69,7 +69,7 @@ const UpdateProfile = () => {
               </View>
             </View>
           </View>
-          <Text style={styles.inputTitle}>Phone Number</Text>
+          <Text style={[STYLES.medium, styles.inputTitle]}>Phone Number</Text>
           <View style={STYLES.inputContainer}>
             <TextInput
               onChangeText={text => setName(text)}
@@ -80,7 +80,7 @@ const UpdateProfile = () => {
               keyboardType="numeric"
             />
           </View>
-          <Text style={styles.inputTitle}>Email Address</Text>
+          <Text style={[STYLES.medium, styles.inputTitle]}>Email Address</Text>
           <View style={STYLES.inputContainer}>
             <TextInput
               onChangeText={text => setPhone(text)}
@@ -97,7 +97,7 @@ const UpdateProfile = () => {
 
           <View style={{flexDirection: 'row'}}>
             <View style={{flex: 1, margin: 3}}>
-              <Text style={styles.inputTitle}>Notify Low Balance</Text>
+            <Text style={[STYLES.medium, styles.inputTitle]}>Notify Low Balance</Text>
               <Picker
                 selectedValue={selectedValue}
                 style={{height: 50, width: 150}}
@@ -109,7 +109,7 @@ const UpdateProfile = () => {
               </Picker>
             </View>
             <View style={{flex: 1, margin: 3}}>
-              <Text style={styles.inputTitle}>Low Balance Point</Text>
+            <Text style={[STYLES.medium, styles.inputTitle]}>Low Balance Point</Text>
               <View style={STYLES.inputContainer}>
                 <TextInput
                   onChangeText={text => setName(text)}
@@ -125,7 +125,7 @@ const UpdateProfile = () => {
 
           <View style={{flexDirection: 'row'}}>
             <View style={{flex: 1, margin: 3}}>
-              <Text style={styles.inputTitle}>Notify Promotions</Text>
+            <Text style={[STYLES.medium, styles.inputTitle]}>Notify Promotions</Text>
               <Picker
                 selectedValue={selectedValue}
                 style={{height: 50, width: 150}}
@@ -137,7 +137,7 @@ const UpdateProfile = () => {
               </Picker>
             </View>
             <View style={{flex: 1, margin: 3}}>
-              <Text style={styles.inputTitle}>Notify Orders</Text>
+            <Text style={[STYLES.medium, styles.inputTitle]}>Notify Orders</Text>
               <Picker
                 selectedValue={selectedValue}
                 style={{height: 50, width: 150}}
@@ -150,12 +150,12 @@ const UpdateProfile = () => {
             </View>
           </View>
 
-          <Text style={styles.inputTitle}>Order Notes</Text>
-          
+          <Text style={[STYLES.medium, styles.inputTitle]}>Order Notes</Text>
+
           <KeyboardAvoidingView style={STYLES.inputContainer}>
             <TextInput
               onChangeText={text => setPhone(text)}
-            //   placeholder="Enter Email Address"
+              //   placeholder="Enter Email Address"
               // defaultValue="zahid@powah.com"
               multiline={true}
               numberOfLines={3}
@@ -166,7 +166,7 @@ const UpdateProfile = () => {
           </KeyboardAvoidingView>
 
           <TouchableOpacity style={STYLES.btnPrimary}>
-            <Text style={{color: '#fff', fontWeight: 'bold', fontSize: 18}}>
+            <Text style={STYLES.btnFont}>
               Save
             </Text>
           </TouchableOpacity>
@@ -180,9 +180,6 @@ export default UpdateProfile;
 
 const styles = StyleSheet.create({
   inputTitle: {
-    marginTop: 20,
-
-    fontSize: 15,
-    fontWeight: 'bold',
+    marginTop: 15,
   },
 });

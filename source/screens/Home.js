@@ -16,41 +16,12 @@ import {spacing} from '../theme/spacing';
 import {FOOD_LIST} from '../data/food-list';
 import {colors} from '../theme/colors';
 import {CATEGORY_LIST} from '../data/category-list';
-
+import AntDesign from 'react-native-vector-icons/AntDesign';
+import STYLES from '../theme/styles';
 const Home = () => {
   const navigation = useNavigation();
 
-  const renderItem = ({item}) => {
-    const {name, image, price} = item;
-    return (
-      <SafeAreaView>
-        <TouchableOpacity
-          onPress={() => navigation.navigate('FoodDetails', {food: item})}>
-          <View
-            style={{
-              backgroundColor: colors.white,
-              padding: 10,
-              borderRadius: 10,
-            }}>
-            <Text style={{fontSize: 14, fontWeight: 'bold'}}>{name}</Text>
-            <View
-              style={{
-                padding: 10,
-              }}>
-              <Image
-                resizeMode="contain"
-                style={{width: 125, height: 125}}
-                source={image}
-              />
-            </View>
-            <Text style={{fontSize: 14, fontWeight: 'bold'}}>
-              Price: ${price}
-            </Text>
-          </View>
-        </TouchableOpacity>
-      </SafeAreaView>
-    );
-  };
+  // render Category item
 
   const renderCategory = ({item}) => {
     const {image, category} = item;
@@ -60,7 +31,8 @@ const Home = () => {
           flexDirection: 'row',
           alignItems: 'center',
           backgroundColor: colors.white,
-          marginHorizontal: 5,
+          // marginHorizontal: 5,
+          marginRight: 10,
           paddingHorizontal: 15,
           paddingVertical: 10,
           borderRadius: 10,
@@ -76,8 +48,45 @@ const Home = () => {
     );
   };
 
+  // render popular item
+
+  const renderItem = ({item}) => {
+    const {name, image, price} = item;
+    return (
+      <SafeAreaView>
+        <TouchableOpacity
+          onPress={() => navigation.navigate('FoodDetails', {food: item})}>
+          <View
+            style={{
+              backgroundColor: colors.white,
+              padding: 10,
+              borderRadius: 10,
+            }}>
+            <Text style={STYLES.h5}>{name}</Text>
+            <View
+              style={{
+                padding: 16,
+              }}>
+              <Image
+                resizeMode="contain"
+                style={{width: 125, height: 125}}
+                source={image}
+              />
+            </View>
+            <Text
+              style={[STYLES.primary, {fontWeight: 'bold', color: colors.ash}]}>
+              ${price}.00
+            </Text>
+          </View>
+        </TouchableOpacity>
+      </SafeAreaView>
+    );
+  };
+
   return (
-    <SafeAreaView style={{flex: 1, paddingHorizontal: 20}}>
+    <SafeAreaView style={[STYLES.screen, {paddingBottom: 0}]}>
+      {/* Home Top Section  */}
+
       <View style={styles.topBar}>
         <TouchableOpacity onPress={() => navigation.navigate('Profile')}>
           <Image
@@ -92,30 +101,39 @@ const Home = () => {
           />
         </TouchableOpacity>
       </View>
+
       <ScrollView showsVerticalScrollIndicator={false}>
+        {/* Search Box  */}
+
         <View style={styles.search}>
           <View style={styles.searchWrapper}>
+            <AntDesign
+              name="search1"
+              size={18}
+              color="black"
+              style={styles.searchIcon}
+            />
             <TextInput placeholder="Search Food" style={styles.searchInput} />
           </View>
         </View>
 
-        <Text style={{fontSize: 20, fontWeight: 'bold'}}>Categories</Text>
+        {/* Categories Section  */}
+
+        <Text style={STYLES.h3}>Categories</Text>
         <FlatList
           horizontal
           data={CATEGORY_LIST}
-          // numColumns={2}
           showsHorizontalScrollIndicator={false}
           renderItem={renderCategory}
         />
 
+        {/* Popular Section  */}
+
         <View style={styles.popularBox}>
-          <Text style={{fontSize: 20, fontWeight: 'bold'}}>
-            Popular Near You
-          </Text>
+          <Text style={STYLES.h3}>Popular Near You</Text>
           <FlatList
             columnWrapperStyle={{
-              flex: 1,
-              justifyContent: 'space-evenly',
+              justifyContent: 'space-between',
               marginTop: 10,
             }}
             data={FOOD_LIST}
@@ -136,18 +154,12 @@ const styles = StyleSheet.create({
     width: 40,
   },
   topBar: {
-    paddingVertical: 10,
     flexDirection: 'row',
-
     justifyContent: 'space-between',
-  },
-  popularBox: {
-    paddingVertical: 20,
-    // backgroundColor: colors.red,
+    paddingBottom: 10,
   },
   search: {
     marginVertical: 20,
-    // fontFamily: 'Monserrat-regular',
     fontSize: 16,
     paddingHorizontal: 15,
     backgroundColor: colors.white,
@@ -161,10 +173,13 @@ const styles = StyleSheet.create({
   searchIcon: {
     color: '#b0b0b0',
     marginRight: 10,
-    marginTop: 5,
+    marginTop: 14,
   },
   searchInput: {
     color: '#b4b4b4',
-    // paddingRight: '80%',
+    fontFamily: 'Poopins-Regular',
+  },
+  popularBox: {
+    paddingVertical: 20,
   },
 });

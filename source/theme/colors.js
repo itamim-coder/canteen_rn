@@ -13,5 +13,6 @@ export const colors = {
   primary: '#28388f',
   secondary: '#64beff',
   pink: '#ff2d5f',
-  green: '#9ACD32'
+  green: '#9ACD32',
+  ash : '#666666',
 };
