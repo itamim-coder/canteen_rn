@@ -10,6 +10,7 @@ import React from 'react';
 import {colors} from '../theme/colors';
 import Wallet from '../components/Wallet';
 import Statusbar from '../components/Statusbar';
+import STYLES from '../theme/styles';
 
 const AddtoWallet = () => {
   return (
@@ -19,11 +20,11 @@ const AddtoWallet = () => {
         style={{
           flexDirection: 'row',
           justifyContent: 'space-between',
-
+          paddingHorizontal:20,
           backgroundColor: colors.white,
         }}>
-        <Text style={styles.headText}>Amount to Add</Text>
-        <Text style={[styles.headText, {color: colors.pink}]}>$100</Text>
+        <Text style={STYLES.h3}>Amount to Add</Text>
+        <Text style={[STYLES.h3, {color: colors.pink}]}>$100</Text>
       </View>
       <Wallet />
     </SafeAreaView>

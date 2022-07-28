@@ -3,6 +3,7 @@ import React from 'react';
 import Statusbar from '../components/Statusbar';
 import Wallet from '../components/Wallet';
 import {colors} from '../theme/colors';
+import STYLES from '../theme/styles';
 
 const Payment = () => {
   return (
@@ -16,8 +17,8 @@ const Payment = () => {
           padding:10,
           backgroundColor: colors.white,
         }}>
-        <Text style={styles.headText}>Amount to Pay</Text>
-        <Text style={[styles.headText, {color: colors.pink}]}>$100</Text>
+        <Text style={STYLES.h3}>Amount to Pay</Text>
+        <Text style={[STYLES.h3, {color: colors.pink}]}>$100</Text>
       </View>
       <Wallet />
     </SafeAreaView>

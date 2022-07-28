@@ -10,6 +10,7 @@ import {
 import React from 'react';
 import {colors} from '../theme/colors';
 import {useNavigation} from '@react-navigation/native';
+import STYLES from '../theme/styles';
 // import {Icon} from 'react-native-vector-icons/Icon';
 
 const Profile = () => {
@@ -20,21 +21,23 @@ const Profile = () => {
         style={{
           flexDirection: 'row',
           justifyContent: 'space-between',
-          //   margin: 15,
           alignItems: 'center',
           marginTop: 30,
           padding: 20,
         }}>
         <View>
-          <Text style={{fontSize: 28, fontWeight: 'bold'}}>Samantah</Text>
-          <TouchableOpacity onPress={() => navigation.navigate('UpdateProfile')}>
+          <Text style={[STYLES.primary, {fontSize: 28}]}>Samantah</Text>
+          <TouchableOpacity
+            onPress={() => navigation.navigate('UpdateProfile')}>
             <Text
-              style={{
-                fontSize: 18,
-                fontWeight: 'bold',
-                color: colors.red,
-                paddingTop: 15,
-              }}>
+              style={[
+                STYLES.primary,
+                {
+                  fontSize: 18,
+                  color: colors.red,
+                  paddingTop: 15,
+                },
+              ]}>
               View Profile
             </Text>
           </TouchableOpacity>
@@ -53,101 +56,101 @@ const Profile = () => {
           borderTopLeftRadius: 30,
           borderTopRightRadius: 30,
           padding: 20,
-          //   marginTop:50,
         }}>
         <ScrollView>
           <TouchableOpacity
             style={{
-              paddingVertical: 25,
+              paddingVertical: 20,
 
               marginBottom: 5,
             }}>
             {/* <Icon name="rocket" size={30} color="#900" /> */}
-            <Text style={{fontSize: 20, fontWeight: 'bold'}}>
-              Change Language
-            </Text>
+            <Text style={[STYLES.medium, {fontSize: 20}]}>Change Language</Text>
           </TouchableOpacity>
           <TouchableOpacity
-          onPress={() => navigation.navigate('My Order')}
+            onPress={() => navigation.navigate('My Order')}
             style={{
-              paddingVertical: 25,
-
+              paddingVertical: 20,
               marginBottom: 5,
             }}>
             {/* <Icon name="rocket" size={30} color="#900" /> */}
-            <Text style={{fontSize: 20, fontWeight: 'bold'}}>
-              My Orders
-            </Text>
+            <Text style={[STYLES.medium, {fontSize: 20}]}>My Orders</Text>
           </TouchableOpacity>
           <TouchableOpacity
             style={{
-              paddingVertical: 25,
+              paddingVertical: 20,
 
               marginBottom: 5,
             }}>
             {/* <Icon name="rocket" size={30} color="#900" /> */}
-            <Text style={{fontSize: 20, fontWeight: 'bold'}}>FAQs</Text>
+            <Text style={[STYLES.medium, {fontSize: 20}]}>FAQs</Text>
             <Text
-              style={{
-                fontSize: 18,
-                fontWeight: 'bold',
-                color: colors.darkGrey,
-              }}>
+              style={[
+                STYLES.primary,
+                {
+                  fontSize: 15,
+                  color: colors.darkGrey,
+                },
+              ]}>
               Get your question answered
             </Text>
           </TouchableOpacity>
           <TouchableOpacity
             style={{
-              paddingVertical: 25,
+              paddingVertical: 20,
 
               marginBottom: 5,
             }}>
             {/* <Icon name="rocket" size={30} color="#900" /> */}
-            <Text style={{fontSize: 20, fontWeight: 'bold'}}>
+            <Text style={[STYLES.medium, {fontSize: 20}]}>
               Terms & Conditions
             </Text>
             <Text
-              style={{
-                fontSize: 18,
-                fontWeight: 'bold',
-                color: colors.darkGrey,
-              }}>
+              style={[
+                STYLES.primary,
+                {
+                  fontSize: 15,
+                  color: colors.darkGrey,
+                },
+              ]}>
               Know terms of use
             </Text>
           </TouchableOpacity>
           <TouchableOpacity
             style={{
-              paddingVertical: 25,
+              paddingVertical: 20,
 
               marginBottom: 5,
             }}>
             {/* <Icon name="rocket" size={30} color="#900" /> */}
-            <Text style={{fontSize: 20, fontWeight: 'bold'}}>
-              Privacy Policy
-            </Text>
+            <Text style={[STYLES.medium, {fontSize: 20}]}>Privacy Policy</Text>
             <Text
-              style={{
-                fontSize: 18,
-                fontWeight: 'bold',
-                color: colors.darkGrey,
-              }}>
+              style={[
+                STYLES.primary,
+                {
+                  fontSize: 15,
+                  color: colors.darkGrey,
+                },
+              ]}>
               Companies privacy policy
             </Text>
           </TouchableOpacity>
           <TouchableOpacity
             style={{
-              paddingVertical: 25,
+              paddingVertical: 20,
 
               marginBottom: 5,
             }}>
             {/* <Icon name="rocket" size={30} color="#900" /> */}
-            <Text style={{fontSize: 20, fontWeight: 'bold'}}>Logout</Text>
+            <Text style={[STYLES.medium, {fontSize: 20}]}>Logout</Text>
             <Text
-              style={{
-                fontSize: 18,
-                fontWeight: 'bold',
-                color: colors.darkGrey,
-              }}>
+              style={[
+                STYLES.primary,
+                {
+                  fontSize: 15,
+                  color: colors.darkGrey,
+                },
+              ]}>
               Sign out from account
             </Text>
           </TouchableOpacity>

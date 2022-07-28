@@ -17,13 +17,12 @@ const Login = () => {
   const navigation = useNavigation();
   const handleSignin = () => {};
   return (
-    <SafeAreaView style={styles.loginContainer}>
+    <SafeAreaView style={[STYLES.screen, styles.loginContainer]}>
       <View style={styles.loginBox}>
-        <Text style={styles.h1}>Login</Text>
-        <Text style={styles.primary}>
-          If you already have a YumCayman.ky account
+        <Text style={[STYLES.h1, {textAlign: 'center'}]}>Log in</Text>
+        <Text style={[STYLES.primary, {textAlign: 'center'}]}>
+          If you already have a YumCayman.ky account{'\n'}please log in below
         </Text>
-        <Text style={styles.primary}>please log in below</Text>
         <View>
           <View style={STYLES.inputContainer}>
             <TextInput
@@ -40,24 +39,25 @@ const Login = () => {
               placeholderTextColor={'grey'}
               style={STYLES.input}
               secureTextEntry
+              keyboardType="numeric"
             />
           </View>
           <TouchableOpacity
-            //   onPress={handleSignin}
+              // onPress={handleSignin}
             onPress={() => navigation.navigate('TabNavigator')}
             style={STYLES.btnPrimary}>
-            <Text style={{color: '#fff', fontWeight: 'bold', fontSize: 18}}>
-              Login
-            </Text>
+            <Text style={STYLES.btnFont}>Login</Text>
           </TouchableOpacity>
           <View style={styles.loginBottom}>
             <TouchableOpacity>
-              <Text style={{color: colors.darkGrey, fontWeight: 'bold'}}>
+              <Text
+                style={{color: colors.light, fontFamily: 'Poppins-Regular'}}>
                 Forgot Password?
               </Text>
             </TouchableOpacity>
             <TouchableOpacity onPress={() => navigation.navigate('Signup')}>
-              <Text style={{color: colors.darkGrey, fontWeight: 'bold'}}>
+              <Text
+                style={{color: colors.light, fontFamily: 'Poppins-Regular'}}>
                 Sign up
               </Text>
             </TouchableOpacity>
@@ -72,31 +72,12 @@ export default Login;
 
 const styles = StyleSheet.create({
   loginContainer: {
-    // backgroundColor: colors.white,
+    backgroundColor: colors.white,
     flex: 1,
   },
   loginBox: {
-    marginTop: 200,
-    marginLeft: 20,
-    marginRight: 20,
-  },
-  h1: {
-    color: colors.black,
-    fontSize: 36,
-    textAlign: 'center',
-  },
-
-  primary: {
-    color: colors.black,
-    textAlign: 'center',
-  },
-  btnPrimary: {
-    backgroundColor: colors.black,
-    height: 50,
-    borderRadius: 5,
+    flex: 1,
     justifyContent: 'center',
-    alignItems: 'center',
-    marginTop: 50,
   },
   loginBottom: {
     marginTop: 10,

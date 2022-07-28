@@ -15,6 +15,7 @@ import {useNavigation} from '@react-navigation/native';
 import Statusbar from '../components/Statusbar';
 import FlashMessage from 'react-native-flash-message';
 import {showMessage, hideMessage} from 'react-native-flash-message';
+import STYLES from '../theme/styles';
 const FoodDetails = ({route}) => {
   const food = route.params.food;
   const {name, image, details, price} = food;
@@ -25,18 +26,19 @@ const FoodDetails = ({route}) => {
     return (
       <View>
         <TouchableOpacity
-          style={{backgroundColor: colors.white, margin: 10, borderRadius: 10}}
+          style={{
+            backgroundColor: colors.white,
+            marginRight: 10,
+            // marginTop: 40,
+            borderRadius: 10,
+          }}
           onPress={() => navigation.navigate('FoodDetails', {food: item})}>
-          <Text style={{fontSize: 14, margin: 10, fontWeight: 'bold'}}>
-            {name}
-          </Text>
+          <Text style={[STYLES.h5, {padding: 10}]}>{name}</Text>
           <View
             style={{
-              // flex: 2,
               flexDirection: 'column',
               justifyContent: 'space-between',
               padding: 20,
-              // paddingHorizontal: 20,
             }}>
             <Image
               resizeMode="cover"
@@ -44,9 +46,7 @@ const FoodDetails = ({route}) => {
               source={image}
             />
           </View>
-          <Text style={{fontSize: 15, margin: 10, fontWeight: 'bold'}}>
-            Price: ${price}
-          </Text>
+          <Text style={[STYLES.h5, {padding: 10}]}>Price: ${price}</Text>
         </TouchableOpacity>
       </View>
     );
@@ -55,7 +55,11 @@ const FoodDetails = ({route}) => {
   return (
     <SafeAreaView style={{flex: 1, backgroundColor: colors.white}}>
       <Statusbar name={name} />
-      <View style={{paddingHorizontal: 20, flex: 1.5}}>
+
+      {/* details screen  */}
+
+      <View
+        style={[STYLES.screen, {paddingTop: 0, paddingBottom: 0, flex: 1.8}]}>
         <ScrollView style={{flex: 1}} showsVerticalScrollIndicator={false}>
           <Image
             resizeMode="contain"
@@ -64,12 +68,9 @@ const FoodDetails = ({route}) => {
               width: '100%',
               alignItems: 'center',
               justifyContent: 'center',
-              // backgroundColor: colors.red,
             }}
           />
-          <Text style={{fontSize: 25, marginVertical: 5, fontWeight: 'bold'}}>
-            {name}
-          </Text>
+          <Text style={STYLES.h2}>{name}</Text>
           <View
             style={{
               flexDirection: 'row',
@@ -77,7 +78,7 @@ const FoodDetails = ({route}) => {
               alignItems: 'center',
               paddingVertical: 10,
             }}>
-            <Text style={{fontSize: 25, fontWeight: 'bold'}}>${price}</Text>
+            <Text style={STYLES.h3}>${price}</Text>
             <TouchableOpacity
               onPress={() => {
                 /* HERE IS WHERE WE'RE GOING TO SHOW OUR FIRST MESSAGE */
@@ -98,45 +99,44 @@ const FoodDetails = ({route}) => {
                 padding: 10,
                 borderRadius: 10,
               }}>
-              <Text style={{color: colors.white, fontWeight: 'bold'}}>
+              <Text
+                style={[STYLES.btnFont, {fontSize: 13, color: colors.white}]}>
                 Add To Cart
               </Text>
             </TouchableOpacity>
           </View>
-          <Text style={{fontSize: 15, fontWeight: 'bold'}}>{details}</Text>
-          <Text style={{fontSize: 15, fontWeight: 'bold'}}>{details}</Text>
-          <Text style={{fontSize: 15, fontWeight: 'bold'}}>{details}</Text>
-          <Text style={{fontSize: 15, fontWeight: 'bold'}}>{details}</Text>
+          <Text style={STYLES.primary}>{details}</Text>
+          <Text style={STYLES.primary}>{details}</Text>
+          <Text style={STYLES.primary}>{details}</Text>
         </ScrollView>
       </View>
-      <ScrollView
-        style={{
-          backgroundColor: colors.grey,
-          // padding: 150,
-          flex: 1,
 
-          // padding: 20,
-          borderTopLeftRadius: 30,
-          borderTopRightRadius: 30,
-        }}>
+      <ScrollView
+        style={[
+          STYLES.screen,
+          {
+            backgroundColor: colors.grey,
+            // flex: 0.1,
+            borderTopLeftRadius: 30,
+            borderTopRightRadius: 30,
+            paddingBottom:0,
+          },
+        ]}>
         <Text
-          style={{
-            marginVertical: 15,
-            marginHorizontal: 20,
-            fontSize: 18,
-            fontWeight: 'bold',
-          }}>
+          style={[
+            STYLES.primary,
+            {
+              fontSize: 20,
+              marginBottom:10,
+            },
+          ]}>
           Similar Products
         </Text>
         <FlatList
-          // style={{flex:1}}
           horizontal
           showsHorizontalScrollIndicator={false}
           data={FOOD_LIST}
-          // numColumns={2}
           renderItem={renderItem}
-          // refreshing
-          // contentInset={{right: 20, top: 0, left: 0, bottom: 0}}
         />
       </ScrollView>
       <FlashMessage position="top" />
