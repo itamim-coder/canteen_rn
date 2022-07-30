@@ -11,7 +11,7 @@ import {
 } from 'react-native';
 import React, {useState} from 'react';
 import {colors} from '../theme/colors';
-import STYLES from '../theme/styles';
+// import STYLES from '../theme/styles';
 import {Picker} from '@react-native-picker/picker';
 
 const UpdateProfile = () => {

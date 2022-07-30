@@ -3,7 +3,8 @@ import React from 'react';
 import {colors} from '../theme/colors';
 import AntDesign from 'react-native-vector-icons/AntDesign';
 import {useNavigation} from '@react-navigation/native';
-import STYLES from '../theme/styles';
+import TYPOGRAPHY from '../theme/typography';
+// import STYLES from '../theme/styles';
 
 const Statusbar = ({name}) => {
   const navigation = useNavigation();
@@ -25,7 +26,7 @@ const Statusbar = ({name}) => {
       <View style={{flex: 2}}>
         <Text
           style={[
-            STYLES.h3,
+            TYPOGRAPHY.h3,
             {
             
               textAlign: 'center',

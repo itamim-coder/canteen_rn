@@ -3,7 +3,7 @@ import React from 'react';
 import Statusbar from '../components/Statusbar';
 import Wallet from '../components/Wallet';
 import {colors} from '../theme/colors';
-import STYLES from '../theme/styles';
+// import STYLES from '../theme/styles';
 
 const Payment = () => {
   return (

@@ -1,3 +1,4 @@
+import React, {Component} from 'react';
 import {
   SafeAreaView,
   StyleSheet,
@@ -6,74 +7,77 @@ import {
   TouchableOpacity,
   View,
 } from 'react-native';
-import React, {useState} from 'react';
+
 import {colors} from '../theme/colors';
-import STYLES from '../theme/styles';
-import {useNavigation} from '@react-navigation/native';
+import SCREEN from '../theme/Screen';
+import TYPOGRAPHY from '../theme/typography';
+import INPUT from '../theme/Input';
+import BUTTONS from '../theme/Buttons';
+import {Fonts} from '../theme/Fonts';
 
-const Login = () => {
-  const [email, setEmail] = useState('');
-  const [name, setName] = useState('');
-  const [phone, setPhone] = useState('');
-  const navigation = useNavigation();
+export default class Signup extends Component {
+  render() {
+    return (
+      <SafeAreaView style={[SCREEN.screen, styles.loginContainer]}>
+        <View style={styles.loginBox}>
+          <Text style={[TYPOGRAPHY.h1, {textAlign: 'center'}]}>
+            Create Account
+          </Text>
+          <Text style={[TYPOGRAPHY.primary, {textAlign: 'center'}]}>
+            If you don't have an account, please provide your email and phone to
+            register.
+          </Text>
 
-  return (
-    <SafeAreaView style={[STYLES.screen, styles.loginContainer]}>
-      <View style={styles.loginBox}>
-        <Text style={[STYLES.h1, {textAlign: 'center'}]}>Create Account</Text>
-        <Text style={[STYLES.primary, {textAlign: 'center'}]}>
-          If you don't have an account, please provide your email and phone to
-          register.
-        </Text>
-
-        <View>
-          <View style={STYLES.inputContainer}>
-            <TextInput
-              onChangeText={text => setEmail(text)}
-              placeholder="Email"
-              placeholderTextColor={'grey'}
-              style={STYLES.input}
-            />
-          </View>
-          <View style={STYLES.inputContainer}>
-            <TextInput
-              onChangeText={text => setName(text)}
-              placeholder="Name"
-              placeholderTextColor={'grey'}
-              style={STYLES.input}
-            />
-          </View>
-          <View style={STYLES.inputContainer}>
-            <TextInput
-              onChangeText={text => setPhone(text)}
-              placeholder="Phone"
-              placeholderTextColor={'grey'}
-              style={STYLES.input}
-              keyboardType="numeric"
-            />
-          </View>
-          <TouchableOpacity
-            onPress={() => navigation.navigate('Verification')}
-            style={STYLES.btnPrimary}>
-            <Text style={STYLES.btnFont}>
-              Continue
-            </Text>
-          </TouchableOpacity>
-          <View style={{marginTop:10}}>
-            <TouchableOpacity onPress={() => navigation.navigate('Login')}>
-              <Text
-                  style={{color: colors.light, fontFamily: 'Poppins-Regular', textAlign:'center'}}>
-                Back to Login
-              </Text>
+          <View>
+            <View style={INPUT.inputContainer}>
+              <TextInput
+                // onChangeText={text => setEmail(text)}
+                placeholder="Email"
+                placeholderTextColor={'grey'}
+                style={INPUT.input}
+              />
+            </View>
+            <View style={INPUT.inputContainer}>
+              <TextInput
+                // onChangeText={text => setName(text)}
+                placeholder="Name"
+                placeholderTextColor={'grey'}
+                style={INPUT.input}
+              />
+            </View>
+            <View style={INPUT.inputContainer}>
+              <TextInput
+                // onChangeText={text => setPhone(text)}
+                placeholder="Phone"
+                placeholderTextColor={'grey'}
+                style={INPUT.input}
+                keyboardType="numeric"
+              />
+            </View>
+            <TouchableOpacity
+              onPress={() => this.props.navigation.navigate('Verification')}
+              style={BUTTONS.btnPrimary}>
+              <Text style={BUTTONS.btnFont}>Continue</Text>
             </TouchableOpacity>
+            <View style={{marginTop: 10}}>
+              <TouchableOpacity
+                onPress={() => this.props.navigation.navigate('Login')}>
+                <Text
+                  style={{
+                    color: colors.light,
+                    fontFamily: Fonts.primary,
+                    textAlign: 'center',
+                  }}>
+                  Back to Login
+                </Text>
+              </TouchableOpacity>
+            </View>
           </View>
         </View>
-      </View>
-    </SafeAreaView>
-  );
-};
-
-export default Login;
+      </SafeAreaView>
+    );
+  }
+}
 
 const styles = StyleSheet.create({
   loginContainer: {
@@ -84,6 +88,4 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: 'center',
   },
-
- 
 });

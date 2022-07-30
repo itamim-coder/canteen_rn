@@ -10,20 +10,21 @@ import {
   TouchableOpacity,
   View,
 } from 'react-native';
-import React from 'react';
+import React, {Component} from 'react';
 import {useNavigation} from '@react-navigation/native';
 import {spacing} from '../theme/spacing';
 import {FOOD_LIST} from '../data/food-list';
 import {colors} from '../theme/colors';
 import {CATEGORY_LIST} from '../data/category-list';
 import AntDesign from 'react-native-vector-icons/AntDesign';
-import STYLES from '../theme/styles';
-const Home = () => {
-  const navigation = useNavigation();
+import SCREEN from '../theme/Screen';
+import TYPOGRAPHY from '../theme/typography';
+import {Fonts} from '../theme/Fonts';
 
+export default class Home extends Component {
   // render Category item
 
-  const renderCategory = ({item}) => {
+  renderCategory = ({item}) => {
     const {image, category} = item;
     return (
       <TouchableOpacity
@@ -48,21 +49,21 @@ const Home = () => {
     );
   };
 
-  // render popular item
-
-  const renderItem = ({item}) => {
+  renderItem = ({item}) => {
     const {name, image, price} = item;
     return (
       <SafeAreaView>
         <TouchableOpacity
-          onPress={() => navigation.navigate('FoodDetails', {food: item})}>
+          onPress={() =>
+            this.props.navigation.navigate('FoodDetails', {food: item})
+          }>
           <View
             style={{
               backgroundColor: colors.white,
               padding: 10,
               borderRadius: 10,
             }}>
-            <Text style={STYLES.h5}>{name}</Text>
+            <Text style={TYPOGRAPHY.h5}>{name}</Text>
             <View
               style={{
                 padding: 16,
@@ -74,7 +75,10 @@ const Home = () => {
               />
             </View>
             <Text
-              style={[STYLES.primary, {fontWeight: 'bold', color: colors.ash}]}>
+              style={[
+                TYPOGRAPHY.h5,
+                // {fontWeight: 'bold', color: colors.ash}
+              ]}>
               ${price}.00
             </Text>
           </View>
@@ -82,71 +86,72 @@ const Home = () => {
       </SafeAreaView>
     );
   };
+  render() {
+    return (
+      <SafeAreaView style={[SCREEN.screen, {paddingBottom: 0}]}>
+        {/* Home Top Section  */}
 
-  return (
-    <SafeAreaView style={[STYLES.screen, {paddingBottom: 0}]}>
-      {/* Home Top Section  */}
-
-      <View style={styles.topBar}>
-        <TouchableOpacity onPress={() => navigation.navigate('Profile')}>
-          <Image
-            style={styles.image}
-            source={require('../../assets/images/profile.png')}
-          />
-        </TouchableOpacity>
-        <TouchableOpacity onPress={() => navigation.navigate('Topup')}>
-          <Image
-            style={styles.image}
-            source={require('../../assets/images/ic_wallet.png')}
-          />
-        </TouchableOpacity>
-      </View>
-
-      <ScrollView showsVerticalScrollIndicator={false}>
-        {/* Search Box  */}
-
-        <View style={styles.search}>
-          <View style={styles.searchWrapper}>
-            <AntDesign
-              name="search1"
-              size={18}
-              color="black"
-              style={styles.searchIcon}
+        <View style={styles.topBar}>
+          <TouchableOpacity
+            onPress={() => this.props.navigation.navigate('Profile')}>
+            <Image
+              style={styles.image}
+              source={require('../../assets/images/profile.png')}
             />
-            <TextInput placeholder="Search Food" style={styles.searchInput} />
+          </TouchableOpacity>
+          <TouchableOpacity
+            onPress={() => this.props.navigation.navigate('Topup')}>
+            <Image
+              style={styles.image}
+              source={require('../../assets/images/ic_wallet.png')}
+            />
+          </TouchableOpacity>
+        </View>
+
+        <ScrollView showsVerticalScrollIndicator={false}>
+          {/* Search Box  */}
+
+          <View style={styles.search}>
+            <View style={styles.searchWrapper}>
+              <AntDesign
+                name="search1"
+                size={18}
+                color="black"
+                style={styles.searchIcon}
+              />
+              <TextInput placeholder="Search Food" style={styles.searchInput} />
+            </View>
           </View>
-        </View>
 
-        {/* Categories Section  */}
+          {/* Categories Section  */}
 
-        <Text style={STYLES.h3}>Categories</Text>
-        <FlatList
-          horizontal
-          data={CATEGORY_LIST}
-          showsHorizontalScrollIndicator={false}
-          renderItem={renderCategory}
-        />
-
-        {/* Popular Section  */}
-
-        <View style={styles.popularBox}>
-          <Text style={STYLES.h3}>Popular Near You</Text>
+          <Text style={TYPOGRAPHY.h3}>Categories</Text>
           <FlatList
-            columnWrapperStyle={{
-              justifyContent: 'space-between',
-              marginTop: 10,
-            }}
-            data={FOOD_LIST}
-            numColumns={2}
-            renderItem={renderItem}
+            horizontal
+            data={CATEGORY_LIST}
+            showsHorizontalScrollIndicator={false}
+            renderItem={item => this.renderCategory(item)}
           />
-        </View>
-      </ScrollView>
-    </SafeAreaView>
-  );
-};
 
-export default Home;
+          {/* Popular Section  */}
+
+          <View style={styles.popularBox}>
+            <Text style={TYPOGRAPHY.h3}>Popular Near You</Text>
+            <FlatList
+              columnWrapperStyle={{
+                justifyContent: 'space-between',
+                marginTop: 10,
+              }}
+              data={FOOD_LIST}
+              numColumns={2}
+              renderItem={item => this.renderItem(item)}
+            />
+          </View>
+        </ScrollView>
+      </SafeAreaView>
+    );
+  }
+}
 
 const styles = StyleSheet.create({
   image: {
@@ -177,7 +182,7 @@ const styles = StyleSheet.create({
   },
   searchInput: {
     color: '#b4b4b4',
-    fontFamily: 'Poopins-Regular',
+    fontFamily: Fonts.primary,
   },
   popularBox: {
     paddingVertical: 20,

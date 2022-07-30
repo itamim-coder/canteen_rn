@@ -10,7 +10,7 @@ import {
 import React from 'react';
 import {colors} from '../theme/colors';
 import {useNavigation} from '@react-navigation/native';
-import STYLES from '../theme/styles';
+// import STYLES from '../theme/styles';
 // import {Icon} from 'react-native-vector-icons/Icon';
 
 const Profile = () => {

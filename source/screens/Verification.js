@@ -1,3 +1,4 @@
+import React, {Component} from 'react';
 import {
   StyleSheet,
   Text,
@@ -5,57 +6,59 @@ import {
   TouchableOpacity,
   View,
 } from 'react-native';
-import React, {useState} from 'react';
-import {useNavigation} from '@react-navigation/native';
+
 import {colors} from '../theme/colors';
 import {SafeAreaView} from 'react-native-safe-area-context';
-import STYLES from '../theme/styles';
+import SCREEN from '../theme/Screen';
+import TYPOGRAPHY from '../theme/typography';
+import INPUT from '../theme/Input';
+import BUTTONS from '../theme/Buttons';
 
-const Verification = () => {
-  const [otp, setOtp] = useState('');
-
-  return (
-    <SafeAreaView style={STYLES.screen}>
-      <View>
-        <Text style={[STYLES.h2]}>Verification</Text>
-        <Text style={[STYLES.primary]}>
-          Enter verification code sent on given number
-        </Text>
-        <View style={styles.otpBox}>
-          <Text style={[STYLES.primary]}>Enter 6 Digit OTP</Text>
-          <View style={STYLES.inputContainer}>
-            <TextInput
-              onChangeText={text => setOtp(text)}
-              placeholder="OTP"
-              placeholderTextColor={'grey'}
-              style={STYLES.input}
-              keyboardType="numeric"
-            />
-          </View>
-          <TouchableOpacity style={STYLES.btnPrimary}>
-            <Text style={STYLES.btnFont}>Submit</Text>
-          </TouchableOpacity>
-          <View style={styles.bottom}>
-            <Text style={[STYLES.primary, {color: colors.light}]}>
-              0 min remain
-            </Text>
-            <TouchableOpacity>
-              <Text
-                style={[
-                  STYLES.primary,
-                  {color: colors.red, fontFamily: 'Poppins-Bold'},
-                ]}>
-                RESEND
-              </Text>
+export default class Verification extends Component {
+  render() {
+    return (
+      <SafeAreaView style={SCREEN.screen}>
+        <View>
+          <Text style={[TYPOGRAPHY.h2]}>Verification</Text>
+          <Text style={[TYPOGRAPHY.primary]}>
+            Enter verification code sent on given number
+          </Text>
+          <View style={styles.otpBox}>
+            <Text style={[TYPOGRAPHY.primary]}>Enter 6 Digit OTP</Text>
+            <View style={INPUT.inputContainer}>
+              <TextInput
+                // onChangeText={text => setOtp(text)}
+                placeholder="OTP"
+                placeholderTextColor={'grey'}
+                style={INPUT.input}
+                keyboardType="numeric"
+              />
+            </View>
+            <TouchableOpacity style={BUTTONS.btnPrimary}>
+              <Text style={BUTTONS.btnFont}>Submit</Text>
             </TouchableOpacity>
+            <View style={styles.bottom}>
+              <Text style={[TYPOGRAPHY.primary, 
+                // {color: colors.light}
+                ]}>
+                0 min remain
+              </Text>
+              <TouchableOpacity>
+                <Text
+                  style={[
+                    TYPOGRAPHY.h4,
+                    // {color: colors.red, fontFamily: 'Poppins-Bold'},
+                  ]}>
+                  RESEND
+                </Text>
+              </TouchableOpacity>
+            </View>
           </View>
         </View>
-      </View>
-    </SafeAreaView>
-  );
-};
-
-export default Verification;
+      </SafeAreaView>
+    );
+  }
+}
 
 const styles = StyleSheet.create({
   bottom: {

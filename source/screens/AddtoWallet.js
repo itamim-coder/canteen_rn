@@ -10,7 +10,7 @@ import React from 'react';
 import {colors} from '../theme/colors';
 import Wallet from '../components/Wallet';
 import Statusbar from '../components/Statusbar';
-import STYLES from '../theme/styles';
+// import STYLES from '../theme/styles';
 
 const AddtoWallet = () => {
   return (

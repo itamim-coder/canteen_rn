@@ -12,7 +12,7 @@ import {
 import React, {useState} from 'react';
 import {colors} from '../theme/colors';
 import {BottomSheet} from 'react-native-btr';
-import STYLES from '../theme/styles';
+// import STYLES from '../theme/styles';
 import {useNavigation} from '@react-navigation/native';
 import {RadioButton} from 'react-native-paper';
 

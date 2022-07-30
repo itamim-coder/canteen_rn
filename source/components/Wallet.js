@@ -1,7 +1,7 @@
 import {Image, StyleSheet, Text, TouchableOpacity, View} from 'react-native';
 import React from 'react';
 import {colors} from '../theme/colors';
-import STYLES from '../theme/styles';
+// import STYLES from '../theme/styles';
 
 const Wallet = () => {
   return (

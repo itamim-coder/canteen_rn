@@ -15,7 +15,7 @@ import {useNavigation} from '@react-navigation/native';
 import Statusbar from '../components/Statusbar';
 import FlashMessage from 'react-native-flash-message';
 import {showMessage, hideMessage} from 'react-native-flash-message';
-import STYLES from '../theme/styles';
+// import STYLES from '../theme/styles';
 const FoodDetails = ({route}) => {
   const food = route.params.food;
   const {name, image, details, price} = food;
