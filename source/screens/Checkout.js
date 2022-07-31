@@ -20,6 +20,12 @@ import INPUT from '../theme/Input';
 import BUTTONS from '../theme/Buttons';
 
 export default class Checkout extends Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      toggleCheckbox: false,
+    };
+  }
   render() {
     return (
       <SafeAreaView style={[SCREEN.screen, {padding: 0}]}>
@@ -86,16 +92,19 @@ export default class Checkout extends Component {
             <View style={styles.checkboxContainer}>
               <CheckBox
                 disabled={false}
-                // value={toggleCheckBox}
-                // onValueChange={newValue => setToggleCheckBox(newValue)}
+                value={this.state.value}
+                onValueChange={newValue =>
+                  this.setState({toggleCheckBox: this.state.newValue})
+                }
               />
               <Text style={TYPOGRAPHY.primary}>Wallet Balance $0.00</Text>
             </View>
             <Text style={TYPOGRAPHY.h5}>Choose Currency</Text>
             <RadioButton.Group
-            // onValueChange={newValue => setChecked(newValue)}
-            // value={checked}
-            >
+              value={this.props.toggleCheckBox}
+              onValueChange={newValue =>
+                this.setState({toggleCheckBox: this.state.newValue})
+              }>
               <View style={{flexDirection: 'row', alignItems: 'center'}}>
                 <RadioButton value="kyd" />
                 <Text>KYD</Text>

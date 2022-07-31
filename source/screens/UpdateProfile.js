@@ -1,3 +1,4 @@
+import React, {Component} from 'react';
 import {
   Image,
   KeyboardAvoidingView,
@@ -9,174 +10,186 @@ import {
   TouchableOpacity,
   View,
 } from 'react-native';
-import React, {useState} from 'react';
 import {colors} from '../theme/colors';
 // import STYLES from '../theme/styles';
 import {Picker} from '@react-native-picker/picker';
+import SCREEN from '../theme/Screen';
+import TYPOGRAPHY from '../theme/typography';
+import INPUT from '../theme/Input';
+import BUTTONS from '../theme/Buttons';
 
-const UpdateProfile = () => {
-  const [email, setEmail] = useState('');
-  const [name, setName] = useState('');
-  const [phone, setPhone] = useState('');
-  const [selectedValue, setSelectedValue] = useState('no');
-  return (
-    <SafeAreaView style={STYLES.screen}>
-      <ScrollView showsVerticalScrollIndicator={false}>
-        <View
-          style={{
-            //   padding: 20,
-            marginTop: 15,
-            flexDirection: 'row',
-            justifyContent: 'space-between',
-            alignItems: 'center',
-          }}>
+export default class UpdateProfile extends Component {
+  render() {
+    return (
+      <SafeAreaView style={SCREEN.screen}>
+        <ScrollView showsVerticalScrollIndicator={false}>
+          <View
+            style={{
+              //   padding: 20,
+              marginTop: 15,
+              flexDirection: 'row',
+              justifyContent: 'space-between',
+              alignItems: 'center',
+            }}>
+            <View>
+              <Text style={[TYPOGRAPHY.primary, {fontSize: 28}]}>Profile</Text>
+            </View>
+            <Image
+              style={{width: 80, height: 80}}
+              source={require('../../assets/images/profile.png')}
+            />
+          </View>
+
           <View>
-            <Text style={[STYLES.primary, {fontSize: 28}]}>Profile</Text>
-          </View>
-          <Image
-            style={{width: 80, height: 80}}
-            source={require('../../assets/images/profile.png')}
-          />
-        </View>
-
-        <View>
-          <View style={{flexDirection: 'row'}}>
-            <View style={{flex: 1, margin: 3}}>
-            <Text style={[STYLES.medium, styles.inputTitle]}>Full Name</Text>
-              <View style={STYLES.inputContainer}>
-                <TextInput
-                  onChangeText={text => setName(text)}
-                  placeholder="Enter Full Name"
-                  defaultValue="Zahid"
-                  placeholderTextColor={'grey'}
-                  style={STYLES.input}
-                />
+            <View style={{flexDirection: 'row'}}>
+              <View style={{flex: 1, margin: 3}}>
+                <Text style={[TYPOGRAPHY.medium, styles.inputTitle]}>
+                  Full Name
+                </Text>
+                <View style={INPUT.inputContainer}>
+                  <TextInput
+                    // onChangeText={text => setName(text)}
+                    placeholder="Enter Full Name"
+                    defaultValue="Zahid"
+                    placeholderTextColor={'grey'}
+                    style={INPUT.input}
+                  />
+                </View>
+              </View>
+              <View style={{flex: 1, margin: 3}}>
+                <Text style={[TYPOGRAPHY.medium, styles.inputTitle]}>Account</Text>
+                <View style={INPUT.inputContainer}>
+                  <TextInput
+                    // onChangeText={text => setName(text)}
+                    defaultValue="3820"
+                    placeholderTextColor={'grey'}
+                    editable={false}
+                    style={[
+                      INPUT.input,
+                      {color: colors.grey, backgroundColor: colors.light},
+                    ]}
+                  />
+                </View>
               </View>
             </View>
-            <View style={{flex: 1, margin: 3}}>
-            <Text style={[STYLES.medium, styles.inputTitle]}>Account</Text>
-              <View style={STYLES.inputContainer}>
-                <TextInput
-                  onChangeText={text => setName(text)}
-                  defaultValue="3820"
-                  placeholderTextColor={'grey'}
-                  editable={false}
-                  style={[
-                    STYLES.input,
-                    {color: colors.grey, backgroundColor: colors.light},
-                  ]}
-                />
-              </View>
+            <Text style={[TYPOGRAPHY.medium, styles.inputTitle]}>Phone Number</Text>
+            <View style={INPUT.inputContainer}>
+              <TextInput
+                // onChangeText={text => setName(text)}
+                placeholder="Enter Phone Number"
+                defaultValue="+0085324324"
+                placeholderTextColor={'grey'}
+                style={INPUT.input}
+                keyboardType="numeric"
+              />
             </View>
-          </View>
-          <Text style={[STYLES.medium, styles.inputTitle]}>Phone Number</Text>
-          <View style={STYLES.inputContainer}>
-            <TextInput
-              onChangeText={text => setName(text)}
-              placeholder="Enter Phone Number"
-              defaultValue="+0085324324"
-              placeholderTextColor={'grey'}
-              style={STYLES.input}
-              keyboardType="numeric"
-            />
-          </View>
-          <Text style={[STYLES.medium, styles.inputTitle]}>Email Address</Text>
-          <View style={STYLES.inputContainer}>
-            <TextInput
-              onChangeText={text => setPhone(text)}
-              placeholder="Enter Email Address"
-              defaultValue="zahid@powah.com"
-              editable={false}
-              placeholderTextColor={'grey'}
-              style={[
-                STYLES.input,
-                {color: colors.grey, backgroundColor: colors.light},
-              ]}
-            />
-          </View>
-
-          <View style={{flexDirection: 'row'}}>
-            <View style={{flex: 1, margin: 3}}>
-            <Text style={[STYLES.medium, styles.inputTitle]}>Notify Low Balance</Text>
-              <Picker
-                selectedValue={selectedValue}
-                style={{height: 50, width: 150}}
-                onValueChange={(itemValue, itemIndex) =>
-                  setSelectedValue(itemValue)
-                }>
-                <Picker.Item label="NO" value="no" />
-                <Picker.Item label="YES" value="yes" />
-              </Picker>
-            </View>
-            <View style={{flex: 1, margin: 3}}>
-            <Text style={[STYLES.medium, styles.inputTitle]}>Low Balance Point</Text>
-              <View style={STYLES.inputContainer}>
-                <TextInput
-                  onChangeText={text => setName(text)}
-                  // defaultValue="3820"
-                  placeholderTextColor={'grey'}
-                  // editable={false}
-                  style={[STYLES.input, {color: colors.black}]}
-                  keyboardType="numeric"
-                />
-              </View>
-            </View>
-          </View>
-
-          <View style={{flexDirection: 'row'}}>
-            <View style={{flex: 1, margin: 3}}>
-            <Text style={[STYLES.medium, styles.inputTitle]}>Notify Promotions</Text>
-              <Picker
-                selectedValue={selectedValue}
-                style={{height: 50, width: 150}}
-                onValueChange={(itemValue, itemIndex) =>
-                  setSelectedValue(itemValue)
-                }>
-                <Picker.Item label="NO" value="no" />
-                <Picker.Item label="YES" value="yes" />
-              </Picker>
-            </View>
-            <View style={{flex: 1, margin: 3}}>
-            <Text style={[STYLES.medium, styles.inputTitle]}>Notify Orders</Text>
-              <Picker
-                selectedValue={selectedValue}
-                style={{height: 50, width: 150}}
-                onValueChange={(itemValue, itemIndex) =>
-                  setSelectedValue(itemValue)
-                }>
-                <Picker.Item label="NO" value="java" />
-                <Picker.Item label="YES" value="js" />
-              </Picker>
-            </View>
-          </View>
-
-          <Text style={[STYLES.medium, styles.inputTitle]}>Order Notes</Text>
-
-          <KeyboardAvoidingView style={STYLES.inputContainer}>
-            <TextInput
-              onChangeText={text => setPhone(text)}
-              //   placeholder="Enter Email Address"
-              // defaultValue="zahid@powah.com"
-              multiline={true}
-              numberOfLines={3}
-              // editable={false}
-              placeholderTextColor={'grey'}
-              style={[STYLES.input, {color: colors.black}]}
-            />
-          </KeyboardAvoidingView>
-
-          <TouchableOpacity style={STYLES.btnPrimary}>
-            <Text style={STYLES.btnFont}>
-              Save
+            <Text style={[TYPOGRAPHY.medium, styles.inputTitle]}>
+              Email Address
             </Text>
-          </TouchableOpacity>
-        </View>
-      </ScrollView>
-    </SafeAreaView>
-  );
-};
+            <View style={INPUT.inputContainer}>
+              <TextInput
+                // onChangeText={text => setPhone(text)}
+                placeholder="Enter Email Address"
+                defaultValue="zahid@powah.com"
+                editable={false}
+                placeholderTextColor={'grey'}
+                style={[
+                  INPUT.input,
+                  {color: colors.grey, backgroundColor: colors.light},
+                ]}
+              />
+            </View>
 
-export default UpdateProfile;
+            <View style={{flexDirection: 'row'}}>
+              <View style={{flex: 1, margin: 3}}>
+                <Text style={[TYPOGRAPHY.medium, styles.inputTitle]}>
+                  Notify Low Balance
+                </Text>
+                <Picker
+                  // selectedValue={selectedValue}
+                  style={{height: 50, width: 150}}
+                  // onValueChange={(itemValue, itemIndex) =>
+                    // setSelectedValue(itemValue)
+                  // }
+                  >
+                  <Picker.Item label="NO" value="no" />
+                  <Picker.Item label="YES" value="yes" />
+                </Picker>
+              </View>
+              <View style={{flex: 1, margin: 3}}>
+                <Text style={[TYPOGRAPHY.medium, styles.inputTitle]}>
+                  Low Balance Point
+                </Text>
+                <View style={INPUT.inputContainer}>
+                  <TextInput
+                    // onChangeText={text => setName(text)}
+                    // defaultValue="3820"
+                    placeholderTextColor={'grey'}
+                    // editable={false}
+                    style={[INPUT.input, {color: colors.black}]}
+                    keyboardType="numeric"
+                  />
+                </View>
+              </View>
+            </View>
+
+            <View style={{flexDirection: 'row'}}>
+              <View style={{flex: 1, margin: 3}}>
+                <Text style={[TYPOGRAPHY.medium, styles.inputTitle]}>
+                  Notify Promotions
+                </Text>
+                <Picker
+                  // selectedValue={selectedValue}
+                  style={{height: 50, width: 150}}
+                  // onValueChange={(itemValue, itemIndex) =>
+                    // setSelectedValue(itemValue)
+                  // }
+                  >
+                  <Picker.Item label="NO" value="no" />
+                  <Picker.Item label="YES" value="yes" />
+                </Picker>
+              </View>
+              <View style={{flex: 1, margin: 3}}>
+                <Text style={[TYPOGRAPHY.medium, styles.inputTitle]}>
+                  Notify Orders
+                </Text>
+                <Picker
+                  // selectedValue={selectedValue}
+                  style={{height: 50, width: 150}}
+                  // onValueChange={(itemValue, itemIndex) =>
+                    // setSelectedValue(itemValue)
+                  // }
+                  >
+                  <Picker.Item label="NO" value="java" />
+                  <Picker.Item label="YES" value="js" />
+                </Picker>
+              </View>
+            </View>
+
+            <Text style={[TYPOGRAPHY.medium, styles.inputTitle]}>Order Notes</Text>
+
+            <KeyboardAvoidingView style={INPUT.inputContainer}>
+              <TextInput
+                // onChangeText={text => setPhone(text)}
+                //   placeholder="Enter Email Address"
+                // defaultValue="zahid@powah.com"
+                multiline={true}
+                numberOfLines={3}
+                // editable={false}
+                placeholderTextColor={'grey'}
+                style={[INPUT.input, {color: colors.black}]}
+              />
+            </KeyboardAvoidingView>
+
+            <TouchableOpacity style={BUTTONS.btnPrimary}>
+              <Text style={BUTTONS.btnFont}>Save</Text>
+            </TouchableOpacity>
+          </View>
+        </ScrollView>
+      </SafeAreaView>
+    );
+  }
+}
 
 const styles = StyleSheet.create({
   inputTitle: {

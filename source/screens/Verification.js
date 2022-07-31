@@ -6,8 +6,6 @@ import {
   TouchableOpacity,
   View,
 } from 'react-native';
-
-import {colors} from '../theme/colors';
 import {SafeAreaView} from 'react-native-safe-area-context';
 import SCREEN from '../theme/Screen';
 import TYPOGRAPHY from '../theme/typography';
@@ -38,8 +36,10 @@ export default class Verification extends Component {
               <Text style={BUTTONS.btnFont}>Submit</Text>
             </TouchableOpacity>
             <View style={styles.bottom}>
-              <Text style={[TYPOGRAPHY.primary, 
-                // {color: colors.light}
+              <Text
+                style={[
+                  TYPOGRAPHY.primary,
+                  // {color: colors.light}
                 ]}>
                 0 min remain
               </Text>
