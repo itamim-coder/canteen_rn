@@ -16,7 +16,7 @@ import {showMessage, hideMessage} from 'react-native-flash-message';
 import SCREEN from '../theme/Screen';
 import TYPOGRAPHY from '../theme/typography';
 import BUTTONS from '../theme/Buttons';
-
+import Button from '../components/Button';
 
 export class MyCart extends Component {
   constructor(props) {
@@ -155,12 +155,16 @@ export class MyCart extends Component {
             ${this.state.count * 10}
           </Text>
 
-          <TouchableOpacity
+          {/* <TouchableOpacity
             style={checkOutButton}
             onPress={() => this.props.navigation.navigate('Checkout')}>
             <Text style={[BUTTONS.btnFont]}>Checkout</Text>
-          </TouchableOpacity>
-          {/* <Button name="checkout button" props={this.props.navigation}></Button> */}
+          </TouchableOpacity> */}
+          <Button
+            // name="checkout button"
+            navigation={this.props.navigation}
+            type="checkout"
+          />
         </View>
         <FlashMessage position="top" />
       </SafeAreaView>

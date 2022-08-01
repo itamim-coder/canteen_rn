@@ -15,10 +15,11 @@ import TYPOGRAPHY from '../theme/typography';
 import {Fonts} from '../theme/Fonts';
 import INPUT from '../theme/Input';
 import SCREEN from '../theme/Screen';
+import Button from '../components/Button';
 
 export default class Login extends Component {
   render() {
-    // const { navigate } = this.props.navigation; 
+    // const { navigate } = this.props.navigation;
     return (
       <SafeAreaView style={[SCREEN.screen, styles.loginContainer]}>
         <View style={styles.loginBox}>
@@ -45,12 +46,7 @@ export default class Login extends Component {
                 keyboardType="numeric"
               />
             </View>
-            <TouchableOpacity
-              // onPress={handleSignin}
-              onPress={() => this.props.navigation.navigate('TabNavigator')}
-              style={BUTTONS.btnPrimary}>
-              <Text style={BUTTONS.btnFont}>Login</Text>
-            </TouchableOpacity>
+            <Button type="login" navigation={this.props.navigation}/>
             <View style={styles.loginBottom}>
               <TouchableOpacity>
                 <Text style={{color: colors.light, fontFamily: Fonts.primary}}>

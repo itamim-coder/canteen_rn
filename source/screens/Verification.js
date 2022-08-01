@@ -11,6 +11,8 @@ import SCREEN from '../theme/Screen';
 import TYPOGRAPHY from '../theme/typography';
 import INPUT from '../theme/Input';
 import BUTTONS from '../theme/Buttons';
+import {colors} from '../theme/colors';
+import Button from '../components/Button';
 
 export default class Verification extends Component {
   render() {
@@ -32,22 +34,16 @@ export default class Verification extends Component {
                 keyboardType="numeric"
               />
             </View>
-            <TouchableOpacity style={BUTTONS.btnPrimary}>
-              <Text style={BUTTONS.btnFont}>Submit</Text>
-            </TouchableOpacity>
+            <Button type="submit" navigation={this.props.navigation} />
             <View style={styles.bottom}>
-              <Text
-                style={[
-                  TYPOGRAPHY.primary,
-                  // {color: colors.light}
-                ]}>
+              <Text style={[TYPOGRAPHY.primary, {color: colors.light}]}>
                 0 min remain
               </Text>
               <TouchableOpacity>
                 <Text
                   style={[
                     TYPOGRAPHY.h4,
-                    // {color: colors.red, fontFamily: 'Poppins-Bold'},
+                    {color: colors.red, fontFamily: 'Poppins-Bold'},
                   ]}>
                   RESEND
                 </Text>

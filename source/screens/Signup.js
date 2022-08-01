@@ -14,6 +14,7 @@ import TYPOGRAPHY from '../theme/typography';
 import INPUT from '../theme/Input';
 import BUTTONS from '../theme/Buttons';
 import {Fonts} from '../theme/Fonts';
+import Button from '../components/Button';
 
 export default class Signup extends Component {
   render() {
@@ -54,11 +55,11 @@ export default class Signup extends Component {
                 keyboardType="numeric"
               />
             </View>
-            <TouchableOpacity
-              onPress={() => this.props.navigation.navigate('Verification')}
-              style={BUTTONS.btnPrimary}>
-              <Text style={BUTTONS.btnFont}>Continue</Text>
-            </TouchableOpacity>
+            <Button
+              type="continue"
+              navigation={this.props.navigation}
+              page="Verification"
+            />
             <View style={{marginTop: 10}}>
               <TouchableOpacity
                 onPress={() => this.props.navigation.navigate('Login')}>

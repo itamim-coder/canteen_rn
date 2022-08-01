@@ -19,6 +19,8 @@ import SCREEN from '../theme/Screen';
 import TYPOGRAPHY from '../theme/typography';
 import {Fonts} from '../theme/Fonts';
 import Seacrh from '../components/Seacrh';
+import Popular from '../components/Popular';
+import HomeTopBar from '../components/HomeTopBar';
 
 export class Home extends Component {
   // render Category item
@@ -47,52 +49,7 @@ export class Home extends Component {
     );
   };
 
-  renderItem = ({item}) => {
-    const {name, image, price} = item;
-    const popularCard = {
-      backgroundColor: colors.white,
-      padding: 10,
-      borderRadius: 10,
-    };
-    const priceText = {
-      ...TYPOGRAPHY.h5,
-      fontWeight: 'bold',
-      color: colors.ash,
-    };
-    return (
-      <SafeAreaView>
-        <TouchableOpacity
-          onPress={() =>
-            this.props.navigation.navigate('FoodDetails', {food: item})
-          }>
-          <View style={popularCard}>
-            <Text style={TYPOGRAPHY.h5}>{name}</Text>
-            <View
-              style={{
-                padding: 16,
-              }}>
-              <Image
-                resizeMode="contain"
-                style={{width: 125, height: 125}}
-                source={image}
-              />
-            </View>
-            <Text style={priceText}>${price}.00</Text>
-          </View>
-        </TouchableOpacity>
-      </SafeAreaView>
-    );
-  };
   render() {
-    const image = {
-      height: 40,
-      width: 40,
-    };
-    const topBar = {
-      flexDirection: 'row',
-      justifyContent: 'space-between',
-      paddingBottom: 10,
-    };
     const popularBox = {
       paddingVertical: 20,
     };
@@ -105,22 +62,7 @@ export class Home extends Component {
         {/* Home Top Section  */}
 
         {/* <HomeTopBar /> */}
-        <View style={topBar}>
-          <TouchableOpacity
-            onPress={() => this.props.navigation.navigate('Profile')}>
-            <Image
-              style={image}
-              source={require('../../assets/images/profile.png')}
-            />
-          </TouchableOpacity>
-          <TouchableOpacity
-            onPress={() => this.props.navigation.navigate('Topup')}>
-            <Image
-              style={image}
-              source={require('../../assets/images/ic_wallet.png')}
-            />
-          </TouchableOpacity>
-        </View>
+        <HomeTopBar navigation={this.props.navigation} />
 
         <ScrollView showsVerticalScrollIndicator={false}>
           {/* Search Box  */}
@@ -138,19 +80,7 @@ export class Home extends Component {
           />
 
           {/* Popular Section  */}
-
-          <View style={popularBox}>
-            <Text style={TYPOGRAPHY.h3}>Popular Near You</Text>
-            <FlatList
-              columnWrapperStyle={{
-                justifyContent: 'space-between',
-                marginTop: 10,
-              }}
-              data={FOOD_LIST}
-              numColumns={2}
-              renderItem={item => this.renderItem(item)}
-            />
-          </View>
+          <Popular navigation={this.props.navigation} />
         </ScrollView>
       </SafeAreaView>
     );

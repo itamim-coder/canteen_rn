@@ -18,6 +18,7 @@ import {RadioButton} from 'react-native-paper';
 import TYPOGRAPHY from '../theme/typography';
 import BUTTONS from '../theme/Buttons';
 import INPUT from '../theme/Input';
+import Button from '../components/Button';
 
 export default class Topup extends Component {
   constructor(props) {
@@ -168,14 +169,11 @@ export default class Topup extends Component {
                         <Text>USD</Text>
                       </View>
                     </RadioButton.Group>
-                    <TouchableOpacity
-                      //   onPress={handleSignin}
-                      onPress={() =>
-                        this.props.navigation.navigate('AddtoWallet')
-                      }
-                      style={BUTTONS.btnPrimary}>
-                      <Text style={BUTTONS.btnFont}>Continue</Text>
-                    </TouchableOpacity>
+                    <Button
+                      type="continue"
+                      navigation={this.props.navigation}
+                      page="AddtoWallet"
+                    />
                   </ScrollView>
                 </View>
               </SafeAreaView>
