@@ -27,8 +27,17 @@ export default class Checkout extends Component {
     };
   }
   render() {
+    const checkOutContainer = {
+      ...SCREEN.screen,
+      padding: 0,
+    };
+    const inputContainer = {
+      ...INPUT.inputContainer,
+      marginTop: 0,
+    };
+
     return (
-      <SafeAreaView style={[SCREEN.screen, {padding: 0}]}>
+      <SafeAreaView style={checkOutContainer}>
         <Statusbar name="Checkout" />
         <View>
           <View
@@ -47,7 +56,7 @@ export default class Checkout extends Component {
               <View style={{flexDirection: 'row'}}>
                 <View style={{flex: 1, marginBottom: 5}}>
                   <Text style={TYPOGRAPHY.primary}>Full Name</Text>
-                  <View style={[INPUT.inputContainer, {marginTop: 0}]}>
+                  <View style={inputContainer}>
                     <TextInput
                       // onChangeText={text => setName(text)}
                       placeholder="Enter Full Name"
@@ -61,7 +70,7 @@ export default class Checkout extends Component {
               <View style={{flexDirection: 'row'}}>
                 <View style={{flex: 1, marginBottom: 5}}>
                   <Text style={TYPOGRAPHY.primary}>Phone Number</Text>
-                  <View style={[INPUT.inputContainer, {marginTop: 0}]}>
+                  <View style={inputContainer}>
                     <TextInput
                       // onChangeText={text => setName(text)}
                       placeholder="Enter Phone Number"
@@ -76,7 +85,7 @@ export default class Checkout extends Component {
               <View style={{flexDirection: 'row'}}>
                 <View style={{flex: 1, marginBottom: 5}}>
                   <Text style={TYPOGRAPHY.primary}>Email Address</Text>
-                  <View style={[INPUT.inputContainer, {marginTop: 0}]}>
+                  <View style={inputContainer}>
                     <TextInput
                       // onChangeText={text => setPhone(text)}
                       placeholder="Enter Email Address"

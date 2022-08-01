@@ -15,8 +15,12 @@ import TYPOGRAPHY from '../theme/typography';
 
 export default class AddtoWallet extends Component {
   render() {
+    const addWalletContianer = {
+      backgroundColor: colors.black,
+      flex: 1,
+    };
     return (
-      <SafeAreaView style={{backgroundColor: colors.black, flex: 1}}>
+      <SafeAreaView style={addWalletContianer}>
         <Statusbar name="Add To Wallet" method="add" />
         <View
           style={{

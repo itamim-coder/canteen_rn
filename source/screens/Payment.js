@@ -8,8 +8,13 @@ import TYPOGRAPHY from '../theme/typography';
 
 export default class Payment extends Component {
   render() {
+    const paymentContainer = {backgroundColor: colors.black, flex: 1};
+    const amountText = {
+      ...TYPOGRAPHY.h3,
+      color: colors.pink,
+    };
     return (
-      <SafeAreaView style={{backgroundColor: colors.black, flex: 1}}>
+      <SafeAreaView style={paymentContainer}>
         <Statusbar name="Payment Method" />
 
         <View
@@ -20,7 +25,7 @@ export default class Payment extends Component {
             backgroundColor: colors.white,
           }}>
           <Text style={TYPOGRAPHY.h3}>Amount to Pay</Text>
-          <Text style={[TYPOGRAPHY.h3, {color: colors.pink}]}>$100</Text>
+          <Text style={amountText}>$100</Text>
         </View>
         <Wallet />
       </SafeAreaView>

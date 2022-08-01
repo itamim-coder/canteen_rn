@@ -17,7 +17,8 @@ import SCREEN from '../theme/Screen';
 import TYPOGRAPHY from '../theme/typography';
 import BUTTONS from '../theme/Buttons';
 
-export default class MyCart extends Component {
+
+export class MyCart extends Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -25,38 +26,57 @@ export default class MyCart extends Component {
     };
   }
   render() {
+    const cartContainer = {
+      ...SCREEN.screen,
+      padding: 0,
+      backgroundColor: colors.black,
+    };
+
+    const cartDetails = {
+      ...SCREEN.screen,
+
+      backgroundColor: colors.grey,
+      borderTopStartRadius: 40,
+      borderTopEndRadius: 40,
+      paddingVertical: 0,
+    };
+
+    const productCard = {
+      flexDirection: 'row',
+      backgroundColor: colors.white,
+      marginVertical: 5,
+      borderRadius: 6,
+      alignItems: 'center',
+      justifyContent: 'space-around',
+    };
+
+    const calculationCard = {
+      backgroundColor: colors.white,
+      padding: 30,
+      marginBottom: 5,
+      flexDirection: 'row',
+      justifyContent: 'space-between',
+    };
+
+    const checkOutButton = {
+      ...BUTTONS.btnPrimary,
+      paddingHorizontal: 30,
+      marginBottom: 18,
+    };
     return (
-      <SafeAreaView
-        style={[SCREEN.screen, {padding: 0, backgroundColor: colors.black}]}>
+      <SafeAreaView style={cartContainer}>
         <Statusbar name="My Cart" />
 
         {/* full screen  */}
 
-        <View
-          style={[
-            SCREEN.screen,
-            {
-              backgroundColor: colors.grey,
-              borderTopStartRadius: 40,
-              borderTopEndRadius: 40,
-              paddingVertical: 0,
-            },
-          ]}>
+        <View style={cartDetails}>
           <ScrollView
             showsVerticalScrollIndicator={false}
             style={{marginTop: 20, flex: 1}}>
             {/* product card */}
 
             <View>
-              <View
-                style={{
-                  flexDirection: 'row',
-                  backgroundColor: colors.white,
-                  marginVertical: 5,
-                  borderRadius: 6,
-                  alignItems: 'center',
-                  justifyContent: 'space-around',
-                }}>
+              <View style={productCard}>
                 <Image
                   style={{width: 100, height: 100}}
                   source={require('../../assets/images/items/items1.png')}
@@ -109,24 +129,11 @@ export default class MyCart extends Component {
             {/* Total calculation */}
 
             <View style={{marginTop: 40}}>
-              <View
-                style={{
-                  backgroundColor: colors.white,
-                  padding: 30,
-                  flexDirection: 'row',
-                  justifyContent: 'space-between',
-                }}>
+              <View style={calculationCard}>
                 <Text style={TYPOGRAPHY.h5}>Item Total</Text>
                 <Text style={TYPOGRAPHY.h5}>$200</Text>
               </View>
-              <View
-                style={{
-                  backgroundColor: colors.white,
-                  padding: 30,
-                  flexDirection: 'row',
-                  justifyContent: 'space-between',
-                  marginTop: 5,
-                }}>
+              <View style={calculationCard}>
                 <Text style={TYPOGRAPHY.h5}>Delivery Charge</Text>
                 <Text style={TYPOGRAPHY.h5}>$200</Text>
               </View>
@@ -147,14 +154,13 @@ export default class MyCart extends Component {
           <Text style={[TYPOGRAPHY.h3, {color: colors.white}]}>
             ${this.state.count * 10}
           </Text>
+
           <TouchableOpacity
-            style={[
-              BUTTONS.btnPrimary,
-              {paddingHorizontal: 30, marginBottom: 18},
-            ]}
+            style={checkOutButton}
             onPress={() => this.props.navigation.navigate('Checkout')}>
             <Text style={[BUTTONS.btnFont]}>Checkout</Text>
           </TouchableOpacity>
+          {/* <Button name="checkout button" props={this.props.navigation}></Button> */}
         </View>
         <FlashMessage position="top" />
       </SafeAreaView>
@@ -162,9 +168,4 @@ export default class MyCart extends Component {
   }
 }
 
-const styles = StyleSheet.create({
-  statusbar: {
-    padding: 20,
-    backgroundColor: colors.white,
-  },
-});
+export default MyCart;

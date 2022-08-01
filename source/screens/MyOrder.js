@@ -7,6 +7,22 @@ import TYPOGRAPHY from '../theme/typography';
 
 export default class MyOrder extends Component {
   render() {
+    const orderTitle = {
+      ...TYPOGRAPHY.primary,
+      fontSize: 20,
+      fontWeight: '800',
+      marginLeft: 10,
+    };
+    const orderStatus = {
+      ...TYPOGRAPHY.medium,
+
+      backgroundColor: colors.green,
+      padding: 5,
+      marginLeft: 15,
+
+      borderBottomLeftRadius: 10,
+      borderTopLeftRadius: 10,
+    };
     return (
       <SafeAreaView style={{flex: 1}}>
         <Statusbar name="My Orders" />
@@ -18,13 +34,7 @@ export default class MyOrder extends Component {
               borderRadius: 10,
               marginBottom: 10,
             }}>
-            <Text
-              style={[
-                TYPOGRAPHY.primary,
-                {fontSize: 20, fontWeight: '800', marginLeft: 10},
-              ]}>
-              Order DT100
-            </Text>
+            <Text style={orderTitle}>Order DT100</Text>
             <View
               style={{
                 flexDirection: 'row',
@@ -35,20 +45,7 @@ export default class MyOrder extends Component {
                 Order 3 Items
               </Text>
 
-              <Text
-                style={[
-                  TYPOGRAPHY.medium,
-                  {
-                    backgroundColor: colors.green,
-                    padding: 5,
-                    marginLeft: 15,
-
-                    borderBottomLeftRadius: 10,
-                    borderTopLeftRadius: 10,
-                  },
-                ]}>
-                Order Delivered
-              </Text>
+              <Text style={orderStatus}>Order Delivered</Text>
             </View>
           </View>
           <View
@@ -58,13 +55,7 @@ export default class MyOrder extends Component {
               borderRadius: 10,
               marginBottom: 10,
             }}>
-            <Text
-              style={[
-                TYPOGRAPHY.primary,
-                {fontSize: 20, fontWeight: '800', marginLeft: 10},
-              ]}>
-              Order DT100
-            </Text>
+            <Text style={orderTitle}>Order DT100</Text>
             <View
               style={{
                 flexDirection: 'row',
@@ -98,13 +89,7 @@ export default class MyOrder extends Component {
               borderRadius: 10,
               marginBottom: 10,
             }}>
-            <Text
-              style={[
-                TYPOGRAPHY.primary,
-                {fontSize: 20, fontWeight: '800', marginLeft: 10},
-              ]}>
-              Order DT100
-            </Text>
+            <Text style={orderTitle}>Order DT100</Text>
             <View
               style={{
                 flexDirection: 'row',
@@ -115,20 +100,7 @@ export default class MyOrder extends Component {
                 Order 3 Items
               </Text>
 
-              <Text
-                style={[
-                  TYPOGRAPHY.medium,
-                  {
-                    backgroundColor: colors.green,
-                    padding: 5,
-                    marginLeft: 15,
-
-                    borderBottomLeftRadius: 10,
-                    borderTopLeftRadius: 10,
-                  },
-                ]}>
-                Order Delivered
-              </Text>
+              <Text type="success" style={orderStatus}>Order Delivered</Text>
             </View>
           </View>
         </View>

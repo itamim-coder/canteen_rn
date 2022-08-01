@@ -11,34 +11,32 @@ import {
   View,
 } from 'react-native';
 import React, {Component} from 'react';
-import {useNavigation} from '@react-navigation/native';
-import {spacing} from '../theme/spacing';
 import {FOOD_LIST} from '../data/food-list';
 import {colors} from '../theme/colors';
 import {CATEGORY_LIST} from '../data/category-list';
-import AntDesign from 'react-native-vector-icons/AntDesign';
+
 import SCREEN from '../theme/Screen';
 import TYPOGRAPHY from '../theme/typography';
 import {Fonts} from '../theme/Fonts';
+import Seacrh from '../components/Seacrh';
 
-export default class Home extends Component {
+export class Home extends Component {
   // render Category item
 
   renderCategory = ({item}) => {
     const {image, category} = item;
+    const categoryCard = {
+      flexDirection: 'row',
+      alignItems: 'center',
+      backgroundColor: colors.white,
+      marginRight: 10,
+      paddingHorizontal: 15,
+      paddingVertical: 10,
+      borderRadius: 10,
+      marginTop: 10,
+    };
     return (
-      <TouchableOpacity
-        style={{
-          flexDirection: 'row',
-          alignItems: 'center',
-          backgroundColor: colors.white,
-          // marginHorizontal: 5,
-          marginRight: 10,
-          paddingHorizontal: 15,
-          paddingVertical: 10,
-          borderRadius: 10,
-          marginTop: 10,
-        }}>
+      <TouchableOpacity style={categoryCard}>
         <Image
           resizeMode="contain"
           style={{width: 50, height: 50}}
@@ -51,18 +49,23 @@ export default class Home extends Component {
 
   renderItem = ({item}) => {
     const {name, image, price} = item;
+    const popularCard = {
+      backgroundColor: colors.white,
+      padding: 10,
+      borderRadius: 10,
+    };
+    const priceText = {
+      ...TYPOGRAPHY.h5,
+      fontWeight: 'bold',
+      color: colors.ash,
+    };
     return (
       <SafeAreaView>
         <TouchableOpacity
           onPress={() =>
             this.props.navigation.navigate('FoodDetails', {food: item})
           }>
-          <View
-            style={{
-              backgroundColor: colors.white,
-              padding: 10,
-              borderRadius: 10,
-            }}>
+          <View style={popularCard}>
             <Text style={TYPOGRAPHY.h5}>{name}</Text>
             <View
               style={{
@@ -74,35 +77,46 @@ export default class Home extends Component {
                 source={image}
               />
             </View>
-            <Text
-              style={[
-                TYPOGRAPHY.h5,
-                // {fontWeight: 'bold', color: colors.ash}
-              ]}>
-              ${price}.00
-            </Text>
+            <Text style={priceText}>${price}.00</Text>
           </View>
         </TouchableOpacity>
       </SafeAreaView>
     );
   };
   render() {
+    const image = {
+      height: 40,
+      width: 40,
+    };
+    const topBar = {
+      flexDirection: 'row',
+      justifyContent: 'space-between',
+      paddingBottom: 10,
+    };
+    const popularBox = {
+      paddingVertical: 20,
+    };
+    const homeContainer = {
+      ...SCREEN.screen,
+      paddingBottom: 0,
+    };
     return (
-      <SafeAreaView style={[SCREEN.screen, {paddingBottom: 0}]}>
+      <SafeAreaView style={homeContainer}>
         {/* Home Top Section  */}
 
-        <View style={styles.topBar}>
+        {/* <HomeTopBar /> */}
+        <View style={topBar}>
           <TouchableOpacity
             onPress={() => this.props.navigation.navigate('Profile')}>
             <Image
-              style={styles.image}
+              style={image}
               source={require('../../assets/images/profile.png')}
             />
           </TouchableOpacity>
           <TouchableOpacity
             onPress={() => this.props.navigation.navigate('Topup')}>
             <Image
-              style={styles.image}
+              style={image}
               source={require('../../assets/images/ic_wallet.png')}
             />
           </TouchableOpacity>
@@ -111,17 +125,7 @@ export default class Home extends Component {
         <ScrollView showsVerticalScrollIndicator={false}>
           {/* Search Box  */}
 
-          <View style={styles.search}>
-            <View style={styles.searchWrapper}>
-              <AntDesign
-                name="search1"
-                size={18}
-                color="black"
-                style={styles.searchIcon}
-              />
-              <TextInput placeholder="Search Food" style={styles.searchInput} />
-            </View>
-          </View>
+          <Seacrh />
 
           {/* Categories Section  */}
 
@@ -135,7 +139,7 @@ export default class Home extends Component {
 
           {/* Popular Section  */}
 
-          <View style={styles.popularBox}>
+          <View style={popularBox}>
             <Text style={TYPOGRAPHY.h3}>Popular Near You</Text>
             <FlatList
               columnWrapperStyle={{
@@ -153,38 +157,4 @@ export default class Home extends Component {
   }
 }
 
-const styles = StyleSheet.create({
-  image: {
-    height: 40,
-    width: 40,
-  },
-  topBar: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    paddingBottom: 10,
-  },
-  search: {
-    marginVertical: 20,
-    fontSize: 16,
-    paddingHorizontal: 15,
-    backgroundColor: colors.white,
-    borderRadius: 10,
-    shadowColor: '#000',
-    borderWidth: 0.3,
-  },
-  searchWrapper: {
-    flexDirection: 'row',
-  },
-  searchIcon: {
-    color: '#b0b0b0',
-    marginRight: 10,
-    marginTop: 14,
-  },
-  searchInput: {
-    color: '#b4b4b4',
-    fontFamily: Fonts.primary,
-  },
-  popularBox: {
-    paddingVertical: 20,
-  },
-});
+export default Home;

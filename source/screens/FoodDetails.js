@@ -20,7 +20,7 @@ import SCREEN from '../theme/Screen';
 import TYPOGRAPHY from '../theme/typography';
 import BUTTONS from '../theme/Buttons';
 
-export default class FoodDetails extends Component {
+export  class FoodDetails extends Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -32,20 +32,29 @@ export default class FoodDetails extends Component {
   //   const {id} =
   // }
   renderItem = ({item}) => {
+    const sliderCard = {
+      backgroundColor: colors.white,
+      marginRight: 10,
+      // marginTop: 40,
+      borderRadius: 10,
+    };
+    const foodName = {
+      ...TYPOGRAPHY.h5,
+      padding: 10,
+    };
+    const priceText = {
+      ...TYPOGRAPHY.h5,
+      padding: 10,
+    };
     const {name, image, price} = item;
     return (
       <View>
         <TouchableOpacity
-          style={{
-            backgroundColor: colors.white,
-            marginRight: 10,
-            // marginTop: 40,
-            borderRadius: 10,
-          }}
+          style={sliderCard}
           onPress={() =>
             this.props.navigation.navigate('FoodDetails', {food: item})
           }>
-          <Text style={[TYPOGRAPHY.h5, {padding: 10}]}>{name}</Text>
+          <Text style={foodName}>{name}</Text>
           <View
             style={{
               flexDirection: 'column',
@@ -58,23 +67,34 @@ export default class FoodDetails extends Component {
               source={image}
             />
           </View>
-          <Text style={[TYPOGRAPHY.h5, {padding: 10}]}>Price: ${price}</Text>
+          <Text style={priceText}>Price: ${price}</Text>
         </TouchableOpacity>
       </View>
     );
   };
   render() {
+    const detailsContainer = {flex: 1, backgroundColor: colors.white};
+    const detailsScreen = {
+      ...SCREEN.screen,
+      paddingTop: 0,
+      paddingBottom: 0,
+      flex: 1.8,
+    };
+    const cartButton = {
+      ...BUTTONS.btnFont,
+      fontSize: 13,
+      color: colors.white,
+    };
     const food = this.props.route.params.food;
-    
+
     const {name, price, image, details} = food;
     return (
-      <SafeAreaView style={{flex: 1, backgroundColor: colors.white}}>
+      <SafeAreaView style={detailsContainer}>
         <Statusbar name={name} />
 
         {/* details screen  */}
 
-        <View
-          style={[SCREEN.screen, {paddingTop: 0, paddingBottom: 0, flex: 1.8}]}>
+        <View style={detailsScreen}>
           <ScrollView style={{flex: 1}} showsVerticalScrollIndicator={false}>
             <Image
               resizeMode="contain"
@@ -114,19 +134,12 @@ export default class FoodDetails extends Component {
                   padding: 10,
                   borderRadius: 10,
                 }}>
-                <Text
-                  style={[
-                    BUTTONS.btnFont,
-                    {fontSize: 13, color: colors.white},
-                  ]}>
-                  Add To Cart
-                </Text>
+                <Text style={cartButton}>Add To Cart</Text>
               </TouchableOpacity>
             </View>
             <Text style={TYPOGRAPHY.primary}>{details}</Text>
             <Text style={TYPOGRAPHY.primary}>{details}</Text>
             <Text style={TYPOGRAPHY.primary}>{details}</Text>
-           
           </ScrollView>
         </View>
 
@@ -164,9 +177,4 @@ export default class FoodDetails extends Component {
   }
 }
 
-const styles = StyleSheet.create({
-  statusbar: {
-    padding: 20,
-    // backgroundColor: colors.black,
-  },
-});
+export default FoodDetails
