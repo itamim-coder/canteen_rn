@@ -19,6 +19,12 @@ import INPUT from '../theme/Input';
 import BUTTONS from '../theme/Buttons';
 
 export default class UpdateProfile extends Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      selectedValue: 'no',
+    };
+  }
   render() {
     return (
       <SafeAreaView style={SCREEN.screen}>
@@ -57,7 +63,9 @@ export default class UpdateProfile extends Component {
                 </View>
               </View>
               <View style={{flex: 1, margin: 3}}>
-                <Text style={[TYPOGRAPHY.medium, styles.inputTitle]}>Account</Text>
+                <Text style={[TYPOGRAPHY.medium, styles.inputTitle]}>
+                  Account
+                </Text>
                 <View style={INPUT.inputContainer}>
                   <TextInput
                     // onChangeText={text => setName(text)}
@@ -72,7 +80,9 @@ export default class UpdateProfile extends Component {
                 </View>
               </View>
             </View>
-            <Text style={[TYPOGRAPHY.medium, styles.inputTitle]}>Phone Number</Text>
+            <Text style={[TYPOGRAPHY.medium, styles.inputTitle]}>
+              Phone Number
+            </Text>
             <View style={INPUT.inputContainer}>
               <TextInput
                 // onChangeText={text => setName(text)}
@@ -106,12 +116,11 @@ export default class UpdateProfile extends Component {
                   Notify Low Balance
                 </Text>
                 <Picker
-                  // selectedValue={selectedValue}
+                  selectedValue={this.state.selectedValue}
                   style={{height: 50, width: 150}}
-                  // onValueChange={(itemValue, itemIndex) =>
-                    // setSelectedValue(itemValue)
-                  // }
-                  >
+                  onValueChange={(itemValue, itemIndex) => {
+                    this.setState({selectedValue: itemValue});
+                  }}>
                   <Picker.Item label="NO" value="no" />
                   <Picker.Item label="YES" value="yes" />
                 </Picker>
@@ -139,12 +148,11 @@ export default class UpdateProfile extends Component {
                   Notify Promotions
                 </Text>
                 <Picker
-                  // selectedValue={selectedValue}
+                  selectedValue={this.state.selectedValue}
                   style={{height: 50, width: 150}}
-                  // onValueChange={(itemValue, itemIndex) =>
-                    // setSelectedValue(itemValue)
-                  // }
-                  >
+                  onValueChange={(itemValue, itemIndex) => {
+                    this.setState({selectedValue: itemValue});
+                  }}>
                   <Picker.Item label="NO" value="no" />
                   <Picker.Item label="YES" value="yes" />
                 </Picker>
@@ -154,19 +162,20 @@ export default class UpdateProfile extends Component {
                   Notify Orders
                 </Text>
                 <Picker
-                  // selectedValue={selectedValue}
+                  selectedValue={this.state.selectedValue}
                   style={{height: 50, width: 150}}
-                  // onValueChange={(itemValue, itemIndex) =>
-                    // setSelectedValue(itemValue)
-                  // }
-                  >
-                  <Picker.Item label="NO" value="java" />
-                  <Picker.Item label="YES" value="js" />
+                  onValueChange={(itemValue, itemIndex) => {
+                    this.setState({selectedValue: itemValue});
+                  }}>
+                  <Picker.Item label="NO" value="no" />
+                  <Picker.Item label="YES" value="yes" />
                 </Picker>
               </View>
             </View>
 
-            <Text style={[TYPOGRAPHY.medium, styles.inputTitle]}>Order Notes</Text>
+            <Text style={[TYPOGRAPHY.medium, styles.inputTitle]}>
+              Order Notes
+            </Text>
 
             <KeyboardAvoidingView style={INPUT.inputContainer}>
               <TextInput

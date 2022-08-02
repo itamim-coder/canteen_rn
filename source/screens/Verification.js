@@ -10,7 +10,7 @@ import {SafeAreaView} from 'react-native-safe-area-context';
 import SCREEN from '../theme/Screen';
 import TYPOGRAPHY from '../theme/typography';
 import INPUT from '../theme/Input';
-import BUTTONS from '../theme/Buttons';
+
 import {colors} from '../theme/colors';
 import Button from '../components/Button';
 

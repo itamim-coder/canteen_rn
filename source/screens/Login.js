@@ -17,12 +17,25 @@ import INPUT from '../theme/Input';
 import SCREEN from '../theme/Screen';
 import Button from '../components/Button';
 
-export default class Login extends Component {
+export class Login extends Component {
   render() {
-    // const { navigate } = this.props.navigation;
+    const loginContainer = {
+      ...SCREEN.screen,
+      backgroundColor: colors.white,
+      flex: 1,
+    };
+    const loginBox = {
+      flex: 1,
+      justifyContent: 'center',
+    };
+    const loginBottom = {
+      marginTop: 10,
+      flexDirection: 'row',
+      justifyContent: 'space-between',
+    };
     return (
-      <SafeAreaView style={[SCREEN.screen, styles.loginContainer]}>
-        <View style={styles.loginBox}>
+      <SafeAreaView style={loginContainer}>
+        <View style={loginBox}>
           <Text style={[TYPOGRAPHY.h1, {textAlign: 'center'}]}>Log in</Text>
           <Text style={[TYPOGRAPHY.primary, {textAlign: 'center'}]}>
             If you already have a YumCayman.ky account{'\n'}please log in below
@@ -46,8 +59,8 @@ export default class Login extends Component {
                 keyboardType="numeric"
               />
             </View>
-            <Button type="login" navigation={this.props.navigation}/>
-            <View style={styles.loginBottom}>
+            <Button type="login" navigation={this.props.navigation} />
+            <View style={loginBottom}>
               <TouchableOpacity>
                 <Text style={{color: colors.light, fontFamily: Fonts.primary}}>
                   Forgot Password?
@@ -67,18 +80,4 @@ export default class Login extends Component {
   }
 }
 
-const styles = StyleSheet.create({
-  loginContainer: {
-    backgroundColor: colors.white,
-    flex: 1,
-  },
-  loginBox: {
-    flex: 1,
-    justifyContent: 'center',
-  },
-  loginBottom: {
-    marginTop: 10,
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-  },
-});
+export default Login

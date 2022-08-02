@@ -23,7 +23,8 @@ export default class Checkout extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      toggleCheckbox: false,
+      checked: 'kyd',
+      toggleCheckBox: false,
     };
   }
   render() {
@@ -101,19 +102,19 @@ export default class Checkout extends Component {
             <View style={styles.checkboxContainer}>
               <CheckBox
                 disabled={false}
-                value={this.state.value}
-                onValueChange={newValue =>
-                  this.setState({toggleCheckBox: this.state.newValue})
-                }
+                value={this.state.toggleCheckBox}
+                onValueChange={newValue => {
+                  this.setState({toggleCheckBox: newValue});
+                }}
               />
               <Text style={TYPOGRAPHY.primary}>Wallet Balance $0.00</Text>
             </View>
             <Text style={TYPOGRAPHY.h5}>Choose Currency</Text>
             <RadioButton.Group
-              value={this.props.toggleCheckBox}
-              onValueChange={newValue =>
-                this.setState({toggleCheckBox: this.state.newValue})
-              }>
+              value={this.state.checked}
+              onValueChange={newValue => {
+                this.setState({checked: newValue});
+              }}>
               <View style={{flexDirection: 'row', alignItems: 'center'}}>
                 <RadioButton value="kyd" />
                 <Text>KYD</Text>

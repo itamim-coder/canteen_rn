@@ -25,6 +25,7 @@ export default class Topup extends Component {
     super(props);
     this.state = {
       visible: false,
+      checked: 'kyd',
     };
   }
   // const [visible, setVisible] = useState(false);
@@ -155,9 +156,10 @@ export default class Topup extends Component {
                     </View>
                     <Text style={TYPOGRAPHY.medium}>Choose Currency</Text>
                     <RadioButton.Group
-                    // onValueChange={newValue => setChecked(newValue)}
-                    // value={checked}
-                    >
+                      onValueChange={newValue => {
+                        this.setState({checked: newValue});
+                      }}
+                      value={this.state.checked}>
                       <View
                         style={{flexDirection: 'row', alignItems: 'center'}}>
                         <RadioButton value="kyd" />
