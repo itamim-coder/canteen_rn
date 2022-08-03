@@ -1,13 +1,15 @@
 import {Text, TouchableOpacity, View} from 'react-native';
 import React, {Component} from 'react';
 import BUTTONS from '../theme/Buttons';
+import {Fonts} from '../theme/Fonts';
 
 export class Button extends Component {
   render() {
     const checkOutButton = {
       ...BUTTONS.btnPrimary,
       paddingHorizontal: 30,
-      marginBottom: 18,
+      marginBottom: 15,
+      marginTop: 15,
     };
     console.log(this.props);
     if (this.props.type == 'checkout') {
@@ -15,7 +17,9 @@ export class Button extends Component {
         <TouchableOpacity
           style={checkOutButton}
           onPress={() => this.props.navigation.navigate('Checkout')}>
-          <Text style={[BUTTONS.btnFont]}>Checkout</Text>
+          <Text style={[BUTTONS.btnFont, {fontFamily: Fonts.primaryMedium}]}>
+            Checkout
+          </Text>
         </TouchableOpacity>
       );
     } else if (this.props.type == 'login') {

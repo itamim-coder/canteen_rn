@@ -6,7 +6,7 @@ const INPUT = StyleSheet.create({
   inputContainer: {
     flexDirection: 'row',
     marginTop: 10,
-   
+  
   },
   input: {
     color: colors.black,
@@ -15,6 +15,7 @@ const INPUT = StyleSheet.create({
     borderColor: colors.light,
     flex: 1,
     fontSize: 15,
+    borderRadius:5,
   },
 });
 

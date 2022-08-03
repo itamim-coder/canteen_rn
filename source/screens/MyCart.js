@@ -47,12 +47,12 @@ export class MyCart extends Component {
       marginVertical: 5,
       borderRadius: 6,
       alignItems: 'center',
-      justifyContent: 'space-around',
+      // justifyContent: 'space-between',
     };
 
     const calculationCard = {
       backgroundColor: colors.white,
-      padding: 30,
+      padding: 10,
       marginBottom: 5,
       flexDirection: 'row',
       justifyContent: 'space-between',
@@ -81,47 +81,81 @@ export class MyCart extends Component {
                   style={{width: 100, height: 100}}
                   source={require('../../assets/images/items/items1.png')}
                 />
-                <View style={{margin: 20}}>
-                  <Text style={TYPOGRAPHY.primary}>Chinese Noodles</Text>
+                <View>
+                  <View>
+                    <Text style={[TYPOGRAPHY.h3, {fontSize: 15}]}>
+                      Chinese Noodles
+                    </Text>
+                  </View>
                   <View
                     style={{
                       flexDirection: 'row',
                       justifyContent: 'space-between',
-                      padding: 5,
+                      alignItems: 'center',
+                      // marginHorizontal:50,
                     }}>
-                    <TouchableOpacity
-                      onPress={() =>
-                        this.setState({count: this.state.count - 1})
-                      }>
-                      <Text style={{fontSize: 17}}>-</Text>
-                    </TouchableOpacity>
-                    <Text style={{fontSize: 17}}>{this.state.count}</Text>
-                    <TouchableOpacity
-                      onPress={() =>
-                        this.setState({count: this.state.count + 1})
-                      }>
-                      <Text style={{fontSize: 17}}>+</Text>
-                    </TouchableOpacity>
-                  </View>
-                  <View />
-                </View>
+                    <Text style={{color: colors.green, fontSize: 15}}>
+                      Custom
+                    </Text>
 
-                <View>
-                  <Text style={TYPOGRAPHY.primary}>
-                    ${this.state.count * 10}
-                  </Text>
-                </View>
-                <View>
-                  {/* <TouchableOpacity
-                  onPress={() => {
-                    showMessage({
-                      message: 'Order Cancel',
-                      type: 'danger',
-                      icon: 'danger',
-                    });
-                  }}>
-                  <Text style={{paddingBottom: 70, fontWeight: 'bold'}}>X</Text>
-                </TouchableOpacity> */}
+                    <View
+                      style={{
+                        flexDirection: 'row',
+                        marginHorizontal: 20,
+                        backgroundColor: colors.darkOrange,
+                        borderRadius: 5,
+                        paddingVertical: 5,
+                      }}>
+                      <TouchableOpacity
+                        onPress={() =>
+                          this.setState({count: this.state.count - 1})
+                        }>
+                        <Text
+                          style={{
+                            fontSize: 17,
+                            color: colors.white,
+                            paddingHorizontal: 10,
+                          }}>
+                          -
+                        </Text>
+                      </TouchableOpacity>
+                      <Text
+                        style={{
+                          fontSize: 17,
+                          color: colors.white,
+                          paddingHorizontal: 10,
+                        }}>
+                        {this.state.count}
+                      </Text>
+                      <TouchableOpacity
+                        onPress={() =>
+                          this.setState({count: this.state.count + 1})
+                        }>
+                        <Text
+                          style={{
+                            fontSize: 17,
+                            color: colors.white,
+                            paddingHorizontal: 10,
+                          }}>
+                          +
+                        </Text>
+                      </TouchableOpacity>
+                    </View>
+
+                    <Text
+                      style={[
+                        TYPOGRAPHY.primary,
+                        {
+                          marginHorizontal: 20,
+                          alignItems: 'center',
+                          fontWeight: 'bold',
+                        },
+                      ]}>
+                      ${this.state.count * 10}
+                    </Text>
+
+                    <View />
+                  </View>
                 </View>
               </View>
             </View>
@@ -130,42 +164,41 @@ export class MyCart extends Component {
 
             <View style={{marginTop: 40}}>
               <View style={calculationCard}>
-                <Text style={TYPOGRAPHY.h5}>Item Total</Text>
-                <Text style={TYPOGRAPHY.h5}>$200</Text>
-              </View>
-              <View style={calculationCard}>
-                <Text style={TYPOGRAPHY.h5}>Delivery Charge</Text>
-                <Text style={TYPOGRAPHY.h5}>$200</Text>
+                <View>
+                  <Text style={TYPOGRAPHY.h5}>Item Total</Text>
+                  <Text style={TYPOGRAPHY.h5}>Delivery Fee</Text>
+                </View>
+
+                <View>
+                  <Text style={TYPOGRAPHY.h5}>$200</Text>
+                  <Text style={TYPOGRAPHY.h5}>$200</Text>
+                </View>
               </View>
             </View>
+            <View style={[calculationCard, {paddingVertical: 20}]}>
+              <Text
+                style={[
+                  TYPOGRAPHY.h5,
+                  {fontWeight: 'bold', color: colors.red},
+                ]}>
+                Amount To Pay
+              </Text>
+              <Text style={TYPOGRAPHY.h5}>$200</Text>
+            </View>
           </ScrollView>
+          <View>
+            <Button
+              name="checkout button"
+              style={{flex: 1}}
+              // style={{marginTop:10}}
+              navigation={this.props.navigation}
+              type="checkout"
+            />
+          </View>
         </View>
 
-        {/* checkout calculation  */}
+     
 
-        <View
-          style={{
-            flex: 0.2,
-            paddingHorizontal: 15,
-            flexDirection: 'row',
-            alignItems: 'center',
-            justifyContent: 'space-between',
-          }}>
-          <Text style={[TYPOGRAPHY.h3, {color: colors.white}]}>
-            ${this.state.count * 10}
-          </Text>
-
-          {/* <TouchableOpacity
-            style={checkOutButton}
-            onPress={() => this.props.navigation.navigate('Checkout')}>
-            <Text style={[BUTTONS.btnFont]}>Checkout</Text>
-          </TouchableOpacity> */}
-          <Button
-            // name="checkout button"
-            navigation={this.props.navigation}
-            type="checkout"
-          />
-        </View>
         <FlashMessage position="top" />
       </SafeAreaView>
     );

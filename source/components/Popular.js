@@ -102,8 +102,8 @@ export class Popular extends Component {
         </Text>
         <FlatList
           columnWrapperStyle={{
-            justifyContent: 'space-around',
-            // marginTop: 5,
+            justifyContent: 'space-evenly',
+            marginHorizontal: 0,
           }}
           data={FOOD_LIST}
           numColumns={2}

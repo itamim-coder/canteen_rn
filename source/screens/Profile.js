@@ -11,6 +11,10 @@ import {
 
 import {colors} from '../theme/colors';
 import TYPOGRAPHY from '../theme/typography';
+import FontAwesome from 'react-native-vector-icons/FontAwesome';
+// import Entypo from 'react-native-vector-icons/Entypo';
+import Entypo from 'react-native-vector-icons/Entypo';
+import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 
 export default class Profile extends Component {
   render() {
@@ -60,22 +64,37 @@ export default class Profile extends Component {
             <TouchableOpacity
               style={{
                 paddingVertical: 20,
-
+                flexDirection: 'row',
+                alignItems: 'center',
                 marginBottom: 5,
               }}>
-              {/* <Icon name="rocket" size={30} color="#900" /> */}
-              <Text style={[TYPOGRAPHY.medium, {fontSize: 20}]}>
+              <FontAwesome name="language" size={24} color="red" />
+              <Text
+                style={[
+                  TYPOGRAPHY.medium,
+                  {marginHorizontal: 20, fontSize: 20},
+                ]}>
                 Change Language
               </Text>
+              
             </TouchableOpacity>
+            
             <TouchableOpacity
               onPress={() => this.props.navigation.navigate('My Order')}
               style={{
                 paddingVertical: 20,
                 marginBottom: 5,
+                flexDirection: 'row',
+                alignItems: 'center',
               }}>
-              {/* <Icon name="rocket" size={30} color="#900" /> */}
-              <Text style={[TYPOGRAPHY.medium, {fontSize: 20}]}>My Orders</Text>
+              <Entypo name="archive" size={24} color="red" />
+              <Text
+                style={[
+                  TYPOGRAPHY.medium,
+                  {marginHorizontal: 20, fontSize: 20},
+                ]}>
+                My Orders
+              </Text>
             </TouchableOpacity>
             <TouchableOpacity
               style={{
@@ -83,13 +102,20 @@ export default class Profile extends Component {
 
                 marginBottom: 5,
               }}>
-              {/* <Icon name="rocket" size={30} color="#900" /> */}
-              <Text style={[TYPOGRAPHY.medium, {fontSize: 20}]}>FAQs</Text>
+              <View style={{flexDirection: 'row', alignItems: 'center'}}>
+                <MaterialCommunityIcons
+                  name="comment-question"
+                  size={24}
+                  color="red"
+                />
+                <Text style={[TYPOGRAPHY.medium, {marginHorizontal: 20,fontSize: 20}]}>FAQs</Text>
+              </View>
               <Text
                 style={[
                   TYPOGRAPHY.primary,
                   {
                     fontSize: 15,
+                    marginHorizontal: 45,
                     color: colors.darkGrey,
                   },
                 ]}>
@@ -102,15 +128,22 @@ export default class Profile extends Component {
 
                 marginBottom: 5,
               }}>
-              {/* <Icon name="rocket" size={30} color="#900" /> */}
-              <Text style={[TYPOGRAPHY.medium, {fontSize: 20}]}>
-                Terms & Conditions
-              </Text>
+              <View style={{flexDirection: 'row', alignItems: 'center'}}>
+                <MaterialCommunityIcons
+                  name="clipboard-list"
+                  size={24}
+                  color="red"
+                />
+                <Text style={[TYPOGRAPHY.medium, {marginHorizontal: 20,fontSize: 20}]}>
+                  Terms & Conditions
+                </Text>
+              </View>
               <Text
                 style={[
                   TYPOGRAPHY.primary,
                   {
                     fontSize: 15,
+                    marginHorizontal: 45,
                     color: colors.darkGrey,
                   },
                 ]}>
@@ -123,15 +156,18 @@ export default class Profile extends Component {
 
                 marginBottom: 5,
               }}>
-              {/* <Icon name="rocket" size={30} color="#900" /> */}
-              <Text style={[TYPOGRAPHY.medium, {fontSize: 20}]}>
-                Privacy Policy
-              </Text>
+              <View style={{flexDirection: 'row',marginLeft:3, alignItems: 'center'}}>
+                <FontAwesome name="lock" size={24} color="red" />
+                <Text style={[TYPOGRAPHY.medium, {marginHorizontal: 25,fontSize: 20}]}>
+                  Privacy Policy
+                </Text>
+              </View>
               <Text
                 style={[
                   TYPOGRAPHY.primary,
                   {
                     fontSize: 15,
+                    marginHorizontal: 45,
                     color: colors.darkGrey,
                   },
                 ]}>
@@ -144,14 +180,17 @@ export default class Profile extends Component {
 
                 marginBottom: 5,
               }}>
-              {/* <Icon name="rocket" size={30} color="#900" /> */}
-              <Text style={[TYPOGRAPHY.medium, {fontSize: 20}]}>Logout</Text>
+              <View style={{flexDirection: 'row', alignItems: 'center'}}>
+                <MaterialCommunityIcons name="logout" size={24} color="red" />
+                <Text style={[TYPOGRAPHY.medium, {marginHorizontal: 20,fontSize: 20}]}>Logout</Text>
+              </View>
               <Text
                 style={[
                   TYPOGRAPHY.primary,
                   {
                     fontSize: 15,
                     color: colors.darkGrey,
+                    marginHorizontal: 45,
                   },
                 ]}>
                 Sign out from account
