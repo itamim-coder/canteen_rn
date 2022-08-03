@@ -24,6 +24,7 @@ export class Popular extends Component {
   }
   renderItem = ({item}) => {
 
+
     const {name, image, price} = item;
     return (
       <SafeAreaView>
@@ -34,16 +35,20 @@ export class Popular extends Component {
           <View
             style={{
               backgroundColor: colors.white,
-              padding: 10,
+              // marginHorizontal: 35,
+              padding: 20,
               borderRadius: 10,
-             
+              margin: 5,
               marginBottom: 10,
             }}>
             <Text style={TYPOGRAPHY.h6}>{name}</Text>
             <View
-              style={{
-                padding: 14,
-              }}>
+              style={
+                {
+                  // padding: 5,
+                  // backgroundColor: colors.red
+                }
+              }>
               <Image
                 resizeMode="contain"
                 style={{width: 125, height: 125}}
@@ -63,7 +68,6 @@ export class Popular extends Component {
                 ${price}.00
               </Text>
               <TouchableOpacity
-              
                 style={{
                   backgroundColor: colors.red,
                   paddingHorizontal: 10,
@@ -79,21 +83,18 @@ export class Popular extends Component {
                   +
                 </Text>
               </TouchableOpacity>
-
-      
             </View>
-            
           </View>
         </TouchableOpacity>
-        <View>
-      
-        </View>
+        <View />
       </SafeAreaView>
     );
   };
   render() {
     const popularBox = {
-      marginVertical: 20,
+      paddingVertical: 20,
+      // backgroundColor: colors.red,
+      // marginBottom:10,
     };
     return (
       <View style={popularBox}>
@@ -101,10 +102,13 @@ export class Popular extends Component {
           Popular Near You
         </Text>
         <FlatList
-          columnWrapperStyle={{
-            justifyContent: 'space-evenly',
-            marginHorizontal: 0,
-          }}
+          columnWrapperStyle={
+            {
+              justifyContent: 'space-between',
+              // marginRight: 5,
+              // marginBottom:5,
+            }
+          }
           data={FOOD_LIST}
           numColumns={2}
           renderItem={item => this.renderItem(item)}
