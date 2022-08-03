@@ -50,9 +50,7 @@ export class Home extends Component {
   };
 
   render() {
-    const popularBox = {
-      paddingVertical: 20,
-    };
+
     const homeContainer = {
       ...SCREEN.screen,
       paddingBottom: 0,
@@ -71,7 +69,7 @@ export class Home extends Component {
 
           {/* Categories Section  */}
 
-          <Text style={TYPOGRAPHY.h3}>Categories</Text>
+          <Text style={[TYPOGRAPHY.h4, {fontWeight: 'bold'}]}>Categories</Text>
           <FlatList
             horizontal
             data={CATEGORY_LIST}

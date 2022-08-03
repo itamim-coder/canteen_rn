@@ -19,6 +19,8 @@ import TYPOGRAPHY from '../theme/typography';
 import BUTTONS from '../theme/Buttons';
 import INPUT from '../theme/Input';
 import Button from '../components/Button';
+import Statusbar from '../components/Statusbar';
+import { Fonts } from '../theme/Fonts';
 
 export default class Topup extends Component {
   constructor(props) {
@@ -38,6 +40,7 @@ export default class Topup extends Component {
     };
     return (
       <SafeAreaView style={styles.topupConatiner}>
+        <Statusbar></Statusbar>
         <View style={styles.addMoneyBox}>
           <View
             style={{
@@ -57,17 +60,19 @@ export default class Topup extends Component {
               resizeMode="cover"
               imageStyle={{borderRadius: 6}}
               source={require('../../assets/images/wallet_bg.png')}>
-              <Text style={[TYPOGRAPHY.h1, styles.bgtxt]}>Wallet</Text>
+              <Text style={[TYPOGRAPHY.medium, styles.bgtxt]}>YumCayMan Wallet</Text>
               <Text style={[TYPOGRAPHY.primary, styles.balancetxt]}>
-                Total Balance{'\n'}$1000
+                Total Balance
               </Text>
+              <Text style={{marginLeft:15, fontSize:20, fontFamily: Fonts.primaryMedium, color: colors.white}}>$1000</Text>
+              <Text style={{marginLeft:15, marginTop:10, fontSize:12, fontFamily: Fonts.primary, color: colors.light}}>YumCayMan money can be use for ordering food.</Text>
             </ImageBackground>
             <TouchableOpacity
               onPress={toggleBottomNavigationView}
               style={{
                 padding: 20,
               }}>
-              <Text style={[BUTTONS.btnFont, styles.addtxt]}>Add Money</Text>
+              <Text style={[TYPOGRAPHY.h5, styles.addtxt]}>+  Add Money</Text>
             </TouchableOpacity>
           </View>
           <View style={styles.addMoney}>
@@ -199,23 +204,29 @@ export default class Topup extends Component {
               style={{
                 backgroundColor: colors.white,
                 padding: 15,
-                flexDirection: 'row',
-                justifyContent: 'space-between',
+                // flexDirection: 'row',
+                // justifyContent: 'space-between',
                 marginTop: 15,
               }}>
-              <View>
-                <Text style={[TYPOGRAPHY.h4]}>Order DT56565</Text>
-                <Text style={[TYPOGRAPHY.medium, {color: colors.light}]}>
-                  Date 12 Jun
+              <View >
+              <View  style={{flexDirection:'row', justifyContent: 'space-between'}}>
+              <Text style={[TYPOGRAPHY.h4]}>Order DT56565</Text>
+                <Text style={[TYPOGRAPHY.h3, {color: colors.green}]}>
+                  +$21.50
                 </Text>
               </View>
-              <View>
-                <Text style={[TYPOGRAPHY.h3, {color: colors.red}]}>
-                  $-21.50
+              <View style={{flexDirection:'row', justifyContent: 'space-between'}}>
+           <Text style={[TYPOGRAPHY.medium, {color: colors.light}]}>
+                  Date 12 Jun
                 </Text>
+            
                 <Text style={[TYPOGRAPHY.medium, {color: colors.light}]}>
-                  3 Items
+                  Promocode applied
                 </Text>
+           </View>
+              </View>
+              <View >
+     
               </View>
             </View>
             <View
@@ -357,12 +368,12 @@ const styles = StyleSheet.create({
   },
   bgtxt: {
     color: 'white',
-    fontSize: 35,
+    fontSize: 25,
     margin: 15,
   },
   balancetxt: {
     color: '#D8D8D8',
-    fontSize: 20,
+    fontSize: 15,
     marginLeft: 15,
   },
   addMoney: {

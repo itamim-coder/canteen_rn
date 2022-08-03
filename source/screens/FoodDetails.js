@@ -19,8 +19,10 @@ import {showMessage, hideMessage} from 'react-native-flash-message';
 import SCREEN from '../theme/Screen';
 import TYPOGRAPHY from '../theme/typography';
 import BUTTONS from '../theme/Buttons';
+import { Fonts } from '../theme/Fonts';
 
-export  class FoodDetails extends Component {
+
+export class FoodDetails extends Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -37,14 +39,15 @@ export  class FoodDetails extends Component {
       marginRight: 10,
       // marginTop: 40,
       borderRadius: 10,
+      padding:10,
     };
     const foodName = {
-      ...TYPOGRAPHY.h5,
-      padding: 10,
+      ...TYPOGRAPHY.h6,
+      // padding: 10,
     };
     const priceText = {
       ...TYPOGRAPHY.h5,
-      padding: 10,
+      // padding: 10,
     };
     const {name, image, price} = item;
     return (
@@ -67,7 +70,32 @@ export  class FoodDetails extends Component {
               source={image}
             />
           </View>
-          <Text style={priceText}>Price: ${price}</Text>
+          <Text style={[TYPOGRAPHY.h6, {color: colors.green}]}>
+              Customize
+            </Text>
+            <View
+              style={{
+                flexDirection: 'row',
+                alignItems: 'center',
+                justifyContent: 'space-between',
+              }}>
+              <Text style={[TYPOGRAPHY.h3, {fontWeight: 'bold'}]}>
+                ${price}.00
+              </Text>
+              <TouchableOpacity
+                style={{
+                  backgroundColor: colors.red,
+                  paddingHorizontal: 10,
+                  paddingVertical: 5,
+                  borderRadius: 10,
+               
+                }}>
+               <Text style={{   color: colors.white,
+                  fontWeight: 'bold', fontSize:15}}>+
+                </Text>
+              </TouchableOpacity>
+           
+            </View>
         </TouchableOpacity>
       </View>
     );
@@ -75,14 +103,14 @@ export  class FoodDetails extends Component {
   render() {
     const detailsContainer = {flex: 1, backgroundColor: colors.white};
     const detailsScreen = {
-      ...SCREEN.screen,
+      // ...SCREEN.screen,
       paddingTop: 0,
       paddingBottom: 0,
       flex: 1.8,
     };
     const cartButton = {
       ...BUTTONS.btnFont,
-      fontSize: 13,
+      fontSize: 15,
       color: colors.white,
     };
     const food = this.props.route.params.food;
@@ -90,60 +118,103 @@ export  class FoodDetails extends Component {
     const {name, price, image, details} = food;
     return (
       <SafeAreaView style={detailsContainer}>
-        <Statusbar name={name} />
+       
+       <Statusbar name={name} type="food"/>
+  
+      
 
         {/* details screen  */}
 
         <View style={detailsScreen}>
           <ScrollView style={{flex: 1}} showsVerticalScrollIndicator={false}>
-            <Image
-              resizeMode="contain"
-              source={image}
-              style={{
-                width: '100%',
-                alignItems: 'center',
-                justifyContent: 'center',
-              }}
-            />
-            <Text style={TYPOGRAPHY.h2}>{name}</Text>
-            <View
-              style={{
-                flexDirection: 'row',
-                justifyContent: 'space-between',
-                alignItems: 'center',
-                paddingVertical: 10,
-              }}>
-              <Text style={TYPOGRAPHY.h3}>${price}</Text>
-              <TouchableOpacity
-                onPress={() => {
-                  /* HERE IS WHERE WE'RE GOING TO SHOW OUR FIRST MESSAGE */
-                  showMessage({
-                    message: 'Added Successfully',
-                    description: 'Click here to check cart',
-                    type: 'success',
-                    icon: 'success',
-
-                    onPress: () => {
-                      this.props.navigation.navigate('My Cart');
-                      /* THIS FUNC/CB WILL BE CALLED AFTER MESSAGE PRESS */
-                    },
-                  });
-                }}
+            <View style={SCREEN.screen}>
+              <Image
+                resizeMode="contain"
+                source={image}
                 style={{
-                  backgroundColor: '#f5474a',
-                  padding: 10,
-                  borderRadius: 10,
+                  width: '100%',
+                  height:300,
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                }}
+              />
+              <Text style={[TYPOGRAPHY.medium, {fontSize: 22}]}>{name}</Text>
+              <Text style={[TYPOGRAPHY.h4, {color: colors.green}]}>
+              Customize
+            </Text>
+              <View
+                style={{
+                  flexDirection: 'row',
+                  justifyContent: 'space-between',
+                  alignItems: 'center',
+                  paddingVertical: 10,
                 }}>
-                <Text style={cartButton}>Add To Cart</Text>
-              </TouchableOpacity>
+                <Text style={TYPOGRAPHY.h3}>${price}.00</Text>
+                
+                <TouchableOpacity
+                  onPress={() => {
+                    /* HERE IS WHERE WE'RE GOING TO SHOW OUR FIRST MESSAGE */
+                    showMessage({
+                      message: 'Added Successfully',
+                      description: 'Click here to check cart',
+                      type: 'success',
+                      icon: 'success',
+
+                      onPress: () => {
+                        this.props.navigation.navigate('My Cart');
+                        /* THIS FUNC/CB WILL BE CALLED AFTER MESSAGE PRESS */
+                      },
+                    });
+                  }}
+                  style={{
+                    backgroundColor: '#f5474a',
+                    paddingVertical: 7,
+                    paddingHorizontal: 10,
+                    borderRadius: 10,
+                    flexDirection:'row',
+                  }}>
+                  <Text style={[cartButton, {fontFamily: Fonts.primary}]}>Add </Text>
+                  <Text style={[cartButton, {fontFamily: Fonts.primary}]}>      +</Text>
+                </TouchableOpacity>
+              </View>
+              <Text  style={TYPOGRAPHY.h3}>About Product</Text>
+              <Text style={TYPOGRAPHY.primary}>{details}</Text>
             </View>
-            <Text style={TYPOGRAPHY.primary}>{details}</Text>
-            <Text style={TYPOGRAPHY.primary}>{details}</Text>
-            <Text style={TYPOGRAPHY.primary}>{details}</Text>
+
+            <View
+              style={[
+                SCREEN.screen,
+
+                {
+                  // padding:0,
+                  backgroundColor: colors.grey,
+                  // flex: 0.1,
+                  borderTopLeftRadius: 30,
+                  borderTopRightRadius: 30,
+                  paddingBottom: 10,
+                },
+              ]}>
+              <Text
+                style={[
+                  TYPOGRAPHY.h4,
+                  {
+                    // fontSize: 20,
+                    marginBottom: 10,
+                  },
+                ]}>
+                Similar Products
+              </Text>
+              <FlatList
+                horizontal
+                showsHorizontalScrollIndicator={false}
+                data={FOOD_LIST}
+                renderItem={item => this.renderItem(item)}
+              />
+            </View>
           </ScrollView>
         </View>
 
-        <ScrollView
+        {/* <ScrollView
           style={[
             SCREEN.screen,
             {
@@ -170,11 +241,11 @@ export  class FoodDetails extends Component {
             data={FOOD_LIST}
             renderItem={item => this.renderItem(item)}
           />
-        </ScrollView>
+        </ScrollView> */}
         <FlashMessage position="top" />
       </SafeAreaView>
     );
   }
 }
 
-export default FoodDetails
+export default FoodDetails;

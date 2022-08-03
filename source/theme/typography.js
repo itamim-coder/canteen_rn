@@ -28,6 +28,11 @@ const TYPOGRAPHY = StyleSheet.create({
     fontFamily: Fonts.primaryMedium,
     fontSize: 15,
   },
+  h6: {
+    color: colors.black,
+    fontFamily: Fonts.primaryMedium,
+    fontSize: 13,
+  },
   primary: {
     color: colors.black,
     fontFamily: Fonts.primary,
