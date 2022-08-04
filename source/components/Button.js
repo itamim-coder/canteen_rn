@@ -11,7 +11,7 @@ export class Button extends Component {
       marginBottom: 15,
       marginTop: 15,
     };
-    console.log(this.props);
+   
     if (this.props.type == 'checkout') {
       return (
         <TouchableOpacity

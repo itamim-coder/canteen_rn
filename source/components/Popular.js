@@ -1,4 +1,5 @@
 import {
+  Dimensions,
   FlatList,
   Image,
   ScrollView,
@@ -37,21 +38,24 @@ export class Popular extends Component {
               backgroundColor: colors.white,
               // marginHorizontal: 35,
               padding: 20,
+              width: '100%',
+              
+
               borderRadius: 10,
-              margin: 5,
-              marginBottom: 10,
+              // margin: 5,
+              marginBottom: 15,
             }}>
             <Text style={TYPOGRAPHY.h6}>{name}</Text>
             <View
               style={
                 {
-                  // padding: 5,
+                  padding: 5,
                   // backgroundColor: colors.red
                 }
               }>
               <Image
                 resizeMode="contain"
-                style={{width: 125, height: 125}}
+                style={{   width:120, height: 125, alignItems: 'center'}}
                 source={image}
               />
             </View>
@@ -104,9 +108,11 @@ export class Popular extends Component {
         <FlatList
           columnWrapperStyle={
             {
-              justifyContent: 'space-between',
+              justifyContent: 'space-evenly',
+              // width:'100%',
               // marginRight: 5,
               // marginBottom:5,
+              // backgroundColor: colors.red,
             }
           }
           data={FOOD_LIST}
