@@ -50,7 +50,7 @@ export class Home extends Component {
   };
 
   render() {
-
+  
     const homeContainer = {
       ...SCREEN.screen,
       paddingBottom: 0,

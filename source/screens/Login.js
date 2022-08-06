@@ -1,4 +1,4 @@
-import React, {Component, useState} from 'react';
+import React, {Component, useContext, useState} from 'react';
 import {
   SafeAreaView,
   StyleSheet,
@@ -16,6 +16,12 @@ import {Fonts} from '../theme/Fonts';
 import INPUT from '../theme/Input';
 import SCREEN from '../theme/Screen';
 import Button from '../components/Button';
+import {AuthContext} from '../context/AuthContext';
+
+import axios from 'axios';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import App from '../../App';
+import Home from './Home';
 
 export class Login extends Component {
   constructor(props) {
@@ -23,15 +29,25 @@ export class Login extends Component {
     this.state = {
       email: '',
       password: '',
+      userInfo: '',
+
+      emailerror: '',
+      passerror: '',
     };
   }
+  // console.log(error)
   validate_field = () => {
     const {email, password} = this.state;
-    if (email == '') {
-      alert('Please fill email');
+
+    if (email == '' && password == '') {
+      this.setState({emailerror: 'Please enter your email'});
+      this.setState({passerror: 'Please enter your password'});
+      return false;
+    } else if (email == '') {
+      this.setState({emailerror: 'email input'});
       return false;
     } else if (password == '') {
-      alert('Please fill password');
+      this.setState({passerror: 'pass input'});
       return false;
     }
     return true;
@@ -39,13 +55,36 @@ export class Login extends Component {
 
   making_api_call = () => {
     if (this.validate_field()) {
-      alert('Login Success');
+      const data = {email: this.state.email, password: this.state.password};
+      axios
+        .post('https://laqil.com/public/api/login', data)
+        .then(res => {
+          let userInfo = res.data;
+          this.setState({userInfo: userInfo});
+          AsyncStorage.setItem('userInfo', JSON.stringify(userInfo));
+          AsyncStorage.setItem('token', res.data.token);
+          const status = res.data.data.status;
+          console.log(res.data.token);
+          if (status == 1) {
+            alert(res.data.message);
+            this.props.navigation.navigate('TabNavigator');
+          }
+        })
+        .catch(function (error) {
+          if (error.response) {
+            // let emailerror = error.response.data.errors.email;
+
+            // this.setState({emailerror: emailerror});
+            alert(error.response.data.message);
+            // The request was made and the server responded with a status code
+            // that falls out of the range of 2xx
+            console.log(error.response);
+            // console.log(error.response.status);
+            // console.log(error.response.headers);
+          }
+        });
     }
   };
-  handleSubmit() {
-    console.log(JSON.stringify(this.state.email));
-    alert(`${this.state.email}`);
-  }
 
   render() {
     const loginContainer = {
@@ -62,6 +101,7 @@ export class Login extends Component {
       flexDirection: 'row',
       justifyContent: 'space-between',
     };
+    // const val = useContext(AuthContext);
     return (
       <SafeAreaView style={loginContainer}>
         <View style={loginBox}>
@@ -73,8 +113,10 @@ export class Login extends Component {
             <View style={INPUT.inputContainer}>
               <TextInput
                 value={this.state.email}
+                // onFocus={this.setState}
+                // onFocus={this.setState({error: ''})}
                 onChangeText={value => {
-                  this.setState({email: value});
+                  this.setState({email: value, emailerror: ''});
                 }}
                 // onChangeText={text => setEmail(text)}
                 placeholder="Email"
@@ -82,28 +124,34 @@ export class Login extends Component {
                 style={INPUT.input}
               />
             </View>
+            <Text style={{color: colors.bloodRed, fontFamily: Fonts.primary}}>
+              {this.state.emailerror}
+            </Text>
             <View style={INPUT.inputContainer}>
               <TextInput
                 value={this.state.password}
                 onChangeText={value => {
-                  this.setState({password: value});
+                  this.setState({password: value, passerror: ''});
                 }}
                 // onChangeText={text => setPassword(text)}
                 placeholder="Password"
                 placeholderTextColor={'grey'}
                 style={INPUT.input}
                 secureTextEntry
-                keyboardType="numeric"
-                import
+                // keyboardType="numeric"
+                // import
               />
             </View>
-            <Button
+            <Text style={{color: colors.bloodRed, fontFamily: Fonts.primary}}>
+              {this.state.passerror}
+            </Text>
+            {/* <Button
               onPress={() => {
-                this.handleSubmit();
+                this.making_api_call();
               }}
               type="login"
               navigation={this.props.navigation}
-            />
+            /> */}
             <TouchableOpacity
               // onPress={handleSignin}
               onPress={() => {
@@ -125,8 +173,6 @@ export class Login extends Component {
                 </Text>
               </TouchableOpacity>
             </View>
-            <Text>email {this.state.email}</Text>
-            <Text>pass {this.state.password}</Text>
           </View>
         </View>
       </SafeAreaView>

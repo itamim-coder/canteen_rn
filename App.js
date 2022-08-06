@@ -30,10 +30,18 @@ import MyCart from './source/screens/MyCart';
 import Payment from './source/screens/Payment';
 import MyOrder from './source/screens/MyOrder';
 import Checkout from './source/screens/Checkout';
+import {AuthProvider} from './source/context/AuthContext';
+
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const Stack = createNativeStackNavigator();
 const Tab = createBottomTabNavigator();
 
+// const isLog=()=>{
+//   try{
+//     let user = await AsyncStorage.getItem
+//   }
+// }
 //Bottom Tab Navigation
 const TabNavigator = () => {
   return (
@@ -78,6 +86,7 @@ const TabNavigator = () => {
 };
 
 const App = () => {
+  // console.log(prop);
   return (
     <NavigationContainer style={styles.container}>
       <Stack.Navigator screenOptions={{header: () => null}}>

@@ -11,7 +11,7 @@ export class Button extends Component {
       marginBottom: 15,
       marginTop: 15,
     };
-   
+
     if (this.props.type == 'checkout') {
       return (
         <TouchableOpacity
@@ -26,7 +26,7 @@ export class Button extends Component {
       return (
         <TouchableOpacity
           // onPress={handleSignin}
-          onPress={() => this.props.navigation.navigate('TabNavigator')}
+          // onPress={() => this.props.navigation.navigate('TabNavigator')}
           style={BUTTONS.btnPrimary}>
           <Text style={BUTTONS.btnFont}>Login</Text>
         </TouchableOpacity>

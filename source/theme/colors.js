@@ -25,5 +25,5 @@ export const colors = {
   // deepBlue: '#243367',
   // googleBtn: '#4184f3',
   // facebookBtn: '#415dae',
-  // bloodRed: '#fc0100',
+  bloodRed: '#fc0100',
 };
