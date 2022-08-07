@@ -41,7 +41,7 @@ export class Home extends Component {
       <TouchableOpacity style={categoryCard}>
         <Image
           resizeMode="contain"
-          style={{width: 50, height: 50}}
+          style={{width: 40, height: 40}}
           source={image}
         />
         <Text style={{marginLeft: 15, fontWeight: 'bold'}}>{category}</Text>
@@ -50,7 +50,6 @@ export class Home extends Component {
   };
 
   render() {
-  
     const homeContainer = {
       ...SCREEN.screen,
       paddingBottom: 0,
@@ -69,10 +68,18 @@ export class Home extends Component {
 
           {/* Categories Section  */}
 
-          <Text style={[TYPOGRAPHY.h4, {fontWeight: 'bold'}]}>Categories</Text>
+          <View style={{flexDirection: 'row', justifyContent: 'space-between'}}>
+            <Text style={[TYPOGRAPHY.h4, {fontWeight: 'bold'}]}>
+              Categories
+            </Text>
+            <TouchableOpacity
+              onPress={() => this.props.navigation.navigate('AllCategory')}>
+              <Text style={[TYPOGRAPHY.h5, {color: colors.red}]}>See More</Text>
+            </TouchableOpacity>
+          </View>
           <FlatList
             horizontal
-            data={CATEGORY_LIST}
+            data={CATEGORY_LIST.slice(0, 6)}
             showsHorizontalScrollIndicator={false}
             renderItem={item => this.renderCategory(item)}
           />

@@ -17,15 +17,50 @@ import SCREEN from '../theme/Screen';
 import TYPOGRAPHY from '../theme/typography';
 import BUTTONS from '../theme/Buttons';
 import Button from '../components/Button';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import {FOOD_LIST} from '../data/food-list';
 
 export class MyCart extends Component {
   constructor(props) {
     super(props);
     this.state = {
       count: 0,
+      product: [],
+      total: null,
     };
   }
+
+  getDataFromDB = async () => {
+    let items = await AsyncStorage.getItem('cartItems');
+    items = JSON.parse(items);
+    let productData = [];
+
+    if (items) {
+      FOOD_LIST.forEach(data => {
+        if (items.includes(data.id)) {
+          productData.push(data);
+          return;
+        }
+      });
+      this.setState({product: productData});
+      // console.log(p);
+      this.getTotal(productData);
+    } else {
+      this.setState({product: false});
+
+      this.getTotal(false);
+    }
+  };
+  getTotal = productData => {
+    let total = 0;
+    for (let index = 0; index < productData.length; index++) {
+      let productPrice = productData[index].productPrice;
+      total = total + productPrice;
+    }
+    this.setState({total: total});
+  };
   render() {
+    // console.log(this.props.data);
     const cartContainer = {
       ...SCREEN.screen,
       padding: 0,
@@ -85,6 +120,7 @@ export class MyCart extends Component {
                   <View>
                     <Text style={[TYPOGRAPHY.h3, {fontSize: 15}]}>
                       Chinese Noodles
+                      {/* {data.productName} */}
                     </Text>
                   </View>
                   <View
@@ -196,8 +232,6 @@ export class MyCart extends Component {
             />
           </View>
         </View>
-
-     
 
         <FlashMessage position="top" />
       </SafeAreaView>

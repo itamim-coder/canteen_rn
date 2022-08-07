@@ -1,6 +1,6 @@
 export const FOOD_LIST = [
   {
-    id: 1,
+    id: '1',
     name: 'Chinese Rice',
     price: 5,
     details:
@@ -9,7 +9,7 @@ export const FOOD_LIST = [
     category: 'chinese',
   },
   {
-    id: 2,
+    id: '2',
     name: 'Chinese Noodles',
     price: 5,
     details:
@@ -18,7 +18,7 @@ export const FOOD_LIST = [
     category: 'chinese',
   },
   {
-    id: 3,
+    id: '3',
     name: 'Tandoori Rice',
     price: 5,
     details:
@@ -27,7 +27,7 @@ export const FOOD_LIST = [
     category: 'chinese',
   },
   {
-    id: 4,
+    id: '4',
     name: 'Schezwan Rice',
     price: 5,
     details:
@@ -36,7 +36,7 @@ export const FOOD_LIST = [
     category: 'chinese',
   },
   {
-    id: 5,
+    id: '5',
     name: 'Manchaw Noodles',
     price: 5,
     details:
@@ -45,7 +45,7 @@ export const FOOD_LIST = [
     category: 'chinese',
   },
   {
-    id: 6,
+    id: '6',
     name: 'Panner Noodles',
     price: 5,
     details:

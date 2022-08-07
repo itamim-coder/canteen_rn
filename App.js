@@ -33,6 +33,7 @@ import Checkout from './source/screens/Checkout';
 import {AuthProvider} from './source/context/AuthContext';
 
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import AllCategory from './source/screens/AllCategory';
 
 const Stack = createNativeStackNavigator();
 const Tab = createBottomTabNavigator();
@@ -108,6 +109,7 @@ const App = () => {
 
         {/* Food Details */}
         <Stack.Screen name="FoodDetails" component={FoodDetails} />
+        <Stack.Screen name="AllCategory" component={AllCategory} />
 
         {/* Update Profile */}
         <Stack.Screen name="Checkout" component={Checkout} />

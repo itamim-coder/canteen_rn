@@ -1,5 +1,6 @@
 import React, {Component, useContext, useState} from 'react';
 import {
+  ActivityIndicator,
   SafeAreaView,
   StyleSheet,
   Text,
@@ -30,7 +31,6 @@ export class Login extends Component {
       email: '',
       password: '',
       userInfo: '',
-
       emailerror: '',
       passerror: '',
     };
@@ -146,9 +146,10 @@ export class Login extends Component {
               {this.state.passerror}
             </Text>
             {/* <Button
-              onPress={() => {
-                this.making_api_call();
-              }}
+              // onPress={() => {
+              //   this.making_api_call();
+              // }}
+              // onPress={handleSignin}
               type="login"
               navigation={this.props.navigation}
             /> */}
@@ -159,6 +160,7 @@ export class Login extends Component {
               }}
               style={BUTTONS.btnPrimary}>
               <Text style={BUTTONS.btnFont}>Login</Text>
+              {/* <ActivityIndicator /> */}
             </TouchableOpacity>
             <View style={loginBottom}>
               <TouchableOpacity>

@@ -15,7 +15,7 @@ import {SafeAreaView} from 'react-native-safe-area-context';
 import {colors} from '../theme/colors';
 import Button from './Button';
 import {BottomSheet} from 'react-native-btr';
-
+const width = Dimensions.get('screen').width / 2 - 30;
 export class Popular extends Component {
   constructor(props) {
     super(props);
@@ -23,9 +23,8 @@ export class Popular extends Component {
       visible: false,
     };
   }
+
   renderItem = ({item}) => {
-
-
     const {name, image, price} = item;
     return (
       <SafeAreaView>
@@ -36,26 +35,30 @@ export class Popular extends Component {
           <View
             style={{
               backgroundColor: colors.white,
-              // marginHorizontal: 35,
-              padding: 20,
-              width: '100%',
-              
-
+              height: 235,
+              // backgroundColor: colors.light,
+              width,
+              marginHorizontal: 2,
               borderRadius: 10,
+              marginBottom: 20,
+              padding: 15,
+              // marginHorizontal: 35,
+              // padding: 20,
+              // width: '100%',
+
+              // borderRadius: 10,
               // margin: 5,
-              marginBottom: 15,
+              // marginBottom: 15,
             }}>
             <Text style={TYPOGRAPHY.h6}>{name}</Text>
             <View
-              style={
-                {
-                  padding: 5,
-                  // backgroundColor: colors.red
-                }
-              }>
+              style={{
+                padding: 5,
+                // backgroundColor: colors.red
+              }}>
               <Image
                 resizeMode="contain"
-                style={{   width:120, height: 125, alignItems: 'center'}}
+                style={{width: 120, height: 125, alignItems: 'center'}}
                 source={image}
               />
             </View>
@@ -101,25 +104,24 @@ export class Popular extends Component {
       // marginBottom:10,
     };
     return (
-      <View style={popularBox}>
+      <SafeAreaView style={popularBox}>
         <Text style={[TYPOGRAPHY.h3, {fontWeight: 'bold', marginBottom: 20}]}>
           Popular Near You
         </Text>
         <FlatList
-          columnWrapperStyle={
-            {
-              justifyContent: 'space-evenly',
-              // width:'100%',
-              // marginRight: 5,
-              // marginBottom:5,
-              // backgroundColor: colors.red,
-            }
-          }
+          showsVerticalScrollIndicator={false}
+          columnWrapperStyle={{
+            justifyContent: 'space-between',
+          }}
+          contentContainerStyle={{
+            // marginTop: 10,
+            paddingBottom: 50,
+          }}
           data={FOOD_LIST}
           numColumns={2}
           renderItem={item => this.renderItem(item)}
         />
-      </View>
+      </SafeAreaView>
     );
   }
 }
