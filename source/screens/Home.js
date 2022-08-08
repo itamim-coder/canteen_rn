@@ -1,5 +1,6 @@
 /* eslint-disable react-native/no-inline-styles */
 import {
+  ActivityIndicator,
   FlatList,
   Image,
   SafeAreaView,
@@ -24,28 +25,52 @@ import HomeTopBar from '../components/HomeTopBar';
 
 export class Home extends Component {
   // render Category item
+  constructor(props) {
+    super(props);
+    this.state = {
+      visible: false,
+      category: [],
+    };
+  }
+
+  componentDidMount() {
+    this.setState({visible: true});
+    fetch('https://laqil.com/public/api/category-list')
+      .then(res => res.json())
+      .then(res => {
+        if (res.status == true) {
+          this.setState({category: res.data});
+          // console.log(this.state.category);
+          this.setState({visible: false});
+        }
+      });
+  }
 
   renderCategory = ({item}) => {
-    const {image, category} = item;
+    // console.log(item);
+    const {photo, name} = item;
     const categoryCard = {
       flexDirection: 'row',
       alignItems: 'center',
       backgroundColor: colors.white,
       marginRight: 10,
-      paddingHorizontal: 15,
-      paddingVertical: 10,
+      paddingRight: 15,
+      padding: 5,
+      // paddingVertical: 10,
       borderRadius: 10,
       marginTop: 10,
     };
     return (
-      <TouchableOpacity style={categoryCard}>
-        <Image
-          resizeMode="contain"
-          style={{width: 40, height: 40}}
-          source={image}
-        />
-        <Text style={{marginLeft: 15, fontWeight: 'bold'}}>{category}</Text>
-      </TouchableOpacity>
+      <View>
+        <TouchableOpacity style={categoryCard}>
+          <Image
+            resizeMode="cover"
+            style={{width: 60, height: 60, borderRadius: 10}}
+            source={{uri: `${item.photo}`}}
+          />
+          <Text style={{marginLeft: 15, fontWeight: 'bold'}}>{name}</Text>
+        </TouchableOpacity>
+      </View>
     );
   };
 
@@ -73,16 +98,25 @@ export class Home extends Component {
               Categories
             </Text>
             <TouchableOpacity
-              onPress={() => this.props.navigation.navigate('AllCategory')}>
+              onPress={() =>
+                this.props.navigation.navigate('AllCategory', {
+                  category: this.state.category,
+                })
+              }>
               <Text style={[TYPOGRAPHY.h5, {color: colors.red}]}>See More</Text>
             </TouchableOpacity>
           </View>
-          <FlatList
-            horizontal
-            data={CATEGORY_LIST.slice(0, 6)}
-            showsHorizontalScrollIndicator={false}
-            renderItem={item => this.renderCategory(item)}
-          />
+          {this.state.visible ? (
+            <ActivityIndicator color={colors.red} />
+          ) : (
+            <FlatList
+              horizontal
+              data={this.state?.category.slice(0, 6)}
+              keyExtractor={item => item.id}
+              showsHorizontalScrollIndicator={false}
+              renderItem={this.renderCategory}
+            />
+          )}
 
           {/* Popular Section  */}
           <Popular navigation={this.props.navigation} />

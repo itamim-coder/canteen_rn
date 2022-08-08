@@ -5,6 +5,7 @@ import {
   StyleSheet,
   Text,
   TextInput,
+  ToastAndroid,
   TouchableOpacity,
   View,
 } from 'react-native';
@@ -33,6 +34,8 @@ export class Login extends Component {
       userInfo: '',
       emailerror: '',
       passerror: '',
+      disabled: false,
+      indicator: false,
     };
   }
   // console.log(error)
@@ -56,7 +59,10 @@ export class Login extends Component {
   making_api_call = () => {
     if (this.validate_field()) {
       const data = {email: this.state.email, password: this.state.password};
+      this.setState({indicator: true});
+      // this.setState({disabled: true});
       axios
+
         .post('https://laqil.com/public/api/login', data)
         .then(res => {
           let userInfo = res.data;
@@ -67,6 +73,8 @@ export class Login extends Component {
           console.log(res.data.token);
           if (status == 1) {
             alert(res.data.message);
+            this.setState({indicator: false});
+            this.setState({disabled: false});
             this.props.navigation.navigate('TabNavigator');
           }
         })
@@ -76,9 +84,16 @@ export class Login extends Component {
 
             // this.setState({emailerror: emailerror});
             alert(error.response.data.message);
+
+            // ToastAndroid.show(error.response.data.message, ToastAndroid.SHORT);
+            this.setState({indicator: false});
+            this.setState({disabled: false});
+
+            // return;
             // The request was made and the server responded with a status code
             // that falls out of the range of 2xx
-            console.log(error.response);
+            // console.log(error.response);
+
             // console.log(error.response.status);
             // console.log(error.response.headers);
           }
@@ -153,17 +168,25 @@ export class Login extends Component {
               type="login"
               navigation={this.props.navigation}
             /> */}
+
             <TouchableOpacity
               // onPress={handleSignin}
+
               onPress={() => {
                 this.making_api_call();
               }}
+              disabled={this.state.disabled}
               style={BUTTONS.btnPrimary}>
-              <Text style={BUTTONS.btnFont}>Login</Text>
-              {/* <ActivityIndicator /> */}
+              {this.state.indicator ? (
+                <ActivityIndicator color={colors.white} />
+              ) : (
+                <Text style={BUTTONS.btnFont}>Login</Text>
+              )}
             </TouchableOpacity>
+
             <View style={loginBottom}>
-              <TouchableOpacity>
+              <TouchableOpacity
+                onPress={() => this.props.navigation.navigate('ResetRequest')}>
                 <Text style={{color: colors.light, fontFamily: Fonts.primary}}>
                   Forgot Password?
                 </Text>

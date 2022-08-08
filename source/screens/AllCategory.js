@@ -9,7 +9,7 @@ import {colors} from '../theme/colors';
 
 export default class AllCategory extends Component {
   renderCategory = ({item}) => {
-    const {image, category} = item;
+    const {photo, name} = item;
     const categoryCard = {
       flexDirection: 'row',
       alignItems: 'center',
@@ -25,15 +25,16 @@ export default class AllCategory extends Component {
         <Image
           resizeMode="contain"
           style={{width: 40, height: 40}}
-          source={image}
+          style={{width: 60, height: 60, borderRadius: 10}}
+          source={{uri: `${item.photo}`}}
         />
-        <Text style={[{marginLeft: 25}, TYPOGRAPHY.h5]}>
-          {category}
-        </Text>
+        <Text style={[{marginLeft: 25}, TYPOGRAPHY.h5]}>{name}</Text>
       </TouchableOpacity>
     );
   };
   render() {
+    const category = this.props.route.params.category;
+    console.log(category);
     return (
       <SafeAreaView style={{flex: 1}}>
         <Statusbar />
@@ -42,7 +43,7 @@ export default class AllCategory extends Component {
           <FlatList
             //   horizontal
             showsVerticalScrollIndicator={false}
-            data={CATEGORY_LIST}
+            data={category}
             renderItem={item => this.renderCategory(item)}
           />
         </View>

@@ -21,7 +21,21 @@ export class Popular extends Component {
     super(props);
     this.state = {
       visible: false,
+      foods: [],
     };
+  }
+  componentDidMount() {
+    // this.setState({visible: true});
+    fetch('../data/food-list.js')
+      .then(res => res.json())
+      .then(res => {
+        console.log(res);
+        // if (res.status == true) {
+        //   // this.setState({category: res.data});
+        //   // console.log(this.state.category);
+        //   // this.setState({visible: false});
+        // }
+      });
   }
 
   renderItem = ({item}) => {

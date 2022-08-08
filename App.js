@@ -12,6 +12,7 @@ import Home from './source/screens/Home';
 //Auth
 import Login from './source/screens/Login';
 import Signup from './source/screens/Signup';
+import ResetRequest from './source/screens/ResetRequest';
 import Verification from './source/screens/Verification';
 
 //Wallet
@@ -34,6 +35,7 @@ import {AuthProvider} from './source/context/AuthContext';
 
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import AllCategory from './source/screens/AllCategory';
+import ConfirmPassword from './source/screens/ConfirmPassword';
 
 const Stack = createNativeStackNavigator();
 const Tab = createBottomTabNavigator();
@@ -94,6 +96,8 @@ const App = () => {
         {/* Auth  */}
         <Stack.Screen name="Login" component={Login} />
         <Stack.Screen name="Signup" component={Signup} />
+        <Stack.Screen name="ResetRequest" component={ResetRequest} />
+        <Stack.Screen name="ConfirmPassword" component={ConfirmPassword} />
         <Stack.Screen name="Verification" component={Verification} />
 
         {/* Bottom Tab Navigation  */}

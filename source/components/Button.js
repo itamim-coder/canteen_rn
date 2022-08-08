@@ -1,7 +1,8 @@
-import {Text, TouchableOpacity, View} from 'react-native';
+import {ActivityIndicator, Text, TouchableOpacity, View} from 'react-native';
 import React, {Component} from 'react';
 import BUTTONS from '../theme/Buttons';
 import {Fonts} from '../theme/Fonts';
+import { colors } from '../theme/colors';
 
 export class Button extends Component {
   render() {
@@ -40,6 +41,17 @@ export class Button extends Component {
           <Text style={BUTTONS.btnFont}>Continue</Text>
         </TouchableOpacity>
       );
+    } else if (this.props.type == 'loading') {
+      <TouchableOpacity
+        // onPress={handleSignin}
+        disabled
+        // onPress={() => {
+        //   this.making_api_call();
+        // }}
+        style={BUTTONS.btnPrimary}>
+        <Text style={BUTTONS.btnFont}>Login</Text>
+        <ActivityIndicator color={colors.white} />
+      </TouchableOpacity>;
     } else if (this.props.type == 'submit') {
       return (
         <TouchableOpacity style={BUTTONS.btnPrimary}>

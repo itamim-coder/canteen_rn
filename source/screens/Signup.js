@@ -1,5 +1,6 @@
 import React, {Component} from 'react';
 import {
+  ActivityIndicator,
   SafeAreaView,
   StyleSheet,
   Text,
@@ -33,6 +34,8 @@ export default class Signup extends Component {
       phone_error: '',
       password_error: '',
       password_confirmation_error: '',
+      indicator: false,
+      disabled: false,
       // registerUser: '',
     };
   }
@@ -65,7 +68,7 @@ export default class Signup extends Component {
     //   this.setState({email_error: 'Invalid Email Address'});
     //   return false;
     // }
-     else if (phone == '') {
+    else if (phone == '') {
       this.setState({phone_error: 'Please enter your valid phone'});
       return false;
     } else if (password == '') {
@@ -95,6 +98,8 @@ export default class Signup extends Component {
         password: this.state.password,
         password_confirmation: this.state.password_confirmation,
       };
+      this.setState({indicator: true});
+      this.setState({disabled: true});
       axios
         .post('https://laqil.com/public/api/register', data)
         .then(res => {
@@ -107,6 +112,8 @@ export default class Signup extends Component {
           if (status == true) {
             alert(res.data.message);
             this.props.navigation.navigate('TabNavigator');
+            this.setState({indicator: false});
+            this.setState({disabled: false});
           }
         })
         .catch(function (error) {
@@ -117,6 +124,8 @@ export default class Signup extends Component {
             console.log(error.response.data.errors);
             // console.log(error.response.status);
             // console.log(error.response.headers);
+            this.setState({indicator: false});
+            this.setState({disabled: false});
           }
         });
     }
@@ -217,13 +226,26 @@ export default class Signup extends Component {
             <Text style={{color: colors.bloodRed, fontFamily: Fonts.primary}}>
               {this.state.password_confirmation_error}
             </Text>
-            <TouchableOpacity
+            {/* <TouchableOpacity
               // onPress={handleSignin}
               onPress={() => {
                 this.register_api_call();
               }}
               style={BUTTONS.btnPrimary}>
               <Text style={BUTTONS.btnFont}>Register</Text>
+            </TouchableOpacity> */}
+            <TouchableOpacity
+              // onPress={handleSignin}
+              disabled={this.state.disabled}
+              onPress={() => {
+                this.register_api_call();
+              }}
+              style={BUTTONS.btnPrimary}>
+              {this.state.indicator ? (
+                <ActivityIndicator color={colors.white} />
+              ) : (
+                <Text style={BUTTONS.btnFont}>Register</Text>
+              )}
             </TouchableOpacity>
             {/* <Button
               type="continue"
