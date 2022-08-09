@@ -26,20 +26,22 @@ export class Popular extends Component {
   }
   componentDidMount() {
     // this.setState({visible: true});
-    fetch('../data/food-list.js')
+    fetch('https://laqil.com/public/api/product-list?cat=2')
       .then(res => res.json())
       .then(res => {
-        console.log(res);
-        // if (res.status == true) {
-        //   // this.setState({category: res.data});
-        //   // console.log(this.state.category);
-        //   // this.setState({visible: false});
-        // }
+        // console.log(res);
+
+        // this.setState({foods: res});
+        if (res.status == true) {
+          this.setState({foods: res.data});
+          // return this.state.foods;
+          // this.setState({visible: false});
+        }
       });
   }
 
   renderItem = ({item}) => {
-    const {name, image, price} = item;
+    const {description, picture, price} = item;
     return (
       <SafeAreaView>
         <TouchableOpacity
@@ -64,7 +66,7 @@ export class Popular extends Component {
               // margin: 5,
               // marginBottom: 15,
             }}>
-            <Text style={TYPOGRAPHY.h6}>{name}</Text>
+            <Text style={TYPOGRAPHY.h6}>{}</Text>
             <View
               style={{
                 padding: 5,
@@ -73,7 +75,7 @@ export class Popular extends Component {
               <Image
                 resizeMode="contain"
                 style={{width: 120, height: 125, alignItems: 'center'}}
-                source={image}
+                source={{uri: `${item.picture}`}}
               />
             </View>
             <Text style={[TYPOGRAPHY.h6, {color: colors.green}]}>
@@ -131,7 +133,7 @@ export class Popular extends Component {
             // marginTop: 10,
             paddingBottom: 50,
           }}
-          data={FOOD_LIST}
+          data={this.state.foods}
           numColumns={2}
           renderItem={item => this.renderItem(item)}
         />

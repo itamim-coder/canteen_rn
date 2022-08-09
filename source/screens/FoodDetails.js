@@ -109,27 +109,33 @@ export class FoodDetails extends Component {
       fontSize: 15,
       color: colors.white,
     };
-    const addToCart = id => {
+
+    const addToCart = async id => {
+      console.log(id);
       let shoppingCart;
 
-      const storedCart = AsyncStorage.getItem('shopping-cart');
+      //get shopping cart
+      const storedCart = await AsyncStorage.getItem('shopping-cart');
       if (storedCart) {
-        shoppingCart = storedCart;
+        shoppingCart = JSON.parse(storedCart);
       } else {
         shoppingCart = {};
       }
 
+      // add quantity
+      // console.log(shoppingCart);
       const quantity = shoppingCart[id];
-
+      // console.log(shoppingCart[id]);
       if (quantity) {
-        const newQuantity = parseInt(quantity) + 1;
+        const newQuantity = quantity + 1;
+
         shoppingCart[id] = newQuantity;
       } else {
         shoppingCart[id] = 1;
       }
       const jsonValue = JSON.stringify(shoppingCart);
       AsyncStorage.setItem('shopping-cart', jsonValue);
-      console.log(jsonValue);
+      console.log(shoppingCart);
     };
 
     // const addToCart = async id => {
@@ -138,7 +144,7 @@ export class FoodDetails extends Component {
     //   console.log(storedCart);
     //   if (storedCart) {
     //     let array = storedCart;
-    //     array.push(id);
+    //     array.push(_id);
     //     try {
     //       await AsyncStorage.setItem('shopping-cart', JSON.stringify(array));
     //       ToastAndroid.show(
@@ -153,10 +159,7 @@ export class FoodDetails extends Component {
     //     const quantity = shoppingCart[id];
 
     //     try {
-    //       await AsyncStorage.setItem(
-    //         'shopping-cart',
-    //         JSON.stringify(shoppingCart),
-    //       );
+    //       await AsyncStorage.setItem('shopping-cart', JSON.stringify(quantity));
 
     //       ToastAndroid.show(
     //         'Item Added Successfully to cart',
@@ -170,10 +173,10 @@ export class FoodDetails extends Component {
     // };
     const food = this.props.route.params.food;
 
-    const {name, price, image, details, id} = food;
+    const {ingredients, pack_details, price, picture, description, id} = food;
     return (
       <SafeAreaView style={detailsContainer}>
-        <Statusbar name={name} type="food" />
+        <Statusbar name={description} type="food" />
 
         {/* details screen  */}
 
@@ -182,7 +185,7 @@ export class FoodDetails extends Component {
             <View style={SCREEN.screen}>
               <Image
                 resizeMode="contain"
-                source={image}
+                source={{uri: `${picture}`}}
                 style={{
                   width: '100%',
                   height: 300,
@@ -190,7 +193,9 @@ export class FoodDetails extends Component {
                   justifyContent: 'center',
                 }}
               />
-              <Text style={[TYPOGRAPHY.medium, {fontSize: 22}]}>{name}</Text>
+              <Text style={[TYPOGRAPHY.medium, {fontSize: 22}]}>
+                {description}
+              </Text>
               <Text style={[TYPOGRAPHY.h4, {color: colors.green}]}>
                 Customize
               </Text>
@@ -237,7 +242,7 @@ export class FoodDetails extends Component {
                 </TouchableOpacity>
               </View>
               <Text style={TYPOGRAPHY.h3}>About Product</Text>
-              <Text style={TYPOGRAPHY.primary}>{details}</Text>
+              <Text style={TYPOGRAPHY.primary}>{ingredients}</Text>
             </View>
 
             <View
@@ -266,7 +271,7 @@ export class FoodDetails extends Component {
               <FlatList
                 horizontal
                 showsHorizontalScrollIndicator={false}
-                data={FOOD_LIST}
+                // data={foods}
                 renderItem={item => this.renderItem(item)}
               />
             </View>

@@ -22,7 +22,7 @@ import {AuthContext} from '../context/AuthContext';
 
 import axios from 'axios';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import App from '../../App';
+
 import Home from './Home';
 
 export class Login extends Component {
@@ -160,14 +160,14 @@ export class Login extends Component {
             <Text style={{color: colors.bloodRed, fontFamily: Fonts.primary}}>
               {this.state.passerror}
             </Text>
-            {/* <Button
+            <Button
               // onPress={() => {
               //   this.making_api_call();
               // }}
               // onPress={handleSignin}
               type="login"
               navigation={this.props.navigation}
-            /> */}
+            />
 
             <TouchableOpacity
               // onPress={handleSignin}

@@ -8,7 +8,7 @@ import TYPOGRAPHY from '../theme/typography';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 
 const Statusbar = ({name, type}) => {
-  console.log(type);
+  // console.log(type);
   const navigation = useNavigation();
   if (type == 'food') {
     return (

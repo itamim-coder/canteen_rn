@@ -1,5 +1,6 @@
 import React, {Component} from 'react';
 import {
+  FlatList,
   Image,
   SafeAreaView,
   ScrollView,
@@ -19,46 +20,152 @@ import BUTTONS from '../theme/Buttons';
 import Button from '../components/Button';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import {FOOD_LIST} from '../data/food-list';
+import {getStoredCart} from '../../Function/Cart';
 
 export class MyCart extends Component {
   constructor(props) {
     super(props);
     this.state = {
       count: 0,
-      product: [],
+      products: [],
       total: null,
+      cart: [],
     };
   }
 
-  getDataFromDB = async () => {
-    let items = await AsyncStorage.getItem('cartItems');
-    items = JSON.parse(items);
-    let productData = [];
+  // componentDidMount() {
+  //   // this.setState({visible: true});
 
-    if (items) {
-      FOOD_LIST.forEach(data => {
-        if (items.includes(data.id)) {
-          productData.push(data);
-          return;
+  // }
+  async componentDidMount() {
+    const store = await getStoredCart();
+    fetch('https://laqil.com/public/api/product-list?cat=2')
+      .then(res => res.json())
+      .then(res => {
+        // this.setState({products: res});
+        // this.setState({foods: res});
+        if (res.status == true) {
+          this.setState({products: res.data});
+          // return this.state.foods;
+          // this.setState({visible: false});
         }
-      });
-      this.setState({product: productData});
-      // console.log(p);
-      this.getTotal(productData);
-    } else {
-      this.setState({product: false});
+        // console.log(this.state.products);
+        const {products} = this.state;
+        const savedCart = [];
+        // console.log(products);
+        for (const id in store) {
+          // console.log(id);
+          const addedProduct = products.find(product => product.id == id);
+          if (addedProduct) {
+            const quantity = store[id];
+            addedProduct.quantity = quantity;
+            savedCart.push(addedProduct);
+            console.log(savedCart);
+          }
+          // this.setState({cart: addedProduct});
+          // console.log(this.state.cart);
+        }
+        this.setState({cart: savedCart});
 
-      this.getTotal(false);
-    }
+        console.log(this.state.cart);
+      });
+
+    // let json = JSON.parse(store)
+  }
+
+  renderCart = ({item}) => {
+    console.log(item);
+    return (
+      <View>
+        <View
+          style={{
+            flexDirection: 'row',
+            backgroundColor: colors.white,
+            marginVertical: 5,
+            borderRadius: 6,
+            alignItems: 'center',
+            justifyContent: 'space-around',
+          }}>
+          <Image
+            style={{width: 100, height: 100}}
+            source={{uri: `${item.picture}`}}
+          />
+          <View>
+            <View>
+              <Text style={[TYPOGRAPHY.h3, {fontSize: 15}]}>
+                {item.description}
+                {/* {data.productName} */}
+              </Text>
+            </View>
+            <View
+              style={{
+                flexDirection: 'row',
+                justifyContent: 'space-between',
+                alignItems: 'center',
+                // marginHorizontal:50,
+              }}>
+              <Text style={{color: colors.green, fontSize: 15}}>Custom</Text>
+
+              <View
+                style={{
+                  flexDirection: 'row',
+                  marginHorizontal: 20,
+                  backgroundColor: colors.darkOrange,
+                  borderRadius: 5,
+                  paddingVertical: 5,
+                }}>
+                <TouchableOpacity
+                  onPress={() => this.setState({count: item.quantity - 1})}>
+                  <Text
+                    style={{
+                      fontSize: 17,
+                      color: colors.white,
+                      paddingHorizontal: 10,
+                    }}>
+                    -
+                  </Text>
+                </TouchableOpacity>
+                <Text
+                  style={{
+                    fontSize: 17,
+                    color: colors.white,
+                    paddingHorizontal: 10,
+                  }}>
+                  {item.quantity}
+                </Text>
+                <TouchableOpacity
+                  onPress={() => this.setState({count: this.state.count + 1})}>
+                  <Text
+                    style={{
+                      fontSize: 17,
+                      color: colors.white,
+                      paddingHorizontal: 10,
+                    }}>
+                    +
+                  </Text>
+                </TouchableOpacity>
+              </View>
+
+              <Text
+                style={[
+                  TYPOGRAPHY.primary,
+                  {
+                    marginHorizontal: 20,
+                    alignItems: 'center',
+                    fontWeight: 'bold',
+                  },
+                ]}>
+                ${item.quantity * item.price}
+              </Text>
+
+              <View />
+            </View>
+          </View>
+        </View>
+      </View>
+    );
   };
-  getTotal = productData => {
-    let total = 0;
-    for (let index = 0; index < productData.length; index++) {
-      let productPrice = productData[index].productPrice;
-      total = total + productPrice;
-    }
-    this.setState({total: total});
-  };
+
   render() {
     // console.log(this.props.data);
     const cartContainer = {
@@ -109,95 +216,11 @@ export class MyCart extends Component {
             showsVerticalScrollIndicator={false}
             style={{marginTop: 20, flex: 1}}>
             {/* product card */}
-
-            <View>
-              <View style={productCard}>
-                <Image
-                  style={{width: 100, height: 100}}
-                  source={require('../../assets/images/items/items1.png')}
-                />
-                <View>
-                  <View>
-                    <Text style={[TYPOGRAPHY.h3, {fontSize: 15}]}>
-                      Chinese Noodles
-                      {/* {data.productName} */}
-                    </Text>
-                  </View>
-                  <View
-                    style={{
-                      flexDirection: 'row',
-                      justifyContent: 'space-between',
-                      alignItems: 'center',
-                      // marginHorizontal:50,
-                    }}>
-                    <Text style={{color: colors.green, fontSize: 15}}>
-                      Custom
-                    </Text>
-
-                    <View
-                      style={{
-                        flexDirection: 'row',
-                        marginHorizontal: 20,
-                        backgroundColor: colors.darkOrange,
-                        borderRadius: 5,
-                        paddingVertical: 5,
-                      }}>
-                      <TouchableOpacity
-                        onPress={() =>
-                          this.setState({count: this.state.count - 1})
-                        }>
-                        <Text
-                          style={{
-                            fontSize: 17,
-                            color: colors.white,
-                            paddingHorizontal: 10,
-                          }}>
-                          -
-                        </Text>
-                      </TouchableOpacity>
-                      <Text
-                        style={{
-                          fontSize: 17,
-                          color: colors.white,
-                          paddingHorizontal: 10,
-                        }}>
-                        {this.state.count}
-                      </Text>
-                      <TouchableOpacity
-                        onPress={() =>
-                          this.setState({count: this.state.count + 1})
-                        }>
-                        <Text
-                          style={{
-                            fontSize: 17,
-                            color: colors.white,
-                            paddingHorizontal: 10,
-                          }}>
-                          +
-                        </Text>
-                      </TouchableOpacity>
-                    </View>
-
-                    <Text
-                      style={[
-                        TYPOGRAPHY.primary,
-                        {
-                          marginHorizontal: 20,
-                          alignItems: 'center',
-                          fontWeight: 'bold',
-                        },
-                      ]}>
-                      ${this.state.count * 10}
-                    </Text>
-
-                    <View />
-                  </View>
-                </View>
-              </View>
-            </View>
-
+            <FlatList
+              data={this.state.cart}
+              renderItem={item => this.renderCart(item)}
+            />
             {/* Total calculation */}
-
             <View style={{marginTop: 40}}>
               <View style={calculationCard}>
                 <View>
