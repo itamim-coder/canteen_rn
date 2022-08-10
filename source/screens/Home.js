@@ -62,7 +62,11 @@ export class Home extends Component {
     };
     return (
       <View>
-        <TouchableOpacity style={categoryCard}>
+        <TouchableOpacity
+          onPress={() =>
+            this.props.navigation.navigate('FilterCategory', {id: item.id})
+          }
+          style={categoryCard}>
           <Image
             resizeMode="cover"
             style={{width: 60, height: 60, borderRadius: 10}}

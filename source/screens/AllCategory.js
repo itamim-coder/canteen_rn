@@ -21,7 +21,11 @@ export default class AllCategory extends Component {
       marginTop: 10,
     };
     return (
-      <TouchableOpacity style={categoryCard}>
+      <TouchableOpacity
+        onPress={() =>
+          this.props.navigation.navigate('FilterCategory', {id: item.id})
+        }
+        style={categoryCard}>
         <Image
           resizeMode="contain"
           style={{width: 40, height: 40}}

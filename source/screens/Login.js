@@ -169,7 +169,7 @@ export class Login extends Component {
               navigation={this.props.navigation}
             />
 
-            <TouchableOpacity
+            {/* <TouchableOpacity
               // onPress={handleSignin}
 
               onPress={() => {
@@ -182,7 +182,7 @@ export class Login extends Component {
               ) : (
                 <Text style={BUTTONS.btnFont}>Login</Text>
               )}
-            </TouchableOpacity>
+            </TouchableOpacity> */}
 
             <View style={loginBottom}>
               <TouchableOpacity

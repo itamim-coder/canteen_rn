@@ -39,7 +39,7 @@ export class MyCart extends Component {
   // }
   async componentDidMount() {
     const store = await getStoredCart();
-    fetch('https://laqil.com/public/api/product-list?cat=2')
+    fetch('https://laqil.com/public/api/product-list')
       .then(res => res.json())
       .then(res => {
         // this.setState({products: res});
@@ -52,7 +52,7 @@ export class MyCart extends Component {
         // console.log(this.state.products);
         const {products} = this.state;
         const savedCart = [];
-        // console.log(products);
+        console.log(products);
         for (const id in store) {
           // console.log(id);
           const addedProduct = products.find(product => product.id == id);
@@ -74,7 +74,21 @@ export class MyCart extends Component {
   }
 
   renderCart = ({item}) => {
-    console.log(item);
+    console.log(item.quantity);
+    // console.log(this.state.cart.id);
+    const dltFromCart = async id => {
+      console.log(id);
+      const storedCart = await AsyncStorage.getItem('shopping-cart');
+      if (storedCart) {
+        const shoppingCart = JSON.parse(storedCart);
+        if (id in shoppingCart) {
+          // console.log('exist');
+          delete shoppingCart[id];
+          const jsonValue = JSON.stringify(shoppingCart);
+          AsyncStorage.setItem('shopping-cart', jsonValue);
+        }
+      }
+    };
     return (
       <View>
         <View
@@ -115,7 +129,7 @@ export class MyCart extends Component {
                   paddingVertical: 5,
                 }}>
                 <TouchableOpacity
-                  onPress={() => this.setState({count: item.quantity - 1})}>
+                  onPress={() => this.setState({count: item.count - 1})}>
                   <Text
                     style={{
                       fontSize: 17,
@@ -131,10 +145,10 @@ export class MyCart extends Component {
                     color: colors.white,
                     paddingHorizontal: 10,
                   }}>
-                  {item.quantity}
+                  {item.quantity + this.state.count}
                 </Text>
                 <TouchableOpacity
-                  onPress={() => this.setState({count: this.state.count + 1})}>
+                  onPress={() => this.setState({count: item.count + 1})}>
                   <Text
                     style={{
                       fontSize: 17,
@@ -157,6 +171,12 @@ export class MyCart extends Component {
                 ]}>
                 ${item.quantity * item.price}
               </Text>
+              <TouchableOpacity
+                onPress={() => {
+                  dltFromCart(item.id);
+                }}>
+                <Text>X</Text>
+              </TouchableOpacity>
 
               <View />
             </View>
@@ -205,6 +225,9 @@ export class MyCart extends Component {
       paddingHorizontal: 30,
       marginBottom: 18,
     };
+    const clearCart = () => {
+      AsyncStorage.removeItem('shopping-cart');
+    };
     return (
       <SafeAreaView style={cartContainer}>
         <Statusbar name="My Cart" />
@@ -220,6 +243,14 @@ export class MyCart extends Component {
               data={this.state.cart}
               renderItem={item => this.renderCart(item)}
             />
+            <View>
+              <TouchableOpacity
+                onPress={() => {
+                  clearCart();
+                }}>
+                <Text>Clear Cart</Text>
+              </TouchableOpacity>
+            </View>
             {/* Total calculation */}
             <View style={{marginTop: 40}}>
               <View style={calculationCard}>

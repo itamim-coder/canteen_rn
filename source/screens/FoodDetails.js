@@ -1,5 +1,6 @@
 import React, {Component} from 'react';
 import {
+  ActivityIndicator,
   FlatList,
   Image,
   SafeAreaView,
@@ -27,9 +28,27 @@ export class FoodDetails extends Component {
   constructor(props) {
     super(props);
     this.state = {
+      id: this.props.route?.params?.id,
       foodDetails: {},
       cart: '',
+      visible: false,
     };
+  }
+  componentDidMount() {
+    console.log(this.state.id);
+    this.setState({visible: true});
+    fetch(`https://laqil.com/public/api/product-details/${this.state.id}`)
+      .then(res => res.json())
+      .then(res => {
+        console.log(res.data);
+
+        // this.setState({foods: res});
+        if (res.status == true) {
+          this.setState({foodDetails: res.data});
+          // return this.state.foods;
+          this.setState({visible: false});
+        }
+      });
   }
 
   renderItem = ({item}) => {
@@ -173,139 +192,155 @@ export class FoodDetails extends Component {
     // };
     const food = this.props.route.params.food;
 
-    const {ingredients, pack_details, price, picture, description, id} = food;
+    const {ingredients, pack_details, price, picture, description, id} =
+      this.state?.foodDetails;
+    // console.log(id);
+    console.log('render', this.state?.foodDetails);
     return (
       <SafeAreaView style={detailsContainer}>
         <Statusbar name={description} type="food" />
 
         {/* details screen  */}
-
-        <View style={detailsScreen}>
-          <ScrollView style={{flex: 1}} showsVerticalScrollIndicator={false}>
-            <View style={SCREEN.screen}>
-              <Image
-                resizeMode="contain"
-                source={{uri: `${picture}`}}
-                style={{
-                  width: '100%',
-                  height: 300,
-                  alignItems: 'center',
-                  justifyContent: 'center',
-                }}
-              />
-              <Text style={[TYPOGRAPHY.medium, {fontSize: 22}]}>
-                {description}
-              </Text>
-              <Text style={[TYPOGRAPHY.h4, {color: colors.green}]}>
-                Customize
-              </Text>
-              <View
-                style={{
-                  flexDirection: 'row',
-                  justifyContent: 'space-between',
-                  alignItems: 'center',
-                  paddingVertical: 10,
-                }}>
-                <Text style={TYPOGRAPHY.h3}>${price}.00</Text>
-
-                <TouchableOpacity
-                  // onPress={() => (id ? addToCart(id) : null)}
-                  onPress={() => {
-                    addToCart(id);
-                  }}
-                  /* HERE IS WHERE WE'RE GOING TO SHOW OUR FIRST MESSAGE */
-                  // showMessage({
-                  //   message: 'Added Successfully',
-                  //   description: 'Click here to check cart',
-                  //   type: 'success',
-                  //   icon: 'success',
-                  //   onPress: () => {
-                  //     this.props.navigation.navigate('My Cart');
-                  //     /* THIS FUNC/CB WILL BE CALLED AFTER MESSAGE PRESS */
-                  //   },
-                  // });
-                  // }}
+        {this.state.visible ? (
+          <View style={{flex: 1}}>
+            <ActivityIndicator
+              size={'large'}
+              color={colors.red}
+              style={{
+                flex: 1,
+                justifyContent: 'center',
+                alignItems: 'center',
+              }}
+            />
+          </View>
+        ) : (
+          <View style={detailsScreen}>
+            <ScrollView style={{flex: 1}} showsVerticalScrollIndicator={false}>
+              <View style={SCREEN.screen}>
+                <Image
+                  resizeMode="contain"
+                  source={{uri: picture}}
                   style={{
-                    backgroundColor: '#f5474a',
-                    paddingVertical: 7,
-                    paddingHorizontal: 10,
-                    borderRadius: 10,
+                    width: '100%',
+                    height: 300,
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                  }}
+                />
+                <Text style={[TYPOGRAPHY.medium, {fontSize: 22}]}>
+                  {description}
+                </Text>
+                <Text style={[TYPOGRAPHY.h4, {color: colors.green}]}>
+                  Customize
+                </Text>
+                <View
+                  style={{
                     flexDirection: 'row',
+                    justifyContent: 'space-between',
+                    alignItems: 'center',
+                    paddingVertical: 10,
                   }}>
-                  <Text style={[cartButton, {fontFamily: Fonts.primary}]}>
-                    Add{' '}
-                  </Text>
-                  <Text style={[cartButton, {fontFamily: Fonts.primary}]}>
-                    {' '}
-                    +
-                  </Text>
-                </TouchableOpacity>
+                  <Text style={TYPOGRAPHY.h3}>${price}.00</Text>
+
+                  <TouchableOpacity
+                    // onPress={() => (id ? addToCart(id) : null)}
+                    onPress={() => {
+                      addToCart(id);
+                    }}
+                    /* HERE IS WHERE WE'RE GOING TO SHOW OUR FIRST MESSAGE */
+                    // showMessage({
+                    //   message: 'Added Successfully',
+                    //   description: 'Click here to check cart',
+                    //   type: 'success',
+                    //   icon: 'success',
+                    //   onPress: () => {
+                    //     this.props.navigation.navigate('My Cart');
+                    //     /* THIS FUNC/CB WILL BE CALLED AFTER MESSAGE PRESS */
+                    //   },
+                    // });
+                    // }}
+                    style={{
+                      backgroundColor: '#f5474a',
+                      paddingVertical: 7,
+                      paddingHorizontal: 10,
+                      borderRadius: 10,
+                      flexDirection: 'row',
+                    }}>
+                    <Text style={[cartButton, {fontFamily: Fonts.primary}]}>
+                      Add{' '}
+                    </Text>
+                    <Text style={[cartButton, {fontFamily: Fonts.primary}]}>
+                      {' '}
+                      +
+                    </Text>
+                  </TouchableOpacity>
+                </View>
+                <Text style={TYPOGRAPHY.h3}>About Product</Text>
+                <Text style={TYPOGRAPHY.primary}>{ingredients}</Text>
               </View>
-              <Text style={TYPOGRAPHY.h3}>About Product</Text>
-              <Text style={TYPOGRAPHY.primary}>{ingredients}</Text>
-            </View>
 
-            <View
-              style={[
-                SCREEN.screen,
-
-                {
-                  // padding:0,
-                  backgroundColor: colors.grey,
-                  // flex: 0.1,
-                  borderTopLeftRadius: 30,
-                  borderTopRightRadius: 30,
-                  paddingBottom: 10,
-                },
-              ]}>
-              <Text
+              <View
                 style={[
-                  TYPOGRAPHY.h4,
+                  SCREEN.screen,
+
                   {
-                    // fontSize: 20,
-                    marginBottom: 10,
+                    // padding:0,
+                    backgroundColor: colors.grey,
+                    // flex: 0.1,
+                    borderTopLeftRadius: 30,
+                    borderTopRightRadius: 30,
+                    paddingBottom: 10,
                   },
                 ]}>
-                Similar Products
-              </Text>
-              <FlatList
-                horizontal
-                showsHorizontalScrollIndicator={false}
-                // data={foods}
-                renderItem={item => this.renderItem(item)}
-              />
-            </View>
-          </ScrollView>
-        </View>
+                <Text
+                  style={[
+                    TYPOGRAPHY.h4,
+                    {
+                      // fontSize: 20,
+                      marginBottom: 10,
+                    },
+                  ]}>
+                  Similar Products
+                </Text>
+                <FlatList
+                  horizontal
+                  showsHorizontalScrollIndicator={false}
+                  // data={this.state.foods}
+                  renderItem={item => this.renderItem(item)}
+                />
+              </View>
+            </ScrollView>
+          </View>
+        )}
 
         {/* <ScrollView
-          style={[
-            SCREEN.screen,
-            {
-              backgroundColor: colors.grey,
-              // flex: 0.1,
-              borderTopLeftRadius: 30,
-              borderTopRightRadius: 30,
-              paddingBottom: 0,
-            },
-          ]}>
-          <Text
-            style={[
-              TYPOGRAPHY.primary,
-              {
-                fontSize: 20,
-                marginBottom: 10,
-              },
-            ]}>
-            Similar Products
-          </Text>
-          <FlatList
-            horizontal
-            showsHorizontalScrollIndicator={false}
-            data={FOOD_LIST}
-            renderItem={item => this.renderItem(item)}
-          />
-        </ScrollView> */}
+    style={[
+      SCREEN.screen,
+      {
+        backgroundColor: colors.grey,
+        // flex: 0.1,
+        borderTopLeftRadius: 30,
+        borderTopRightRadius: 30,
+        paddingBottom: 0,
+      },
+    ]}>
+    <Text
+      style={[
+        TYPOGRAPHY.primary,
+        {
+          fontSize: 20,
+          marginBottom: 10,
+        },
+      ]}>
+      Similar Products
+    </Text>
+    <FlatList
+      horizontal
+      showsHorizontalScrollIndicator={false}
+      data={FOOD_LIST}
+      renderItem={item => this.renderItem(item)}
+    />
+  </ScrollView> */}
         <FlashMessage position="top" />
       </SafeAreaView>
     );

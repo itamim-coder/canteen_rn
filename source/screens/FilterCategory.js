@@ -1,45 +1,49 @@
 import {
+  Alert,
   Dimensions,
   FlatList,
   Image,
-  ScrollView,
   Text,
-  TextInput,
   TouchableOpacity,
   View,
 } from 'react-native';
 import React, {Component} from 'react';
-import TYPOGRAPHY from '../theme/typography';
-import {FOOD_LIST} from '../data/food-list';
 import {SafeAreaView} from 'react-native-safe-area-context';
+import TYPOGRAPHY from '../theme/typography';
 import {colors} from '../theme/colors';
-import Button from './Button';
-import {BottomSheet} from 'react-native-btr';
+import SCREEN from '../theme/Screen';
+import Statusbar from '../components/Statusbar';
 const width = Dimensions.get('screen').width / 2 - 30;
-export class Popular extends Component {
+
+export default class FilterCategory extends Component {
   constructor(props) {
     super(props);
     this.state = {
+      id: this.props.route?.params?.id,
+      filterFoods: [],
       visible: false,
-      foods: [],
+      message: '',
     };
   }
+
   componentDidMount() {
     this.setState({visible: true});
-    fetch('https://laqil.com/public/api/product-list')
+    fetch(`https://laqil.com/public/api/product-list?cat=${this.state.id}`)
       .then(res => res.json())
       .then(res => {
-        console.log(res.data);
+        console.log(res.message);
 
         // this.setState({foods: res});
         if (res.status == true) {
-          this.setState({foods: res.data});
+          this.setState({filterFoods: res.data});
           // return this.state.foods;
           this.setState({visible: false});
+        } else if (res.data == null) {
+          alert(res.message);
+          this.setState({message: res.message});
         }
       });
   }
-
   renderItem = ({item}) => {
     const {description, picture, price} = item;
     return (
@@ -114,32 +118,35 @@ export class Popular extends Component {
     );
   };
   render() {
+    console.log(this.state.id);
     const popularBox = {
-      paddingVertical: 20,
+      //   paddingVertical: 20,
       // backgroundColor: colors.red,
       // marginBottom:10,
+      ...SCREEN.screen,
     };
     return (
-      <SafeAreaView style={popularBox}>
-        <Text style={[TYPOGRAPHY.h3, {fontWeight: 'bold', marginBottom: 20}]}>
-          Popular Near You
-        </Text>
-        <FlatList
-          showsVerticalScrollIndicator={false}
-          columnWrapperStyle={{
-            justifyContent: 'space-between',
-          }}
-          contentContainerStyle={{
-            // marginTop: 10,
-            paddingBottom: 50,
-          }}
-          data={this.state.foods}
-          numColumns={2}
-          renderItem={item => this.renderItem(item)}
-        />
+      <SafeAreaView style={{flex: 1}}>
+        <Statusbar />
+        <View style={popularBox}>
+          <Text
+            style={[TYPOGRAPHY.h3, {fontWeight: 'bold', marginBottom: 20}]}
+          />
+          <FlatList
+            showsVerticalScrollIndicator={false}
+            columnWrapperStyle={{
+              justifyContent: 'space-between',
+            }}
+            contentContainerStyle={{
+              // marginTop: 10,
+              paddingBottom: 50,
+            }}
+            data={this.state.filterFoods}
+            numColumns={2}
+            renderItem={item => this.renderItem(item)}
+          />
+        </View>
       </SafeAreaView>
     );
   }
 }
-
-export default Popular;
