@@ -32,11 +32,6 @@ export class MyCart extends Component {
       cart: [],
     };
   }
-
-  // componentDidMount() {
-  //   // this.setState({visible: true});
-
-  // }
   async componentDidMount() {
     const store = await getStoredCart();
     fetch('https://laqil.com/public/api/product-list')
@@ -60,25 +55,39 @@ export class MyCart extends Component {
             const quantity = store[id];
             addedProduct.quantity = quantity;
             savedCart.push(addedProduct);
-            console.log(savedCart);
+            // console.log(savedCart);
           }
           // this.setState({cart: addedProduct});
-          // console.log(this.state.cart);
+          // console.log(this.state.quantity);
         }
         this.setState({cart: savedCart});
 
-        console.log(this.state.cart);
+        // console.log(this.state.cart[0].quantity);
       });
 
     // let json = JSON.parse(store)
   }
+  // componentDidUpdate(prevProps, prevState) {
+  //   if (prevState.cart !== this.state.cart) {
+  //     console.log('pokemons state has changed.');
+  //     this.setState({cart: this.state.cart});
+  //   }
+  //   console.log('prevstate', prevState.cart);
+  //   console.log('prevprops', prevProps);
+  // }
+
+  // componentWillUpdate(newProps, newState) {
+  //   console.log('new p', newProps);
+  //   console.log('new s', newState);
+  // }
 
   renderCart = ({item}) => {
-    console.log(item.quantity);
+    // console.log(item.quantity);
     // console.log(this.state.cart.id);
     const dltFromCart = async id => {
-      console.log(id);
+      // console.log(id);
       const storedCart = await AsyncStorage.getItem('shopping-cart');
+      console.log('before', storedCart);
       if (storedCart) {
         const shoppingCart = JSON.parse(storedCart);
         if (id in shoppingCart) {
@@ -86,9 +95,15 @@ export class MyCart extends Component {
           delete shoppingCart[id];
           const jsonValue = JSON.stringify(shoppingCart);
           AsyncStorage.setItem('shopping-cart', jsonValue);
+          // this.setState({cart: ...shoppingCart});
         }
+        console.log('after', shoppingCart);
+        // this.setState({cart: shoppingCart});
       }
     };
+    console.log(item.quantity);
+    console.log(this.state.count);
+  
     return (
       <View>
         <View
@@ -129,7 +144,7 @@ export class MyCart extends Component {
                   paddingVertical: 5,
                 }}>
                 <TouchableOpacity
-                  onPress={() => this.setState({count: item.count - 1})}>
+                  onPress={() => this.setState({count: this.state.count - 1})}>
                   <Text
                     style={{
                       fontSize: 17,
@@ -145,10 +160,10 @@ export class MyCart extends Component {
                     color: colors.white,
                     paddingHorizontal: 10,
                   }}>
-                  {item.quantity + this.state.count}
+                  {this.state.count + item.quantity}
                 </Text>
                 <TouchableOpacity
-                  onPress={() => this.setState({count: item.count + 1})}>
+                  onPress={() => this.setState({count: this.state.count + 1})}>
                   <Text
                     style={{
                       fontSize: 17,
@@ -225,9 +240,11 @@ export class MyCart extends Component {
       paddingHorizontal: 30,
       marginBottom: 18,
     };
-    const clearCart = () => {
+    this.clearCart = () => {
       AsyncStorage.removeItem('shopping-cart');
+      this.setState({cart: []});
     };
+
     return (
       <SafeAreaView style={cartContainer}>
         <Statusbar name="My Cart" />
@@ -246,7 +263,7 @@ export class MyCart extends Component {
             <View>
               <TouchableOpacity
                 onPress={() => {
-                  clearCart();
+                  this.clearCart();
                 }}>
                 <Text>Clear Cart</Text>
               </TouchableOpacity>

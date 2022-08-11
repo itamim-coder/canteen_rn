@@ -29,7 +29,7 @@ export class Popular extends Component {
     fetch('https://laqil.com/public/api/product-list')
       .then(res => res.json())
       .then(res => {
-        console.log(res.data);
+        // console.log(res.data);
 
         // this.setState({foods: res});
         if (res.status == true) {
