@@ -37,6 +37,7 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import AllCategory from './source/screens/AllCategory';
 import ConfirmPassword from './source/screens/ConfirmPassword';
 import FilterCategory from './source/screens/FilterCategory';
+import SchoolFood from './source/screens/SchoolFood';
 
 const Stack = createNativeStackNavigator();
 const Tab = createBottomTabNavigator();
@@ -116,6 +117,7 @@ const App = () => {
         <Stack.Screen name="FoodDetails" component={FoodDetails} />
         <Stack.Screen name="AllCategory" component={AllCategory} />
         <Stack.Screen name="FilterCategory" component={FilterCategory} />
+        <Stack.Screen name="SchoolFood" component={SchoolFood} />
 
         {/* Update Profile */}
         <Stack.Screen name="Checkout" component={Checkout} />

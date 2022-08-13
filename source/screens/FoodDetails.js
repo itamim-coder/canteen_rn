@@ -41,7 +41,6 @@ export class FoodDetails extends Component {
       .then(res => res.json())
       .then(res => {
         console.log(res.data);
-
         // this.setState({foods: res});
         if (res.status == true) {
           this.setState({foodDetails: res.data});
@@ -157,39 +156,6 @@ export class FoodDetails extends Component {
       console.log(shoppingCart);
     };
 
-    // const addToCart = async id => {
-    //   let storedCart = await AsyncStorage.getItem('shopping-cart');
-    //   storedCart = JSON.parse(storedCart);
-    //   console.log(storedCart);
-    //   if (storedCart) {
-    //     let array = storedCart;
-    //     array.push(_id);
-    //     try {
-    //       await AsyncStorage.setItem('shopping-cart', JSON.stringify(array));
-    //       ToastAndroid.show(
-    //         'Item Added Successfully to cart',
-    //         ToastAndroid.SHORT,
-    //       );
-    //       this.props.navigation.navigate('Home');
-    //     } catch (error) {
-    //       return error;
-    //     }
-    //   } else {
-    //     const quantity = shoppingCart[id];
-
-    //     try {
-    //       await AsyncStorage.setItem('shopping-cart', JSON.stringify(quantity));
-
-    //       ToastAndroid.show(
-    //         'Item Added Successfully to cart',
-    //         ToastAndroid.SHORT,
-    //       );
-    //       this.props.navigation.navigate('Home');
-    //     } catch (error) {
-    //       return error;
-    //     }
-    //   }
-    // };
     const food = this.props.route.params.food;
 
     const {ingredients, pack_details, price, picture, description, id} =

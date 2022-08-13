@@ -13,8 +13,8 @@ const BUTTONS = StyleSheet.create({
   },
   btnFont: {
     color: colors.white,
-    fontFamily: Fonts.primaryBold,
-    fontSize: 16,
+    fontFamily: Fonts.primaryMedium,
+    fontSize: 17,
   },
 });
 

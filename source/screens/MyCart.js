@@ -1,5 +1,6 @@
 import React, {Component} from 'react';
 import {
+  ActivityIndicator,
   FlatList,
   Image,
   SafeAreaView,
@@ -30,8 +31,10 @@ export class MyCart extends Component {
       products: [],
       total: null,
       cart: [],
+      indicator: false,
     };
   }
+
   async componentDidMount() {
     const store = await getStoredCart();
     fetch('https://laqil.com/public/api/product-list')
@@ -55,148 +58,139 @@ export class MyCart extends Component {
             const quantity = store[id];
             addedProduct.quantity = quantity;
             savedCart.push(addedProduct);
-            // console.log(savedCart);
           }
-          // this.setState({cart: addedProduct});
-          // console.log(this.state.quantity);
         }
         this.setState({cart: savedCart});
-
-        // console.log(this.state.cart[0].quantity);
       });
-
-    // let json = JSON.parse(store)
   }
-  // componentDidUpdate(prevProps, prevState) {
-  //   if (prevState.cart !== this.state.cart) {
-  //     console.log('pokemons state has changed.');
-  //     this.setState({cart: this.state.cart});
-  //   }
-  //   console.log('prevstate', prevState.cart);
-  //   console.log('prevprops', prevProps);
-  // }
-
-  // componentWillUpdate(newProps, newState) {
-  //   console.log('new p', newProps);
-  //   console.log('new s', newState);
-  // }
+  dltFromCart = async id => {
+    // this.setState({indicator: true});
+    console.log(id);
+    const storedCart = await AsyncStorage.getItem('shopping-cart');
+    // console.log('before', storedCart);
+    if (storedCart) {
+      const shoppingCart = JSON.parse(storedCart);
+      if (id in shoppingCart) {
+        // console.log('exist');
+        delete shoppingCart[id];
+        const jsonValue = JSON.stringify(shoppingCart);
+        await AsyncStorage.setItem('shopping-cart', jsonValue);
+        // this.setState({cart: [...shoppingCart]});
+        console.log('after', shoppingCart);
+        this.setState({cart: shoppingCart});
+        // this.setState({indicator: false});
+      }
+    }
+  };
 
   renderCart = ({item}) => {
     // console.log(item.quantity);
     // console.log(this.state.cart.id);
-    const dltFromCart = async id => {
-      // console.log(id);
-      const storedCart = await AsyncStorage.getItem('shopping-cart');
-      console.log('before', storedCart);
-      if (storedCart) {
-        const shoppingCart = JSON.parse(storedCart);
-        if (id in shoppingCart) {
-          // console.log('exist');
-          delete shoppingCart[id];
-          const jsonValue = JSON.stringify(shoppingCart);
-          AsyncStorage.setItem('shopping-cart', jsonValue);
-          // this.setState({cart: ...shoppingCart});
-        }
-        console.log('after', shoppingCart);
-        // this.setState({cart: shoppingCart});
-      }
-    };
+
     console.log(item.quantity);
     console.log(this.state.count);
-  
+
     return (
       <View>
-        <View
-          style={{
-            flexDirection: 'row',
-            backgroundColor: colors.white,
-            marginVertical: 5,
-            borderRadius: 6,
-            alignItems: 'center',
-            justifyContent: 'space-around',
-          }}>
-          <Image
-            style={{width: 100, height: 100}}
-            source={{uri: `${item.picture}`}}
-          />
-          <View>
+        {this.state.indicator ? (
+          <ActivityIndicator />
+        ) : (
+          <View
+            style={{
+              flexDirection: 'row',
+              backgroundColor: colors.white,
+              marginVertical: 5,
+              borderRadius: 6,
+              alignItems: 'center',
+              justifyContent: 'space-around',
+            }}>
+            <Image
+              style={{width: 100, height: 100}}
+              source={{uri: item.picture}}
+            />
             <View>
-              <Text style={[TYPOGRAPHY.h3, {fontSize: 15}]}>
-                {item.description}
-                {/* {data.productName} */}
-              </Text>
-            </View>
-            <View
-              style={{
-                flexDirection: 'row',
-                justifyContent: 'space-between',
-                alignItems: 'center',
-                // marginHorizontal:50,
-              }}>
-              <Text style={{color: colors.green, fontSize: 15}}>Custom</Text>
-
+              <View>
+                <Text style={[TYPOGRAPHY.h3, {fontSize: 15}]}>
+                  {item.description}
+                  {/* {data.productName} */}
+                </Text>
+              </View>
               <View
                 style={{
                   flexDirection: 'row',
-                  marginHorizontal: 20,
-                  backgroundColor: colors.darkOrange,
-                  borderRadius: 5,
-                  paddingVertical: 5,
+                  justifyContent: 'space-between',
+                  alignItems: 'center',
+                  // marginHorizontal:50,
                 }}>
-                <TouchableOpacity
-                  onPress={() => this.setState({count: this.state.count - 1})}>
+                <Text style={{color: colors.green, fontSize: 15}}>Custom</Text>
+
+                <View
+                  style={{
+                    flexDirection: 'row',
+                    marginHorizontal: 20,
+                    backgroundColor: colors.darkOrange,
+                    borderRadius: 5,
+                    paddingVertical: 5,
+                  }}>
+                  <TouchableOpacity
+                    onPress={() =>
+                      this.setState({count: this.state.count - 1})
+                    }>
+                    <Text
+                      style={{
+                        fontSize: 17,
+                        color: colors.white,
+                        paddingHorizontal: 10,
+                      }}>
+                      -
+                    </Text>
+                  </TouchableOpacity>
                   <Text
                     style={{
                       fontSize: 17,
                       color: colors.white,
                       paddingHorizontal: 10,
                     }}>
-                    -
+                    {this.state.count + item.quantity}
                   </Text>
-                </TouchableOpacity>
+                  <TouchableOpacity
+                    onPress={() =>
+                      this.setState({count: this.state.count + 1})
+                    }>
+                    <Text
+                      style={{
+                        fontSize: 17,
+                        color: colors.white,
+                        paddingHorizontal: 10,
+                      }}>
+                      +
+                    </Text>
+                  </TouchableOpacity>
+                </View>
+
                 <Text
-                  style={{
-                    fontSize: 17,
-                    color: colors.white,
-                    paddingHorizontal: 10,
-                  }}>
-                  {this.state.count + item.quantity}
+                  style={[
+                    TYPOGRAPHY.primary,
+                    {
+                      marginHorizontal: 20,
+                      alignItems: 'center',
+                      fontWeight: 'bold',
+                    },
+                  ]}>
+                  ${item.quantity * item.price}
                 </Text>
                 <TouchableOpacity
-                  onPress={() => this.setState({count: this.state.count + 1})}>
-                  <Text
-                    style={{
-                      fontSize: 17,
-                      color: colors.white,
-                      paddingHorizontal: 10,
-                    }}>
-                    +
-                  </Text>
+                  onPress={() => {
+                    this.dltFromCart(item.id);
+                  }}>
+                  <Text>X</Text>
                 </TouchableOpacity>
+
+                <View />
               </View>
-
-              <Text
-                style={[
-                  TYPOGRAPHY.primary,
-                  {
-                    marginHorizontal: 20,
-                    alignItems: 'center',
-                    fontWeight: 'bold',
-                  },
-                ]}>
-                ${item.quantity * item.price}
-              </Text>
-              <TouchableOpacity
-                onPress={() => {
-                  dltFromCart(item.id);
-                }}>
-                <Text>X</Text>
-              </TouchableOpacity>
-
-              <View />
             </View>
           </View>
-        </View>
+        )}
       </View>
     );
   };
