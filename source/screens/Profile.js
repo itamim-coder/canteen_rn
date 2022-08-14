@@ -62,6 +62,9 @@ export default class Profile extends Component {
           }}>
           <ScrollView>
             <TouchableOpacity
+              onPress={() => {
+                this.props.navigation.navigate('ManageChildren');
+              }}
               style={{
                 paddingVertical: 20,
                 flexDirection: 'row',
@@ -74,11 +77,10 @@ export default class Profile extends Component {
                   TYPOGRAPHY.medium,
                   {marginHorizontal: 20, fontSize: 20},
                 ]}>
-                Change Language
+                Manage Children
               </Text>
-              
             </TouchableOpacity>
-            
+
             <TouchableOpacity
               onPress={() => this.props.navigation.navigate('My Order')}
               style={{
@@ -108,7 +110,13 @@ export default class Profile extends Component {
                   size={24}
                   color="red"
                 />
-                <Text style={[TYPOGRAPHY.medium, {marginHorizontal: 20,fontSize: 20}]}>FAQs</Text>
+                <Text
+                  style={[
+                    TYPOGRAPHY.medium,
+                    {marginHorizontal: 20, fontSize: 20},
+                  ]}>
+                  FAQs
+                </Text>
               </View>
               <Text
                 style={[
@@ -134,7 +142,11 @@ export default class Profile extends Component {
                   size={24}
                   color="red"
                 />
-                <Text style={[TYPOGRAPHY.medium, {marginHorizontal: 20,fontSize: 20}]}>
+                <Text
+                  style={[
+                    TYPOGRAPHY.medium,
+                    {marginHorizontal: 20, fontSize: 20},
+                  ]}>
                   Terms & Conditions
                 </Text>
               </View>
@@ -156,9 +168,18 @@ export default class Profile extends Component {
 
                 marginBottom: 5,
               }}>
-              <View style={{flexDirection: 'row',marginLeft:3, alignItems: 'center'}}>
+              <View
+                style={{
+                  flexDirection: 'row',
+                  marginLeft: 3,
+                  alignItems: 'center',
+                }}>
                 <FontAwesome name="lock" size={24} color="red" />
-                <Text style={[TYPOGRAPHY.medium, {marginHorizontal: 25,fontSize: 20}]}>
+                <Text
+                  style={[
+                    TYPOGRAPHY.medium,
+                    {marginHorizontal: 25, fontSize: 20},
+                  ]}>
                   Privacy Policy
                 </Text>
               </View>
@@ -182,7 +203,13 @@ export default class Profile extends Component {
               }}>
               <View style={{flexDirection: 'row', alignItems: 'center'}}>
                 <MaterialCommunityIcons name="logout" size={24} color="red" />
-                <Text style={[TYPOGRAPHY.medium, {marginHorizontal: 20,fontSize: 20}]}>Logout</Text>
+                <Text
+                  style={[
+                    TYPOGRAPHY.medium,
+                    {marginHorizontal: 20, fontSize: 20},
+                  ]}>
+                  Logout
+                </Text>
               </View>
               <Text
                 style={[

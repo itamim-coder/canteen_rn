@@ -38,6 +38,7 @@ import AllCategory from './source/screens/AllCategory';
 import ConfirmPassword from './source/screens/ConfirmPassword';
 import FilterCategory from './source/screens/FilterCategory';
 import SchoolFood from './source/screens/SchoolFood';
+import ManageChildren from './source/screens/ManageChildren';
 
 const Stack = createNativeStackNavigator();
 const Tab = createBottomTabNavigator();
@@ -112,6 +113,7 @@ const App = () => {
         {/* Profile */}
         <Stack.Screen name="Profile" component={Profile} />
         <Stack.Screen name="UpdateProfile" component={UpdateProfile} />
+        <Stack.Screen name="ManageChildren" component={ManageChildren} />
 
         {/* Food Details */}
         <Stack.Screen name="FoodDetails" component={FoodDetails} />
