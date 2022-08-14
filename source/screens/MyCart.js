@@ -1,4 +1,7 @@
+import React, {Component} from 'react';
 import {
+  ActivityIndicator,
+  FlatList,
   Image,
   SafeAreaView,
   ScrollView,
@@ -7,256 +10,298 @@ import {
   TouchableOpacity,
   View,
 } from 'react-native';
-import React, {useState} from 'react';
 import {colors} from '../theme/colors';
-import {useNavigation} from '@react-navigation/native';
+
 import Statusbar from '../components/Statusbar';
 import FlashMessage from 'react-native-flash-message';
 import {showMessage, hideMessage} from 'react-native-flash-message';
-import STYLES from '../theme/styles';
+import SCREEN from '../theme/Screen';
+import TYPOGRAPHY from '../theme/typography';
+import BUTTONS from '../theme/Buttons';
+import Button from '../components/Button';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import {FOOD_LIST} from '../data/food-list';
+import {getStoredCart} from '../../Function/Cart';
 
-const MyCart = () => {
-  const [count, setCount] = useState(0);
-  const navigation = useNavigation();
-  const increament = () => {
-    setCount(count + 1);
-  };
-  const decrement = () => {
-    if (count > 0) {
-      setCount(count - 1);
+export class MyCart extends Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      count: 0,
+      products: [],
+      total: null,
+      cart: [],
+      indicator: false,
+    };
+  }
+
+  async componentDidMount() {
+    const store = await getStoredCart();
+    fetch('https://laqil.com/public/api/product-list')
+      .then(res => res.json())
+      .then(res => {
+        // this.setState({products: res});
+        // this.setState({foods: res});
+        if (res.status == true) {
+          this.setState({products: res.data});
+          // return this.state.foods;
+          // this.setState({visible: false});
+        }
+        // console.log(this.state.products);
+        const {products} = this.state;
+        const savedCart = [];
+        console.log(products);
+        for (const id in store) {
+          // console.log(id);
+          const addedProduct = products.find(product => product.id == id);
+          if (addedProduct) {
+            const quantity = store[id];
+            addedProduct.quantity = quantity;
+            savedCart.push(addedProduct);
+          }
+        }
+        this.setState({cart: savedCart});
+      });
+  }
+  dltFromCart = async id => {
+    // this.setState({indicator: true});
+    console.log(id);
+    const storedCart = await AsyncStorage.getItem('shopping-cart');
+    // console.log('before', storedCart);
+    if (storedCart) {
+      const shoppingCart = JSON.parse(storedCart);
+      if (id in shoppingCart) {
+        // console.log('exist');
+        delete shoppingCart[id];
+        const jsonValue = JSON.stringify(shoppingCart);
+        await AsyncStorage.setItem('shopping-cart', jsonValue);
+        // this.setState({cart: [...shoppingCart]});
+        console.log('after', shoppingCart);
+        this.setState({cart: shoppingCart});
+        // this.setState({indicator: false});
+      }
     }
   };
-  return (
-    <SafeAreaView
-      style={[STYLES.screen, {padding: 0, backgroundColor: colors.black}]}>
-      <Statusbar name="My Cart" />
 
-      {/* full screen  */}
+  renderCart = ({item}) => {
+    // console.log(item.quantity);
+    // console.log(this.state.cart.id);
 
-      <View
-        style={[
-          STYLES.screen,
-          {
-            backgroundColor: colors.grey,
-            borderTopStartRadius: 40,
-            borderTopEndRadius: 40,
-            paddingVertical: 0,
-          },
-        ]}>
-        <ScrollView
-          showsVerticalScrollIndicator={false}
-          style={{marginTop: 20, flex: 1}}>
-          {/* product card */}
+    console.log(item.quantity);
+    console.log(this.state.count);
 
+    return (
+      <View>
+        {this.state.indicator ? (
+          <ActivityIndicator />
+        ) : (
+          <View
+            style={{
+              flexDirection: 'row',
+              backgroundColor: colors.white,
+              marginVertical: 5,
+              borderRadius: 6,
+              alignItems: 'center',
+              justifyContent: 'space-around',
+            }}>
+            <Image
+              style={{width: 100, height: 100}}
+              source={{uri: item.picture}}
+            />
+            <View>
+              <View>
+                <Text style={[TYPOGRAPHY.h3, {fontSize: 15}]}>
+                  {item.description}
+                  {/* {data.productName} */}
+                </Text>
+              </View>
+              <View
+                style={{
+                  flexDirection: 'row',
+                  justifyContent: 'space-between',
+                  alignItems: 'center',
+                  // marginHorizontal:50,
+                }}>
+                <Text style={{color: colors.green, fontSize: 15}}>Custom</Text>
+
+                <View
+                  style={{
+                    flexDirection: 'row',
+                    marginHorizontal: 20,
+                    backgroundColor: colors.darkOrange,
+                    borderRadius: 5,
+                    paddingVertical: 5,
+                  }}>
+                  <TouchableOpacity
+                    onPress={() =>
+                      this.setState({count: this.state.count - 1})
+                    }>
+                    <Text
+                      style={{
+                        fontSize: 17,
+                        color: colors.white,
+                        paddingHorizontal: 10,
+                      }}>
+                      -
+                    </Text>
+                  </TouchableOpacity>
+                  <Text
+                    style={{
+                      fontSize: 17,
+                      color: colors.white,
+                      paddingHorizontal: 10,
+                    }}>
+                    {this.state.count + item.quantity}
+                  </Text>
+                  <TouchableOpacity
+                    onPress={() =>
+                      this.setState({count: this.state.count + 1})
+                    }>
+                    <Text
+                      style={{
+                        fontSize: 17,
+                        color: colors.white,
+                        paddingHorizontal: 10,
+                      }}>
+                      +
+                    </Text>
+                  </TouchableOpacity>
+                </View>
+
+                <Text
+                  style={[
+                    TYPOGRAPHY.primary,
+                    {
+                      marginHorizontal: 20,
+                      alignItems: 'center',
+                      fontWeight: 'bold',
+                    },
+                  ]}>
+                  ${item.quantity * item.price}
+                </Text>
+                <TouchableOpacity
+                  onPress={() => {
+                    this.dltFromCart(item.id);
+                  }}>
+                  <Text>X</Text>
+                </TouchableOpacity>
+
+                <View />
+              </View>
+            </View>
+          </View>
+        )}
+      </View>
+    );
+  };
+
+  render() {
+    // console.log(this.props.data);
+    const cartContainer = {
+      ...SCREEN.screen,
+      padding: 0,
+      backgroundColor: colors.black,
+    };
+
+    const cartDetails = {
+      ...SCREEN.screen,
+
+      backgroundColor: colors.grey,
+      borderTopStartRadius: 40,
+      borderTopEndRadius: 40,
+      paddingVertical: 0,
+    };
+
+    const productCard = {
+      flexDirection: 'row',
+      backgroundColor: colors.white,
+      marginVertical: 5,
+      borderRadius: 6,
+      alignItems: 'center',
+      // justifyContent: 'space-between',
+    };
+
+    const calculationCard = {
+      backgroundColor: colors.white,
+      padding: 10,
+      marginBottom: 5,
+      flexDirection: 'row',
+      justifyContent: 'space-between',
+    };
+
+    const checkOutButton = {
+      ...BUTTONS.btnPrimary,
+      paddingHorizontal: 30,
+      marginBottom: 18,
+    };
+    this.clearCart = () => {
+      AsyncStorage.removeItem('shopping-cart');
+      this.setState({cart: []});
+    };
+
+    return (
+      <SafeAreaView style={cartContainer}>
+        <Statusbar name="My Cart" />
+
+        {/* full screen  */}
+
+        <View style={cartDetails}>
+          <ScrollView
+            showsVerticalScrollIndicator={false}
+            style={{marginTop: 20, flex: 1}}>
+            {/* product card */}
+            <FlatList
+              data={this.state.cart}
+              renderItem={item => this.renderCart(item)}
+            />
+            <View>
+              <TouchableOpacity
+                onPress={() => {
+                  this.clearCart();
+                }}>
+                <Text>Clear Cart</Text>
+              </TouchableOpacity>
+            </View>
+            {/* Total calculation */}
+            <View style={{marginTop: 40}}>
+              <View style={calculationCard}>
+                <View>
+                  <Text style={TYPOGRAPHY.h5}>Item Total</Text>
+                  <Text style={TYPOGRAPHY.h5}>Delivery Fee</Text>
+                </View>
+
+                <View>
+                  <Text style={TYPOGRAPHY.h5}>$200</Text>
+                  <Text style={TYPOGRAPHY.h5}>$200</Text>
+                </View>
+              </View>
+            </View>
+            <View style={[calculationCard, {paddingVertical: 20}]}>
+              <Text
+                style={[
+                  TYPOGRAPHY.h5,
+                  {fontWeight: 'bold', color: colors.red},
+                ]}>
+                Amount To Pay
+              </Text>
+              <Text style={TYPOGRAPHY.h5}>$200</Text>
+            </View>
+          </ScrollView>
           <View>
-            <View
-              style={{
-                flexDirection: 'row',
-                backgroundColor: colors.white,
-                marginVertical: 5,
-                borderRadius: 6,
-                alignItems: 'center',
-                justifyContent: 'space-around',
-              }}>
-              <Image
-                style={{width: 100, height: 100}}
-                source={require('../../assets/images/items/items1.png')}
-              />
-              <View style={{margin: 20}}>
-                <Text style={STYLES.primary}>Chinese Noodles</Text>
-                <View
-                  style={{
-                    flexDirection: 'row',
-                    justifyContent: 'space-between',
-                    padding: 5,
-                  }}>
-                  <TouchableOpacity onPress={decrement}>
-                    <Text style={{fontSize: 17}}>-</Text>
-                  </TouchableOpacity>
-                  <Text style={{fontSize: 17}}>{count}</Text>
-                  <TouchableOpacity onPress={increament}>
-                    <Text style={{fontSize: 17}}>+</Text>
-                  </TouchableOpacity>
-                </View>
-                <View />
-              </View>
-
-              <View>
-                <Text style={STYLES.primary}>${count * 10}</Text>
-              </View>
-              <View>
-                {/* <TouchableOpacity
-                  onPress={() => {
-
-                    showMessage({
-                      message: 'Order Cancel',
-
-                      type: 'danger',
-                      icon: 'danger',
-                    });
-                  }}>
-                  <Text style={{paddingBottom: 70, fontWeight: 'bold'}}>X</Text>
-                </TouchableOpacity> */}
-              </View>
-            </View>
-            <View
-              style={{
-                flexDirection: 'row',
-                backgroundColor: colors.white,
-                marginVertical: 5,
-                borderRadius: 6,
-                alignItems: 'center',
-                justifyContent: 'space-around',
-              }}>
-              <Image
-                style={{width: 100, height: 100}}
-                source={require('../../assets/images/items/items1.png')}
-              />
-              <View style={{margin: 20}}>
-                <Text style={STYLES.primary}>Chinese Noodles</Text>
-                <View
-                  style={{
-                    flexDirection: 'row',
-                    justifyContent: 'space-between',
-                    padding: 5,
-                  }}>
-                  <TouchableOpacity onPress={decrement}>
-                    <Text style={{fontSize: 17}}>-</Text>
-                  </TouchableOpacity>
-                  <Text style={{fontSize: 17}}>{count}</Text>
-                  <TouchableOpacity onPress={increament}>
-                    <Text style={{fontSize: 17}}>+</Text>
-                  </TouchableOpacity>
-                </View>
-                <View />
-              </View>
-
-              <View>
-                <Text style={STYLES.primary}>${count * 10}</Text>
-              </View>
-              <View>
-                {/* <TouchableOpacity
-                  onPress={() => {
-
-                    showMessage({
-                      message: 'Order Cancel',
-
-                      type: 'danger',
-                      icon: 'danger',
-                    });
-                  }}>
-                  <Text style={{paddingBottom: 70, fontWeight: 'bold'}}>X</Text>
-                </TouchableOpacity> */}
-              </View>
-            </View>
-            <View
-              style={{
-                flexDirection: 'row',
-                backgroundColor: colors.white,
-                marginVertical: 5,
-                borderRadius: 6,
-                alignItems: 'center',
-                justifyContent: 'space-around',
-              }}>
-              <Image
-                style={{width: 100, height: 100}}
-                source={require('../../assets/images/items/items1.png')}
-              />
-              <View style={{margin: 20}}>
-                <Text style={STYLES.primary}>Chinese Noodles</Text>
-                <View
-                  style={{
-                    flexDirection: 'row',
-                    justifyContent: 'space-between',
-                    padding: 5,
-                  }}>
-                  <TouchableOpacity onPress={decrement}>
-                    <Text style={{fontSize: 17}}>-</Text>
-                  </TouchableOpacity>
-                  <Text style={{fontSize: 17}}>{count}</Text>
-                  <TouchableOpacity onPress={increament}>
-                    <Text style={{fontSize: 17}}>+</Text>
-                  </TouchableOpacity>
-                </View>
-                <View />
-              </View>
-
-              <View>
-                <Text style={STYLES.primary}>${count * 10}</Text>
-              </View>
-              <View>
-                {/* <TouchableOpacity
-                  onPress={() => {
-
-                    showMessage({
-                      message: 'Order Cancel',
-
-                      type: 'danger',
-                      icon: 'danger',
-                    });
-                  }}>
-                  <Text style={{paddingBottom: 70, fontWeight: 'bold'}}>X</Text>
-                </TouchableOpacity> */}
-              </View>
-            </View>
-           
+            <Button
+              name="checkout button"
+              style={{flex: 1}}
+              // style={{marginTop:10}}
+              navigation={this.props.navigation}
+              type="checkout"
+            />
           </View>
+        </View>
 
-          {/* Total calculation */}
-
-          <View style={{marginTop: 40}}>
-            <View
-              style={{
-                backgroundColor: colors.white,
-                padding: 30,
-                flexDirection: 'row',
-                justifyContent: 'space-between',
-              }}>
-              <Text style={STYLES.h5}>Item Total</Text>
-              <Text style={STYLES.h5}>$200</Text>
-            </View>
-            <View
-              style={{
-                backgroundColor: colors.white,
-                padding: 30,
-                flexDirection: 'row',
-                justifyContent: 'space-between',
-                marginTop: 5,
-              }}>
-              <Text style={STYLES.h5}>Delivery Charge</Text>
-              <Text style={STYLES.h5}>$200</Text>
-            </View>
-          </View>
-        </ScrollView>
-      </View>
-
-      {/* checkout calculation  */}
-
-      <View
-        style={{
-          flex: 0.2,
-          paddingHorizontal: 15,
-          flexDirection: 'row',
-          alignItems: 'center',
-          justifyContent: 'space-between',
-        }}>
-        <Text style={[STYLES.h3, {color: colors.white}]}>${count * 10}</Text>
-        <TouchableOpacity
-          style={[STYLES.btnPrimary, {paddingHorizontal: 30, marginBottom: 18}]}
-          onPress={() => navigation.navigate('Checkout')}>
-          <Text style={[STYLES.btnFont]}>Checkout</Text>
-        </TouchableOpacity>
-      </View>
-      <FlashMessage position="top" />
-    </SafeAreaView>
-  );
-};
+        <FlashMessage position="top" />
+      </SafeAreaView>
+    );
+  }
+}
 
 export default MyCart;
-
-const styles = StyleSheet.create({
-  statusbar: {
-    padding: 20,
-    backgroundColor: colors.white,
-  },
-});
