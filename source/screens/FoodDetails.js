@@ -29,10 +29,15 @@ export class FoodDetails extends Component {
     super(props);
     this.state = {
       id: this.props.route?.params?.id,
+      quantity: this.props.route?.params?.quantity,
+      name: this.props.route?.params?.id,
+      price: this.props.route?.params?.id,
+      description: this.props.route.params.description,
       foodDetails: {},
       cart: '',
       visible: false,
     };
+    console.log('product', this.props.route.params.item);
   }
   componentDidMount() {
     console.log(this.state.id);
@@ -128,8 +133,8 @@ export class FoodDetails extends Component {
       color: colors.white,
     };
 
-    const addToCart = async id => {
-      console.log(id);
+    const addToCart = async added => {
+      console.log(added);
       let shoppingCart;
 
       //get shopping cart
@@ -143,6 +148,7 @@ export class FoodDetails extends Component {
       // add quantity
       // console.log(shoppingCart);
       const quantity = shoppingCart[id];
+      // const product = shoppingCart[this.state.item];
       // console.log(shoppingCart[id]);
       if (quantity) {
         const newQuantity = quantity + 1;
@@ -150,18 +156,23 @@ export class FoodDetails extends Component {
         shoppingCart[id] = newQuantity;
       } else {
         shoppingCart[id] = 1;
+        // shoppingCart[product] = this.state.foodDetails;
+        // shoppingCart[id].push = added;
       }
+      // console.log(this.state?.foodDetails);
+      console.log('shopping cart', shoppingCart);
       const jsonValue = JSON.stringify(shoppingCart);
       AsyncStorage.setItem('shopping-cart', jsonValue);
-      console.log(shoppingCart);
+      // console.log(shoppingCart);
     };
 
     const food = this.props.route.params.food;
 
     const {ingredients, pack_details, price, picture, description, id} =
       this.state?.foodDetails;
-    // console.log(id);
-    console.log('render', this.state?.foodDetails);
+    const added = this.state.foodDetails;
+    // console.log('added', added);
+    // console.log('render', this.state?.foodDetails);
     return (
       <SafeAreaView style={detailsContainer}>
         <Statusbar name={description} type="food" />
@@ -211,7 +222,7 @@ export class FoodDetails extends Component {
                   <TouchableOpacity
                     // onPress={() => (id ? addToCart(id) : null)}
                     onPress={() => {
-                      addToCart(id);
+                      addToCart(added);
                     }}
                     /* HERE IS WHERE WE'RE GOING TO SHOW OUR FIRST MESSAGE */
                     // showMessage({

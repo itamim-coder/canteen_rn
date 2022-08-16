@@ -1,5 +1,7 @@
+import {Text, View} from 'react-native';
+import React, {Component} from 'react';
 import {StyleSheet} from 'react-native';
-import React from 'react';
+
 import {NavigationContainer} from '@react-navigation/native';
 import {createNativeStackNavigator} from '@react-navigation/native-stack';
 import {colors} from './source/theme/colors';
@@ -22,6 +24,7 @@ import AddtoWallet from './source/screens/AddtoWallet';
 //Profile
 import Profile from './source/screens/Profile';
 import UpdateProfile from './source/screens/UpdateProfile';
+import ManageChildren from './source/screens/ManageChildren';
 
 //Food Details
 import FoodDetails from './source/screens/FoodDetails';
@@ -38,95 +41,108 @@ import AllCategory from './source/screens/AllCategory';
 import ConfirmPassword from './source/screens/ConfirmPassword';
 import FilterCategory from './source/screens/FilterCategory';
 import SchoolFood from './source/screens/SchoolFood';
+import AddStudent from './source/screens/AddStudent';
 
 const Stack = createNativeStackNavigator();
 const Tab = createBottomTabNavigator();
 
-// const isLog=()=>{
-//   try{
-//     let user = await AsyncStorage.getItem
-//   }
-// }
-//Bottom Tab Navigation
-const TabNavigator = () => {
-  return (
-    <Tab.Navigator
-      tabBarOptions={{
-        activeTintColor: colors.darkOrange,
-        inactiveTintColor: colors.light,
-        showLabel: false,
-      }}
-      screenOptions={{
-        headerShown: false,
-      }}>
-      <Tab.Screen
-        name="Home"
-        component={Home}
-        options={{
-          tabBarIcon: ({color}) => (
-            <Entypo name="home" size={30} color={color} />
-          ),
-        }}
-      />
-      <Tab.Screen
-        name="My Cart"
-        component={MyCart}
-        options={{
-          tabBarIcon: ({color}) => (
-            <Entypo name="shopping-cart" size={30} color={color} />
-          ),
-        }}
-      />
-      <Tab.Screen
-        name="My Order"
-        component={MyOrder}
-        options={{
-          tabBarIcon: ({color}) => (
-            <Entypo name="archive" size={30} color={color} />
-          ),
-        }}
-      />
-    </Tab.Navigator>
-  );
-};
+export default class App extends Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      token: '',
+    };
+  }
+  // componentDidMount() {
+  //   this.handleToken();
+  // }
+  // handleToken = async () => {
+  //   const dataToken = await AsyncStorage.getItem('Token');
+  //   // console.log(dataToken);
+  //   if (!dataToken) {
+  //     this.props.navigation.navigate('Login');
+  //   } else {
+  //     this.setState({token: dataToken});
+  //     this.props.navigation.navigate('TabNavigator');
+  //   }
+  // };
+  render() {
+    // console.log(this.state.token);
+    const TabNavigator = () => {
+      return (
+        <Tab.Navigator
+          tabBarOptions={{
+            activeTintColor: colors.darkOrange,
+            inactiveTintColor: colors.light,
+            showLabel: false,
+          }}
+          screenOptions={{
+            headerShown: false,
+          }}>
+          <Tab.Screen
+            name="Home"
+            component={Home}
+            options={{
+              tabBarIcon: ({color}) => (
+                <Entypo name="home" size={30} color={color} />
+              ),
+            }}
+          />
+          <Tab.Screen
+            name="My Cart"
+            component={MyCart}
+            options={{
+              tabBarIcon: ({color}) => (
+                <Entypo name="shopping-cart" size={30} color={color} />
+              ),
+            }}
+          />
+          <Tab.Screen
+            name="My Order"
+            component={MyOrder}
+            options={{
+              tabBarIcon: ({color}) => (
+                <Entypo name="archive" size={30} color={color} />
+              ),
+            }}
+          />
+        </Tab.Navigator>
+      );
+    };
+    return (
+      <NavigationContainer>
+        <Stack.Navigator screenOptions={{header: () => null}}>
+          {/* Auth  */}
+          {/* <Stack.Screen name="Login" component={Login} />
+          <Stack.Screen name="Signup" component={Signup} />
+          <Stack.Screen name="ResetRequest" component={ResetRequest} />
+          <Stack.Screen name="ConfirmPassword" component={ConfirmPassword} />
+          <Stack.Screen name="Verification" component={Verification} /> */}
 
-const App = () => {
-  // console.log(prop);
-  return (
-    <NavigationContainer style={styles.container}>
-      <Stack.Navigator screenOptions={{header: () => null}}>
-        {/* Auth  */}
-        <Stack.Screen name="Login" component={Login} />
-        <Stack.Screen name="Signup" component={Signup} />
-        <Stack.Screen name="ResetRequest" component={ResetRequest} />
-        <Stack.Screen name="ConfirmPassword" component={ConfirmPassword} />
-        <Stack.Screen name="Verification" component={Verification} />
+          {/* Bottom Tab Navigation  */}
+          {/* <Stack.Screen name="TabNavigator" component={TabNavigator} /> */}
 
-        {/* Bottom Tab Navigation  */}
-        <Stack.Screen name="TabNavigator" component={TabNavigator} />
+          {/* Wallet  */}
+          {/* <Stack.Screen name="Topup" component={Topup} />
+          <Stack.Screen name="AddtoWallet" component={AddtoWallet} /> */}
 
-        {/* Wallet  */}
-        <Stack.Screen name="Topup" component={Topup} />
-        <Stack.Screen name="AddtoWallet" component={AddtoWallet} />
+          {/* Profile */}
+          {/* <Stack.Screen name="Profile" component={Profile} />
+          <Stack.Screen name="UpdateProfile" component={UpdateProfile} /> */}
+          <Stack.Screen name="ManageChildren" component={ManageChildren} />
+          <Stack.Screen name="AddStudent" component={AddStudent} />
 
-        {/* Profile */}
-        <Stack.Screen name="Profile" component={Profile} />
-        <Stack.Screen name="UpdateProfile" component={UpdateProfile} />
+          {/* Food Details */}
+          {/* <Stack.Screen name="FoodDetails" component={FoodDetails} />
+          <Stack.Screen name="AllCategory" component={AllCategory} />
+          <Stack.Screen name="FilterCategory" component={FilterCategory} />
+          <Stack.Screen name="SchoolFood" component={SchoolFood} /> */}
 
-        {/* Food Details */}
-        <Stack.Screen name="FoodDetails" component={FoodDetails} />
-        <Stack.Screen name="AllCategory" component={AllCategory} />
-        <Stack.Screen name="FilterCategory" component={FilterCategory} />
-        <Stack.Screen name="SchoolFood" component={SchoolFood} />
-
-        {/* Update Profile */}
-        <Stack.Screen name="Checkout" component={Checkout} />
-        <Stack.Screen name="Payment" component={Payment} />
-      </Stack.Navigator>
-    </NavigationContainer>
-  );
-};
-
-export default App;
-
-const styles = StyleSheet.create({});
+          {/* Update Profile */}
+          {/* <Stack.Screen name="Checkout" component={Checkout} />
+          <Stack.Screen name="Payment" component={Payment} /> */}
+        </Stack.Navigator>
+      </NavigationContainer>
+    );
+  }
+}

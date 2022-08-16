@@ -18,11 +18,8 @@ export class HomeTopBar extends Component {
     fetch('https://laqil.com/public/api/school-list')
       .then(res => res.json())
       .then(res => {
-        // console.log(res.data);
         if (res.status == true) {
           this.setState({schoolList: res.data});
-          console.log(this.state.schoolList);
-          // this.setState({visible: false});
         }
       });
   }

@@ -1,4 +1,11 @@
-import {Dimensions, FlatList, Image, Text, TouchableOpacity, View} from 'react-native';
+import {
+  Dimensions,
+  FlatList,
+  Image,
+  Text,
+  TouchableOpacity,
+  View,
+} from 'react-native';
 import React, {Component} from 'react';
 import SCREEN from '../theme/Screen';
 import {SafeAreaView} from 'react-native-safe-area-context';
@@ -45,7 +52,13 @@ export default class SchoolFood extends Component {
       <SafeAreaView>
         <TouchableOpacity
           onPress={() =>
-            this.props.navigation.navigate('FoodDetails', {id: item.id})
+            this.props.navigation.navigate('FoodDetails', {
+              id: item.id,
+              picture: item.picture,
+              name: item.description,
+              price: item.price,
+              quantity: 0,
+            })
           }>
           <View
             style={{

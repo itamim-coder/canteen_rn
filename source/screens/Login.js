@@ -24,6 +24,7 @@ import axios from 'axios';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
 import Home from './Home';
+import {user_login} from '../api/user_api';
 
 export class Login extends Component {
   constructor(props) {
@@ -58,11 +59,20 @@ export class Login extends Component {
 
   making_api_call = () => {
     if (this.validate_field()) {
+      // user_login({
+      //   email: this.state.email,
+      //   password: this.state.password,
+      // }).then(result => {
+
+      //   console.log(result);
+
+      //   console.log(this.state.email);
+      //   console.log(this.state.password);
+      // });
       const data = {email: this.state.email, password: this.state.password};
       this.setState({indicator: true});
       // this.setState({disabled: true});
       axios
-
         .post('https://laqil.com/public/api/login', data)
         .then(res => {
           let userInfo = res.data;
@@ -72,6 +82,7 @@ export class Login extends Component {
           const status = res.data.data.status;
           console.log(res.data.token);
           if (status == 1) {
+            // this.handleToken();
             alert(res.data.message);
             this.setState({indicator: false});
             this.setState({disabled: false});
@@ -81,25 +92,31 @@ export class Login extends Component {
         .catch(function (error) {
           if (error.response) {
             // let emailerror = error.response.data.errors.email;
-
             // this.setState({emailerror: emailerror});
             alert(error.response.data.message);
-
             // ToastAndroid.show(error.response.data.message, ToastAndroid.SHORT);
             this.setState({indicator: false});
             this.setState({disabled: false});
-
             // return;
             // The request was made and the server responded with a status code
             // that falls out of the range of 2xx
             // console.log(error.response);
-
             // console.log(error.response.status);
             // console.log(error.response.headers);
           }
         });
     }
   };
+  // handleToken = async () => {
+  //   const dataToken = await AsyncStorage.getItem('Token');
+  //   console.log(dataToken);
+  //   if (dataToken) {
+  //     this.props.navigation.navigate('Home');
+  //   } else {
+  //     // this.setState({token: dataToken});
+  //     this.props.navigation.navigate('Login');
+  //   }
+  // };
 
   render() {
     const loginContainer = {
@@ -169,7 +186,7 @@ export class Login extends Component {
               navigation={this.props.navigation}
             />
 
-            {/* <TouchableOpacity
+            <TouchableOpacity
               // onPress={handleSignin}
 
               onPress={() => {
@@ -182,7 +199,7 @@ export class Login extends Component {
               ) : (
                 <Text style={BUTTONS.btnFont}>Login</Text>
               )}
-            </TouchableOpacity> */}
+            </TouchableOpacity>
 
             <View style={loginBottom}>
               <TouchableOpacity

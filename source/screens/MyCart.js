@@ -37,6 +37,7 @@ export class MyCart extends Component {
 
   async componentDidMount() {
     const store = await getStoredCart();
+    console.log('store', store);
     fetch('https://laqil.com/public/api/product-list')
       .then(res => res.json())
       .then(res => {
