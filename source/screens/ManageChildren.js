@@ -20,6 +20,7 @@ import INPUT from '../theme/Input';
 import BUTTONS from '../theme/Buttons';
 import {Picker} from '@react-native-picker/picker';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import axios from 'axios';
 
 const width = Dimensions.get('window').width - 40;
 export default class ManageChildren extends Component {
@@ -32,7 +33,7 @@ export default class ManageChildren extends Component {
       spendingLimit: '',
       classValue: 'no',
       schoolValue: 'no',
-      allData: [],
+      children: [],
     };
   }
 
@@ -42,68 +43,89 @@ export default class ManageChildren extends Component {
   };
 
   findChildren = async () => {
-    const result = await AsyncStorage.getItem('children');
-    console.log(result);
-    if (result !== null) {
-      this.setState({allData: JSON.parse(result)});
-    }
+    const user = await AsyncStorage.getItem('userInfo');
+    const parse = JSON.parse(user);
+
+
+    const token = parse.token;
+    console.log('token', token);
+ 
+
+    axios
+      .get('https://laqil.com/public/api/student-list', {
+        headers: {Authorization: `Bearer ${token}`},
+      })
+      .then(
+        res => {
+          this.setState({children: res.data.data});
+          console.log(res.data.data);
+        },
+        err => {
+          console.log(err);
+        },
+      );
+
+    // if (result !== null) {()
+    //   this.setState({allData: JSON.parse(result)});
+    // }
   };
 
   componentDidMount() {
     this.findChildren();
+    
   }
-  handleSubmit = async () => {
-    const data = {
-      name: this.state.name,
-      spendingLimit: this.state.spendingLimit,
-      classValue: this.state.classValue,
-      schoolValue: this.state.schoolValue,
-    };
-    // console.log(this.state.name, this.state.schoolValue);
-    const updatedData = [...this.state.allData, data];
-    this.setState({allData: updatedData});
-    await AsyncStorage.setItem('children', JSON.stringify(updatedData));
-    this.setModalVisible(!this.state.modalVisible);
-  };
+  // handleSubmit = async () => {
+  //   const data = {
+  //     name: this.state.name,
+  //     spendingLimit: this.state.spendingLimit,
+  //     classValue: this.state.classValue,
+  //     schoolValue: this.state.schoolValue,
+  //   };
+  //   // console.log(this.state.name, this.state.schoolValue);
+  //   const updatedData = [...this.state.allData, data];
+  //   this.setState({allData: updatedData});
+  //   await AsyncStorage.setItem('children', JSON.stringify(updatedData));
+  //   this.setModalVisible(!this.state.modalVisible);
+  // };
 
-  deleteChild = async ({item}) => {
-    console.log('item', item);
-    const result = await AsyncStorage.getItem('children');
-    let childrens = [];
-    if (result !== null) {
-      childrens = JSON.parse(result);
-    }
-    // console.log('childrens', childrens.name);
-    const newChildrens = childrens.filter(
-      children =>
-        //   childrens.name !== this.state.allData.name,
-        console.log('childrens', children.name),
-      //   console.log('alldata', allData.name),
-    );
-    console.log('new', newChildrens);
-    // this.setState{(childrens: newChildrens);
-    // await AsyncStorage.setItem('children', JSON.stringify(newChildrens));
-    this.props.navigation.goBack();
-  };
-  handleDelete = () => {
-    Alert.alert(
-      'Are You Sure!',
-      'This action will delete your note permanently!',
-      [
-        {
-          text: 'Delete',
-          onPress: this.deleteChild,
-        },
-        {
-          text: 'No Thanks',
-          onPress: () => console.log('no thanks'),
-        },
-      ],
-      {
-        cancelable: true,
-      },
-    );
-  };
+  // deleteChild = async ({item}) => {
+  //   console.log('item', item);
+  //   const result = await AsyncStorage.getItem('children');
+  //   let childrens = [];
+  //   if (result !== null) {
+  //     childrens = JSON.parse(result);
+  //   }
+  //   // console.log('childrens', childrens.name);
+  //   const newChildrens = childrens.filter(
+  //     children =>
+  //       //   childrens.name !== this.state.allData.name,
+  //       console.log('childrens', children.name),
+  //     //   console.log('alldata', allData.name),
+  //   );
+  //   console.log('new', newChildrens);
+  //   // this.setState{(childrens: newChildrens);
+  //   // await AsyncStorage.setItem('children', JSON.stringify(newChildrens));
+  //   this.props.navigation.goBack();
+  // };
+  // handleDelete = () => {
+  //   Alert.alert(
+  //     'Are You Sure!',
+  //     'This action will delete your note permanently!',
+  //     [
+  //       {
+  //         text: 'Delete',
+  //         onPress: this.deleteChild,
+  //       },
+  //       {
+  //         text: 'No Thanks',
+  //         onPress: () => console.log('no thanks'),
+  //       },
+  //     ],
+  //     {
+  //       cancelable: true,
+  //     },
+  //   );
+  // };
 
   renderChildren = ({item}) => {
     console.log(item);
@@ -128,10 +150,10 @@ export default class ManageChildren extends Component {
           <View>
             <Text style={TYPOGRAPHY.h4}>{item.name}</Text>
             <Text style={[TYPOGRAPHY.medium, {color: colors.ash}]}>
-              {item.schoolValue}
+              {item.school}
             </Text>
             <Text style={[TYPOGRAPHY.medium, {color: colors.ash}]}>
-              {item.classValue}
+              {item.class}
             </Text>
           </View>
           <TouchableOpacity onPress={() => this.handleDelete()}>
@@ -183,7 +205,7 @@ export default class ManageChildren extends Component {
         <View style={{justifyContent: 'space-between', flex: 1}}>
           <View>
             <FlatList
-              data={this.state.allData}
+              data={this.state.children}
               renderItem={item => this.renderChildren(item)}
             />
           </View>
@@ -215,11 +237,23 @@ export default class ManageChildren extends Component {
                     <View style={INPUT.inputContainer}>
                       <TextInput
                         // onChangeText={text => setName(text)}
+                        value={this.state.name}
+                        onChangeText={value => {
+                          this.setState({name: value});
+                        }}
+                        placeholder="Name"
+                        placeholderTextColor={'grey'}
+                        style={INPUT.input}
+                      />
+                    </View>
+                    <View style={INPUT.inputContainer}>
+                      <TextInput
+                        // onChangeText={text => setName(text)}
                         value={this.state.spendingLimit}
                         onChangeText={value => {
                           this.setState({spendingLimit: value});
                         }}
-                        placeholder="Daily Spending Limit"
+                        placeholder="Phone"
                         placeholderTextColor={'grey'}
                         style={INPUT.input}
                       />
@@ -281,16 +315,18 @@ export default class ManageChildren extends Component {
                   </View>
                 </View>
               </Modal>
-              <TouchableOpacity
-                style={(BUTTONS.btnPrimary, [styles.button, styles.buttonOpen])}
-                /* style={[styles.button, styles.buttonClose]} */
-                onPress={() => this.setModalVisible(true)}>
-                <Text style={[BUTTONS.btnFont, {textAlign: 'center'}]}>
-                  Submit{' '}
-                </Text>
-              </TouchableOpacity>
             </View>
           </View>
+        </View>
+        <View style={{alignItems: 'center'}}>
+          <TouchableOpacity
+            style={(BUTTONS.btnPrimary, [styles.button, styles.buttonOpen])}
+            /* style={[styles.button, styles.buttonClose]} */
+            onPress={() => this.props.navigation.navigate('AddStudent')}>
+            <Text style={[BUTTONS.btnFont, {textAlign: 'center'}]}>
+              Submit{' '}
+            </Text>
+          </TouchableOpacity>
         </View>
       </SafeAreaView>
     );

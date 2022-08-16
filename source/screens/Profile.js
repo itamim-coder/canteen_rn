@@ -15,8 +15,23 @@ import FontAwesome from 'react-native-vector-icons/FontAwesome';
 // import Entypo from 'react-native-vector-icons/Entypo';
 import Entypo from 'react-native-vector-icons/Entypo';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 export default class Profile extends Component {
+  handlelogout = async () => {
+    const user = await AsyncStorage.getItem('token');
+    console.log(user);
+    // AsyncStorage.removeItem('token');
+    // // if (user == null) {
+    // this.props.navigation.navigate('Login');
+    // }
+    // if (!dataToken) {
+    //   this.props.navigation.navigate('Login');
+    // } else {
+    //   this.setState({token: dataToken});
+    //   this.props.navigation.navigate('TabNavigator');
+    // }
+  };
   render() {
     return (
       <SafeAreaView style={{flex: 1}}>
@@ -196,6 +211,7 @@ export default class Profile extends Component {
               </Text>
             </TouchableOpacity>
             <TouchableOpacity
+              onPress={() => this.handlelogout()}
               style={{
                 paddingVertical: 20,
 

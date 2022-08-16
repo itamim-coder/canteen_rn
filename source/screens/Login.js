@@ -82,6 +82,7 @@ export class Login extends Component {
           const status = res.data.data.status;
           console.log(res.data.token);
           if (status == 1) {
+            // this.handleToken();
             alert(res.data.message);
             this.setState({indicator: false});
             this.setState({disabled: false});
@@ -106,6 +107,16 @@ export class Login extends Component {
         });
     }
   };
+  // handleToken = async () => {
+  //   const dataToken = await AsyncStorage.getItem('Token');
+  //   console.log(dataToken);
+  //   if (dataToken) {
+  //     this.props.navigation.navigate('Home');
+  //   } else {
+  //     // this.setState({token: dataToken});
+  //     this.props.navigation.navigate('Login');
+  //   }
+  // };
 
   render() {
     const loginContainer = {

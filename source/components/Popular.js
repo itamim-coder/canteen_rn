@@ -15,6 +15,7 @@ import {SafeAreaView} from 'react-native-safe-area-context';
 import {colors} from '../theme/colors';
 import Button from './Button';
 import {BottomSheet} from 'react-native-btr';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 const width = Dimensions.get('screen').width / 2 - 30;
 export class Popular extends Component {
   constructor(props) {
@@ -39,6 +40,7 @@ export class Popular extends Component {
         }
       });
   }
+
 
   renderItem = ({item}) => {
     const {description, picture, price} = item;
