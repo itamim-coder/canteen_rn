@@ -21,17 +21,17 @@ export default class Profile extends Component {
   handlelogout = async () => {
     const user = await AsyncStorage.getItem('token');
     console.log(user);
-    // AsyncStorage.removeItem('token');
-    // // if (user == null) {
-    // this.props.navigation.navigate('Login');
-    // }
-    // if (!dataToken) {
-    //   this.props.navigation.navigate('Login');
-    // } else {
-    //   this.setState({token: dataToken});
-    //   this.props.navigation.navigate('TabNavigator');
-    // }
+    AsyncStorage.removeItem('token');
+    // if (user == null) {
+    this.props.navigation.navigate('Login');
   };
+  // if (!dataToken) {
+  //   this.props.navigation.navigate('Login');
+  // } else {
+  //   // this.setState({token: dataToken});
+  //   this.props.navigation.navigate('TabNavigator');
+  // }
+  // };
   render() {
     return (
       <SafeAreaView style={{flex: 1}}>
@@ -97,7 +97,7 @@ export default class Profile extends Component {
             </TouchableOpacity>
 
             <TouchableOpacity
-              onPress={() => this.props.navigation.navigate('My Order')}
+              onPress={() => this.props.navigation.navigate('StudentDetails')}
               style={{
                 paddingVertical: 20,
                 marginBottom: 5,
