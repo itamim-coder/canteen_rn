@@ -97,7 +97,7 @@ export default class Profile extends Component {
             </TouchableOpacity>
 
             <TouchableOpacity
-              onPress={() => this.props.navigation.navigate('StudentDetails')}
+              onPress={() => this.props.navigation.navigate('Transaction')}
               style={{
                 paddingVertical: 20,
                 marginBottom: 5,

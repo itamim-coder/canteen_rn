@@ -6,8 +6,7 @@ import TYPOGRAPHY from './typography';
 const INPUT = StyleSheet.create({
   inputContainer: {
     flexDirection: 'row',
-    // marginTop: 10,
-    marginBottom: 35,
+    marginTop: 10,
   },
   input: {
     color: colors.black,

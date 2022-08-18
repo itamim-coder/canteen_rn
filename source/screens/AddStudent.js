@@ -204,7 +204,8 @@ export default class AddStudent extends Component {
               </View>
             </View>
             <Text style={[TYPOGRAPHY.h5]}>Full Name</Text>
-            <View style={INPUT.inputContainer}>
+            <View
+              style={[INPUT.inputContainer, {marginTop: 0, marginBottom: 35}]}>
               <TextInput
                 value={this.state.name}
                 // style={[TYPOGRAPHY.h5]}
@@ -219,7 +220,8 @@ export default class AddStudent extends Component {
               />
             </View>
             <Text style={[TYPOGRAPHY.h5]}>Phone Number</Text>
-            <View style={INPUT.inputContainer}>
+            <View
+              style={[INPUT.inputContainer, {marginTop: 0, marginBottom: 35}]}>
               <TextInput
                 value={this.state.phone}
                 // onFocus={this.setState({error: ''})}
@@ -234,7 +236,8 @@ export default class AddStudent extends Component {
               />
             </View>
             <Text style={[TYPOGRAPHY.h5]}>Email</Text>
-            <View style={INPUT.inputContainer}>
+            <View
+              style={[INPUT.inputContainer, {marginTop: 0, marginBottom: 35}]}>
               <TextInput
                 value={this.state.email}
                 // onFocus={this.setState({error: ''})}
@@ -260,7 +263,8 @@ export default class AddStudent extends Component {
               </Picker>
             </View>
             <Text style={[TYPOGRAPHY.h5]}>Password</Text>
-            <View style={INPUT.inputContainer}>
+            <View
+              style={[INPUT.inputContainer, {marginTop: 0, marginBottom: 35}]}>
               <TextInput
                 value={this.state.password}
                 // onFocus={this.setState({error: ''})}
@@ -274,7 +278,8 @@ export default class AddStudent extends Component {
               />
             </View>
             <Text style={[TYPOGRAPHY.h5]}>Password Confirmation</Text>
-            <View style={INPUT.inputContainer}>
+            <View
+              style={[INPUT.inputContainer, {marginTop: 0, marginBottom: 35}]}>
               <TextInput
                 value={this.state.password_confirmation}
                 // onFocus={this.setState({error: ''})}
@@ -288,7 +293,7 @@ export default class AddStudent extends Component {
               />
             </View>
 
-            <View style={INPUT.inputContainer}>
+            {/* <View style={INPUT.inputContainer}>
               <TextInput
                 value={this.state.parent_id}
                 // onFocus={this.setState({error: ''})}
@@ -299,7 +304,7 @@ export default class AddStudent extends Component {
                 placeholderTextColor={'grey'}
                 style={INPUT.input}
               />
-            </View>
+            </View> */}
             {/* <View style={INPUT.inputContainer}>
               <TextInput
                 value={this.state.code}
@@ -352,7 +357,8 @@ export default class AddStudent extends Component {
             </View>
 
             <Text style={[TYPOGRAPHY.h5]}>Teacher</Text>
-            <View style={INPUT.inputContainer}>
+            <View
+              style={[INPUT.inputContainer, {marginTop: 0, marginBottom: 35}]}>
               <TextInput
                 value={this.state.teacher}
                 // onFocus={this.setState({error: ''})}
@@ -366,7 +372,8 @@ export default class AddStudent extends Component {
               />
             </View>
             <Text style={[TYPOGRAPHY.h5]}>Daily Spending Limit</Text>
-            <View style={INPUT.inputContainer}>
+            <View
+              style={[INPUT.inputContainer, {marginTop: 0, marginBottom: 35}]}>
               <TextInput
                 value={this.state.daily_spending_limit}
                 // onFocus={this.setState({error: ''})}
@@ -380,7 +387,8 @@ export default class AddStudent extends Component {
               />
             </View>
             <Text style={[TYPOGRAPHY.h5]}>Home Room</Text>
-            <View style={INPUT.inputContainer}>
+            <View
+              style={[INPUT.inputContainer, {marginTop: 0, marginBottom: 35}]}>
               <TextInput
                 value={this.state.homeroom}
                 // onFocus={this.setState({error: ''})}
@@ -394,7 +402,8 @@ export default class AddStudent extends Component {
               />
             </View>
             <Text style={[TYPOGRAPHY.h5]}>Dad Cell</Text>
-            <View style={INPUT.inputContainer}>
+            <View
+              style={[INPUT.inputContainer, {marginTop: 0, marginBottom: 35}]}>
               <TextInput
                 value={this.state.dad_cell}
                 // onFocus={this.setState({error: ''})}
@@ -408,7 +417,8 @@ export default class AddStudent extends Component {
               />
             </View>
             <Text style={[TYPOGRAPHY.h5]}>Dad Work Phone</Text>
-            <View style={INPUT.inputContainer}>
+            <View
+              style={[INPUT.inputContainer, {marginTop: 0, marginBottom: 35}]}>
               <TextInput
                 value={this.state.dad_work_phone}
                 // onFocus={this.setState({error: ''})}
@@ -421,7 +431,8 @@ export default class AddStudent extends Component {
               />
             </View>
             <Text style={[TYPOGRAPHY.h5]}>Dad Email</Text>
-            <View style={INPUT.inputContainer}>
+            <View
+              style={[INPUT.inputContainer, {marginTop: 0, marginBottom: 35}]}>
               <TextInput
                 value={this.state.dad_email}
                 // onFocus={this.setState({error: ''})}
@@ -435,7 +446,8 @@ export default class AddStudent extends Component {
               />
             </View>
             <Text style={[TYPOGRAPHY.h5]}>Dad Work Email</Text>
-            <View style={INPUT.inputContainer}>
+            <View
+              style={[INPUT.inputContainer, {marginTop: 0, marginBottom: 35}]}>
               <TextInput
                 value={this.state.dad_work_email}
                 // onFocus={this.setState({error: ''})}
@@ -449,7 +461,8 @@ export default class AddStudent extends Component {
               />
             </View>
             <Text style={[TYPOGRAPHY.h5]}>Mom Cell</Text>
-            <View style={INPUT.inputContainer}>
+            <View
+              style={[INPUT.inputContainer, {marginTop: 0, marginBottom: 35}]}>
               <TextInput
                 value={this.state.mom_cell}
                 // onFocus={this.setState({error: ''})}
@@ -463,7 +476,8 @@ export default class AddStudent extends Component {
               />
             </View>
             <Text style={[TYPOGRAPHY.h5]}>Mom Work Phone</Text>
-            <View style={INPUT.inputContainer}>
+            <View
+              style={[INPUT.inputContainer, {marginTop: 0, marginBottom: 35}]}>
               <TextInput
                 value={this.state.mom_work_phone}
                 // onFocus={this.setState({error: ''})}
@@ -477,7 +491,8 @@ export default class AddStudent extends Component {
               />
             </View>
             <Text style={[TYPOGRAPHY.h5]}>Mom Email</Text>
-            <View style={INPUT.inputContainer}>
+            <View
+              style={[INPUT.inputContainer, {marginTop: 0, marginBottom: 35}]}>
               <TextInput
                 value={this.state.mom_email}
                 // onFocus={this.setState({error: ''})}
@@ -491,7 +506,8 @@ export default class AddStudent extends Component {
               />
             </View>
             <Text style={[TYPOGRAPHY.h5]}>Mom Work Email</Text>
-            <View style={INPUT.inputContainer}>
+            <View
+              style={[INPUT.inputContainer, {marginTop: 0, marginBottom: 35}]}>
               <TextInput
                 value={this.state.mom_work_email}
                 // onFocus={this.setState({error: ''})}
@@ -505,7 +521,8 @@ export default class AddStudent extends Component {
               />
             </View>
             <Text style={[TYPOGRAPHY.h5]}>Notes</Text>
-            <View style={INPUT.inputContainer}>
+            <View
+              style={[INPUT.inputContainer, {marginTop: 0, marginBottom: 35}]}>
               <TextInput
                 value={this.state.notes}
                 // onFocus={this.setState({error: ''})}
@@ -546,25 +563,27 @@ export default class AddStudent extends Component {
                 </View>
               </View>
             </View>
-            <TouchableOpacity
-              // onPress={handleSignin}
+            {this.state.type == 'Add' ? (
+              <TouchableOpacity
+                // onPress={handleSignin}
 
-              onPress={() => {
-                this.addChild();
-              }}
-              disabled={this.state.disabled}
-              style={BUTTONS.btnPrimary}>
-              <Text style={BUTTONS.btnFont}>Add Student</Text>
-            </TouchableOpacity>
-
-            <TouchableOpacity
-              onPress={() => {
-                this.updateStudent();
-              }}
-              disabled={this.state.disabled}
-              style={BUTTONS.btnPrimary}>
-              <Text style={BUTTONS.btnFont}>Update Student</Text>
-            </TouchableOpacity>
+                onPress={() => {
+                  this.addChild();
+                }}
+                disabled={this.state.disabled}
+                style={BUTTONS.btnPrimary}>
+                <Text style={BUTTONS.btnFont}>Add Student</Text>
+              </TouchableOpacity>
+            ) : (
+              <TouchableOpacity
+                onPress={() => {
+                  this.updateStudent();
+                }}
+                disabled={this.state.disabled}
+                style={BUTTONS.btnPrimary}>
+                <Text style={BUTTONS.btnFont}>Update Student</Text>
+              </TouchableOpacity>
+            )}
           </View>
         </ScrollView>
       </SafeAreaView>

@@ -62,10 +62,6 @@ export default class ManageChildren extends Component {
           console.log(err);
         },
       );
-
-    // if (result !== null) {()
-    //   this.setState({allData: JSON.parse(result)});
-    // }
   };
 
   componentDidMount() {
@@ -157,9 +153,9 @@ export default class ManageChildren extends Component {
                 {item.class}
               </Text>
             </View>
-            <TouchableOpacity onPress={() => this.handleDelete()}>
+            {/* <TouchableOpacity onPress={() => this.handleDelete()}>
               <Text>delete</Text>
-            </TouchableOpacity>
+            </TouchableOpacity> */}
           </View>
         </TouchableOpacity>
       </SafeAreaView>

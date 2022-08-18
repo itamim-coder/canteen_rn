@@ -43,6 +43,8 @@ import FilterCategory from './source/screens/FilterCategory';
 import SchoolFood from './source/screens/SchoolFood';
 import AddStudent from './source/screens/AddStudent';
 import StudentDetails from './source/screens/StudentDetails';
+import Transaction from './source/screens/Transaction';
+import Deposit from './source/screens/Deposit';
 
 const Stack = createNativeStackNavigator();
 const Tab = createBottomTabNavigator();
@@ -133,6 +135,8 @@ export default class App extends Component {
           <Stack.Screen name="UpdateProfile" component={UpdateProfile} />
           <Stack.Screen name="ManageChildren" component={ManageChildren} />
           <Stack.Screen name="StudentDetails" component={StudentDetails} />
+          <Stack.Screen name="Transaction" component={Transaction} />
+          <Stack.Screen name="Deposit" component={Deposit} />
           <Stack.Screen name="AddStudent" component={AddStudent} />
 
           {/* Food Details */}
