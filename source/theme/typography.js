@@ -38,6 +38,11 @@ const TYPOGRAPHY = StyleSheet.create({
     fontFamily: Fonts.primaryMedium,
     fontSize: 13,
   },
+  h6Bold: {
+    color: colors.black,
+    fontFamily: Fonts.primarySemiBold,
+    fontSize: 13,
+  },
   primary: {
     color: colors.black,
     fontFamily: Fonts.primary,

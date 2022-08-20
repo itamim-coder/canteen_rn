@@ -36,16 +36,17 @@ export class FoodDetails extends Component {
       foodDetails: {},
       cart: '',
       visible: false,
+      cartProducts: [],
     };
-    console.log('product', this.props.route.params.item);
+    // console.log('cart', this.state.cartProduct);
   }
   componentDidMount() {
-    console.log(this.state.id);
+    // console.log(this.state.id);
     this.setState({visible: true});
     fetch(`https://laqil.com/public/api/product-details/${this.state.id}`)
       .then(res => res.json())
       .then(res => {
-        console.log(res.data);
+        // console.log(res.data);
         // this.setState({foods: res});
         if (res.status == true) {
           this.setState({foodDetails: res.data});
@@ -133,39 +134,81 @@ export class FoodDetails extends Component {
       color: colors.white,
     };
 
+    // const addToCart = async added => {
+    //   console.log(added);
+    //   // const cartProducts = {
+    //   //   id: added.id,
+    //   //   description: added.description,
+    //   //   price: added.price,
+    //   //   img: added.barcode,
+    //   // };
+    //   let shoppingCart;
+
+    //   //get shopping cart
+    //   const storedCart = await AsyncStorage.getItem('shopping-cart');
+    //   if (storedCart) {
+    //     shoppingCart = JSON.parse(storedCart);
+    //   } else {
+    //     shoppingCart = [];
+    //   }
+
+    //   // add quantity
+    //   // console.log(shoppingCart);
+    //   const quantity = shoppingCart[id];
+    //   // const product = shoppingCart[this.state.item];
+    //   // console.log(shoppingCart[id]);
+    //   if (quantity) {
+    //     const newQuantity = quantity + 1;
+
+    //     shoppingCart[id] = newQuantity;
+    //   } else {
+    //     shoppingCart[id] = 1;
+    //     shoppingCart[id] = {cartProducts};
+
+    //     // shoppingCart[product] = this.state.foodDetails;
+    //     // shoppingCart[id].push = added;
+    //   }
+    //   // console.log(this.state?.foodDetails);
+    //   console.log('shopping cart', shoppingCart);
+    //   const jsonValue = JSON.stringify(shoppingCart);
+    //   AsyncStorage.setItem('shopping-cart', jsonValue);
+    //   // console.log(shoppingCart);
+    // };
+
     const addToCart = async added => {
-      console.log(added);
-      let shoppingCart;
-
-      //get shopping cart
       const storedCart = await AsyncStorage.getItem('shopping-cart');
-      if (storedCart) {
-        shoppingCart = JSON.parse(storedCart);
-      } else {
-        shoppingCart = {};
+      console.log('store', storedCart);
+      if (storedCart !== null) {
+        const result = JSON.parse(storedCart);
+        console.log('Update', result);
+        this.setState({cartProducts: result});
       }
+      const cartProduct = {
+        id: added.id,
+        description: added.description,
+        price: added.price,
+        picture: added.picture,
+      };
+      console.log('cart', cartProduct);
+      const updateCarts = [...this.state.cartProducts, cartProduct];
+      console.log('New', updateCarts);
+      this.setState({cartProducts: updateCarts});
+      const jsonUpdate = JSON.stringify(updateCarts);
 
-      // add quantity
-      // console.log(shoppingCart);
-      const quantity = shoppingCart[id];
-      // const product = shoppingCart[this.state.item];
-      // console.log(shoppingCart[id]);
-      if (quantity) {
-        const newQuantity = quantity + 1;
-
-        shoppingCart[id] = newQuantity;
-      } else {
-        shoppingCart[id] = 1;
-        // shoppingCart[product] = this.state.foodDetails;
-        // shoppingCart[id].push = added;
-      }
-      // console.log(this.state?.foodDetails);
-      console.log('shopping cart', shoppingCart);
-      const jsonValue = JSON.stringify(shoppingCart);
-      AsyncStorage.setItem('shopping-cart', jsonValue);
-      // console.log(shoppingCart);
+      await AsyncStorage.setItem('shopping-cart', jsonUpdate);
+      // let shoppingCart;
+      // const storedCart = await AsyncStorage.getItem('shopping-cart');
+      // console.log('storedCart', storedCart);
+      // if (storedCart) {
+      //   shoppingCart = JSON.parse(storedCart);
+      //   console.log('shopping', shoppingCart);
+      // } else {
+      //   shoppingCart = [...storedCart, {...cartProducts}];
+      //   console.log('else', shoppingCart);
+      //   const jsonValue = JSON.stringify(shoppingCart);
+      //   AsyncStorage.setItem('shopping-cart', jsonValue);
+      // }
     };
-
     const food = this.props.route.params.food;
 
     const {ingredients, pack_details, price, picture, description, id} =

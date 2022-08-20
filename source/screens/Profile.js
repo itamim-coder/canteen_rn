@@ -97,7 +97,7 @@ export default class Profile extends Component {
             </TouchableOpacity>
 
             <TouchableOpacity
-              onPress={() => this.props.navigation.navigate('Transaction')}
+              onPress={() => this.props.navigation.navigate('MyOrder')}
               style={{
                 paddingVertical: 20,
                 marginBottom: 5,
@@ -114,6 +114,7 @@ export default class Profile extends Component {
               </Text>
             </TouchableOpacity>
             <TouchableOpacity
+              onPress={() => this.props.navigation.navigate('Transaction')}
               style={{
                 paddingVertical: 20,
 
@@ -130,7 +131,7 @@ export default class Profile extends Component {
                     TYPOGRAPHY.medium,
                     {marginHorizontal: 20, fontSize: 20},
                   ]}>
-                  FAQs
+                  Transaction
                 </Text>
               </View>
               <Text

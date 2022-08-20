@@ -60,17 +60,23 @@ export default class App extends Component {
     this.handleToken();
   }
   handleToken = async () => {
-    const dataToken = await AsyncStorage.getItem('token');
-    // console.log(dataToken);
-    if (!dataToken) {
+    const user = await AsyncStorage.getItem('userInfo');
+    const parse = JSON.parse(user);
+
+    const token = parse.token;
+
+    // const dataToken = await AsyncStorage.getItem('token');
+    // // console.log(dataToken);
+    if (!token) {
       // this.props.navigation.replace('Login');
       this.setState({token: null});
     } else {
-      this.setState({token: dataToken});
+      this.setState({token: token});
       // this.props.navigation.replace('TabNavigator');
     }
   };
   render() {
+    console.log('token', this.state?.token);
     // console.log(this.state.token);
     const TabNavigator = () => {
       return (
@@ -117,6 +123,7 @@ export default class App extends Component {
       <NavigationContainer>
         <Stack.Navigator screenOptions={{header: () => null}}>
           {/* Auth  */}
+
           <Stack.Screen name="Login" component={Login} />
           <Stack.Screen name="Signup" component={Signup} />
           <Stack.Screen name="ResetRequest" component={ResetRequest} />
@@ -124,6 +131,7 @@ export default class App extends Component {
           <Stack.Screen name="Verification" component={Verification} />
 
           {/* Bottom Tab Navigation  */}
+
           <Stack.Screen name="TabNavigator" component={TabNavigator} />
 
           {/* Wallet  */}
@@ -131,23 +139,28 @@ export default class App extends Component {
           <Stack.Screen name="AddtoWallet" component={AddtoWallet} />
 
           {/* Profile */}
-          <Stack.Screen name="Profile" component={Profile} />
+          <Stack.Screen
+            name="Profile"
+            component={Profile}
+            token={this.state.token}
+          />
           <Stack.Screen name="UpdateProfile" component={UpdateProfile} />
           <Stack.Screen name="ManageChildren" component={ManageChildren} />
+          <Stack.Screen name="MyOrder" component={MyOrder} />
           <Stack.Screen name="StudentDetails" component={StudentDetails} />
           <Stack.Screen name="Transaction" component={Transaction} />
           <Stack.Screen name="Deposit" component={Deposit} />
           <Stack.Screen name="AddStudent" component={AddStudent} />
 
           {/* Food Details */}
-          {/* <Stack.Screen name="FoodDetails" component={FoodDetails} />
+          <Stack.Screen name="FoodDetails" component={FoodDetails} />
           <Stack.Screen name="AllCategory" component={AllCategory} />
           <Stack.Screen name="FilterCategory" component={FilterCategory} />
-          <Stack.Screen name="SchoolFood" component={SchoolFood} /> */}
+          <Stack.Screen name="SchoolFood" component={SchoolFood} />
 
           {/* Update Profile */}
-          {/* <Stack.Screen name="Checkout" component={Checkout} />
-          <Stack.Screen name="Payment" component={Payment} /> */}
+          <Stack.Screen name="Checkout" component={Checkout} />
+          <Stack.Screen name="Payment" component={Payment} />
         </Stack.Navigator>
       </NavigationContainer>
     );

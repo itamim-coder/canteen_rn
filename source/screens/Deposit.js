@@ -40,7 +40,7 @@ export default class Deposit extends Component {
     const user = await AsyncStorage.getItem('userInfo');
     const parse = JSON.parse(user);
 
-    const token = '1|ZE85ycMus7eRT0dk9h2IJZIp1RBSNgd1n9KYxMHZ';
+    const token = parse.token;
     console.log(token);
     const data = {
       card_no: this.state.card_no,
@@ -69,7 +69,7 @@ export default class Deposit extends Component {
           console.log(res);
           if (res.data.status == true) {
             alert(res.data.message);
-            this.props.navigation.navigate('Profile');
+            this.props.navigation.navigate('Transaction');
           }
         },
         err => {

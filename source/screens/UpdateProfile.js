@@ -17,15 +17,59 @@ import SCREEN from '../theme/Screen';
 import TYPOGRAPHY from '../theme/typography';
 import INPUT from '../theme/Input';
 import BUTTONS from '../theme/Buttons';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import axios from 'axios';
 
 export default class UpdateProfile extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      selectedValue: 'no',
+      selectedValue: '0',
+      name: '',
+      userData: {},
+      notify_low_balance: '0',
     };
   }
+  getProfile = async () => {
+    const user = await AsyncStorage.getItem('userInfo');
+    const parse = JSON.parse(user);
+
+    const token = parse.token;
+    console.log('token', token);
+
+    axios
+      .get('https://laqil.com/public/api/profile', {
+        headers: {Authorization: `Bearer ${token}`},
+      })
+      .then(
+        res => {
+          this.setState({userData: res.data?.data});
+          console.log(res.data?.data);
+          this.setState({notify_low_balance: res.data.data.notify_low_balance});
+        },
+        err => {
+          console.log(err);
+        },
+      );
+  };
+
+  componentDidMount() {
+    this.getProfile();
+  }
+
   render() {
+    console.log('user', this.state.notify_low_balance);
+    const {
+      name,
+      balance,
+      email,
+      phone,
+      notify_low_balance,
+      notify_promotions,
+      notify_orders,
+      low_balance_point,
+      notes,
+    } = this.state.userData;
     return (
       <SafeAreaView style={SCREEN.screen}>
         <ScrollView showsVerticalScrollIndicator={false}>
@@ -54,9 +98,11 @@ export default class UpdateProfile extends Component {
                 </Text>
                 <View style={INPUT.inputContainer}>
                   <TextInput
-                    // onChangeText={text => setName(text)}
+                    //  onChangeText={value => {
+                    //   this.setState({name: value});
+                    // }}
                     placeholder="Enter Full Name"
-                    defaultValue="Zahid"
+                    defaultValue={this.state.userData.name}
                     placeholderTextColor={'grey'}
                     style={INPUT.input}
                   />
@@ -69,7 +115,7 @@ export default class UpdateProfile extends Component {
                 <View style={INPUT.inputContainer}>
                   <TextInput
                     // onChangeText={text => setName(text)}
-                    defaultValue="3820"
+                    defaultValue={this.state.userData.balance}
                     placeholderTextColor={'grey'}
                     editable={false}
                     style={[
@@ -87,7 +133,7 @@ export default class UpdateProfile extends Component {
               <TextInput
                 // onChangeText={text => setName(text)}
                 placeholder="Enter Phone Number"
-                defaultValue="+0085324324"
+                defaultValue={this.state.userData.phone}
                 placeholderTextColor={'grey'}
                 style={INPUT.input}
                 keyboardType="numeric"
@@ -100,7 +146,7 @@ export default class UpdateProfile extends Component {
               <TextInput
                 // onChangeText={text => setPhone(text)}
                 placeholder="Enter Email Address"
-                defaultValue="zahid@powah.com"
+                defaultValue={this.state.userData.email}
                 editable={false}
                 placeholderTextColor={'grey'}
                 style={[
@@ -116,13 +162,14 @@ export default class UpdateProfile extends Component {
                   Notify Low Balance
                 </Text>
                 <Picker
-                  selectedValue={this.state.selectedValue}
+                  selectedValue={this.state.notify_low_balance}
+                  // defaultValue={this.state.userData.notify_low_balance}
                   style={{height: 50, width: 150}}
                   onValueChange={(itemValue, itemIndex) => {
-                    this.setState({selectedValue: itemValue});
+                    this.setState({notify_low_balance: itemValue});
                   }}>
-                  <Picker.Item label="NO" value="no" />
-                  <Picker.Item label="YES" value="yes" />
+                  <Picker.Item label="NO" value="0" />
+                  <Picker.Item label="YES" value="1" />
                 </Picker>
               </View>
               <View style={{flex: 1, margin: 3}}>
@@ -133,6 +180,7 @@ export default class UpdateProfile extends Component {
                   <TextInput
                     // onChangeText={text => setName(text)}
                     // defaultValue="3820"
+                    defaultValue={this.state.userData.low_balance_point}
                     placeholderTextColor={'grey'}
                     // editable={false}
                     style={[INPUT.input, {color: colors.black}]}
@@ -148,10 +196,11 @@ export default class UpdateProfile extends Component {
                   Notify Promotions
                 </Text>
                 <Picker
-                  selectedValue={this.state.selectedValue}
+                  // selectedValue={this.state.initialOption}
+                  selectedValue={this.state.userData.notify_promotions}
                   style={{height: 50, width: 150}}
                   onValueChange={(itemValue, itemIndex) => {
-                    this.setState({selectedValue: itemValue});
+                    this.setState({notify_promotions: itemValue});
                   }}>
                   <Picker.Item label="NO" value="no" />
                   <Picker.Item label="YES" value="yes" />
@@ -182,6 +231,7 @@ export default class UpdateProfile extends Component {
                 // onChangeText={text => setPhone(text)}
                 //   placeholder="Enter Email Address"
                 // defaultValue="zahid@powah.com"
+                defaultValue={this.state.userData.notes}
                 multiline={true}
                 numberOfLines={3}
                 // editable={false}

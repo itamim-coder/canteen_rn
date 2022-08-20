@@ -34,36 +34,47 @@ export class MyCart extends Component {
       indicator: false,
     };
   }
+  findProducts = async () => {
+    const storedCart = await AsyncStorage.getItem('shopping-cart');
+    console.log('find', storedCart);
+    if (storedCart !== null) {
+      const result = JSON.parse(storedCart);
+      console.log('find2', result);
+      this.setState({cart: result});
+    }
+  };
 
   async componentDidMount() {
-    const store = await getStoredCart();
-    console.log('store', store);
-    fetch('https://laqil.com/public/api/product-list')
-      .then(res => res.json())
-      .then(res => {
-        // this.setState({products: res});
-        // this.setState({foods: res});
-        if (res.status == true) {
-          this.setState({products: res.data});
-          // return this.state.foods;
-          // this.setState({visible: false});
-        }
-        // console.log(this.state.products);
-        const {products} = this.state;
-        const savedCart = [];
-        console.log(products);
-        for (const id in store) {
-          // console.log(id);
-          const addedProduct = products.find(product => product.id == id);
-          if (addedProduct) {
-            const quantity = store[id];
-            addedProduct.quantity = quantity;
-            savedCart.push(addedProduct);
-          }
-        }
-        this.setState({cart: savedCart});
-      });
+    await this.findProducts();
+    // const store = await getStoredCart();
+    // console.log('store', store);
+    // fetch('https://laqil.com/public/api/product-list')
+    //   .then(res => res.json())
+    //   .then(res => {
+    //     // this.setState({products: res});
+    //     // this.setState({foods: res});
+    //     if (res.status == true) {
+    //       this.setState({products: res.data});
+    //       // return this.state.foods;
+    //       // this.setState({visible: false});
+    //     }
+    //     // console.log(this.state.products);
+    //     const {products} = this.state;
+    //     const savedCart = [];
+    //     console.log(products);
+    //     for (const id in store) {
+    //       // console.log(id);
+    //       const addedProduct = products.find(product => product.id == id);
+    //       if (addedProduct) {
+    //         const quantity = store[id];
+    //         addedProduct.quantity = quantity;
+    //         savedCart.push(addedProduct);
+    //       }
+    //     }
+    //     this.setState({cart: savedCart});
+    //   });
   }
+
   dltFromCart = async id => {
     // this.setState({indicator: true});
     console.log(id);
@@ -88,8 +99,8 @@ export class MyCart extends Component {
     // console.log(item.quantity);
     // console.log(this.state.cart.id);
 
-    console.log(item.quantity);
-    console.log(this.state.count);
+    console.log(item);
+    // console.log(this.state.count);
 
     return (
       <View>
@@ -173,7 +184,7 @@ export class MyCart extends Component {
                   style={[
                     TYPOGRAPHY.primary,
                     {
-                      marginHorizontal: 20,
+                      // marginHorizontal: 20,
                       alignItems: 'center',
                       fontWeight: 'bold',
                     },
@@ -201,7 +212,7 @@ export class MyCart extends Component {
     const cartContainer = {
       ...SCREEN.screen,
       padding: 0,
-      backgroundColor: colors.black,
+      // backgroundColor: colors.black,
     };
 
     const cartDetails = {
