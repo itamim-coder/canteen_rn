@@ -14,6 +14,7 @@ export const colors = {
   secondary: '#64beff',
   pink: '#ff2d5f',
   green: '#9ACD32',
+  lightgreen: '#CDFFCD',
   ash: '#666666',
   // blue: '#3665f3',
   // gray: '#333333',

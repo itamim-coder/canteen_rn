@@ -23,6 +23,11 @@ const TYPOGRAPHY = StyleSheet.create({
     fontFamily: Fonts.primaryMedium,
     fontSize: 17,
   },
+  h4Bold: {
+    color: colors.black,
+    fontFamily: Fonts.primarySemiBold,
+    fontSize: 17,
+  },
   h5: {
     color: colors.black,
     fontFamily: Fonts.primaryMedium,

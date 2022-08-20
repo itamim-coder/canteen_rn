@@ -46,10 +46,8 @@ export default class ManageChildren extends Component {
     const user = await AsyncStorage.getItem('userInfo');
     const parse = JSON.parse(user);
 
-
     const token = parse.token;
     console.log('token', token);
- 
 
     axios
       .get('https://laqil.com/public/api/student-list', {
@@ -64,15 +62,10 @@ export default class ManageChildren extends Component {
           console.log(err);
         },
       );
-
-    // if (result !== null) {()
-    //   this.setState({allData: JSON.parse(result)});
-    // }
   };
 
   componentDidMount() {
     this.findChildren();
-    
   }
   // handleSubmit = async () => {
   //   const data = {
@@ -131,35 +124,40 @@ export default class ManageChildren extends Component {
     console.log(item);
     return (
       <SafeAreaView>
-        <View
-          style={{
-            backgroundColor: colors.white,
-            //   width:,
-            padding: 15,
-            borderRadius: 10,
-            marginTop: 15,
-            marginHorizontal: 20,
-            flexDirection: 'row',
-          }}>
-          <View style={{marginRight: 20}}>
-            <Image
-              style={{height: 35, width: 35}}
-              source={require('../../assets/images/profile.png')}
-            />
+        <TouchableOpacity
+          onPress={() =>
+            this.props.navigation.navigate('StudentDetails', {id: item.id})
+          }>
+          <View
+            style={{
+              backgroundColor: colors.white,
+              //   width:,
+              padding: 15,
+              borderRadius: 10,
+              marginTop: 15,
+              marginHorizontal: 20,
+              flexDirection: 'row',
+            }}>
+            <View style={{marginRight: 20}}>
+              <Image
+                style={{height: 35, width: 35}}
+                source={require('../../assets/images/profile.png')}
+              />
+            </View>
+            <View>
+              <Text style={TYPOGRAPHY.h4}>{item.name}</Text>
+              <Text style={[TYPOGRAPHY.medium, {color: colors.ash}]}>
+                {item.school}
+              </Text>
+              <Text style={[TYPOGRAPHY.medium, {color: colors.ash}]}>
+                {item.class}
+              </Text>
+            </View>
+            {/* <TouchableOpacity onPress={() => this.handleDelete()}>
+              <Text>delete</Text>
+            </TouchableOpacity> */}
           </View>
-          <View>
-            <Text style={TYPOGRAPHY.h4}>{item.name}</Text>
-            <Text style={[TYPOGRAPHY.medium, {color: colors.ash}]}>
-              {item.school}
-            </Text>
-            <Text style={[TYPOGRAPHY.medium, {color: colors.ash}]}>
-              {item.class}
-            </Text>
-          </View>
-          <TouchableOpacity onPress={() => this.handleDelete()}>
-            <Text>delete</Text>
-          </TouchableOpacity>
-        </View>
+        </TouchableOpacity>
       </SafeAreaView>
     );
   };
@@ -322,7 +320,11 @@ export default class ManageChildren extends Component {
           <TouchableOpacity
             style={(BUTTONS.btnPrimary, [styles.button, styles.buttonOpen])}
             /* style={[styles.button, styles.buttonClose]} */
-            onPress={() => this.props.navigation.navigate('AddStudent')}>
+            onPress={() =>
+              this.props.navigation.navigate('AddStudent', {
+                type: 'Add',
+              })
+            }>
             <Text style={[BUTTONS.btnFont, {textAlign: 'center'}]}>
               Submit{' '}
             </Text>
