@@ -26,8 +26,17 @@ export default class UpdateProfile extends Component {
     this.state = {
       selectedValue: '0',
       name: '',
+      phone: '',
+      email: '',
+      display_name: '',
       userData: {},
-      notify_low_balance: '0',
+      notify_low_balance: '',
+      notify_promotions: '',
+      notify_orders: '',
+      low_balance_point: '',
+      notes: '',
+      is_locked: '1',
+      status: '1',
     };
   }
   getProfile = async () => {
@@ -35,7 +44,7 @@ export default class UpdateProfile extends Component {
     const parse = JSON.parse(user);
 
     const token = parse.token;
-    console.log('token', token);
+    console.log('token', user);
 
     axios
       .get('https://laqil.com/public/api/profile', {
@@ -45,7 +54,50 @@ export default class UpdateProfile extends Component {
         res => {
           this.setState({userData: res.data?.data});
           console.log(res.data?.data);
-          this.setState({notify_low_balance: res.data.data.notify_low_balance});
+          // this.setState({notify_low_balance: res.data.data.notify_low_balance});
+        },
+        err => {
+          console.log(err);
+        },
+      );
+  };
+  updateProfile = async ({email}) => {
+    console.log('item', email);
+    this.setState({email: email});
+
+    const user = await AsyncStorage.getItem('userInfo');
+    const parse = JSON.parse(user);
+
+    const token = parse.token;
+    console.log(token);
+    const data = {
+      name: this.state.name,
+      phone: this.state.phone,
+
+      email: this.state.email,
+      is_locked: this.state.is_locked,
+      status: this.state.status,
+      // display_name: this.state.display_name,
+
+      // notify_low_balance: this.status.notify_low_balance,
+      // notify_promotions: this.state.notify_promotions,
+      // notify_orders: this.state.notify_orders,
+      // low_balance_point: this.state.low_balance_point,
+      // notes: this.state.notes,
+    };
+
+    console.log(data);
+    axios
+      .post('https://laqil.com/public/api/update-profile', data, {
+        headers: {Authorization: `Bearer ${token}`},
+      })
+      .then(
+        res => {
+          console.log(res);
+          // if (res.data.status == true) {
+          //   alert(res.data.message);
+          //   this.props.navigation.navigate('Profile');
+          // }
         },
         err => {
           console.log(err);
@@ -70,6 +122,7 @@ export default class UpdateProfile extends Component {
       low_balance_point,
       notes,
     } = this.state.userData;
+    // this.setState({email: this.state.userData.email});
     return (
       <SafeAreaView style={SCREEN.screen}>
         <ScrollView showsVerticalScrollIndicator={false}>
@@ -98,9 +151,9 @@ export default class UpdateProfile extends Component {
                 </Text>
                 <View style={INPUT.inputContainer}>
                   <TextInput
-                    //  onChangeText={value => {
-                    //   this.setState({name: value});
-                    // }}
+                    onChangeText={value => {
+                      this.setState({name: value});
+                    }}
                     placeholder="Enter Full Name"
                     defaultValue={this.state.userData.name}
                     placeholderTextColor={'grey'}
@@ -131,7 +184,9 @@ export default class UpdateProfile extends Component {
             </Text>
             <View style={INPUT.inputContainer}>
               <TextInput
-                // onChangeText={text => setName(text)}
+                onChangeText={value => {
+                  this.setState({phone: value});
+                }}
                 placeholder="Enter Phone Number"
                 defaultValue={this.state.userData.phone}
                 placeholderTextColor={'grey'}
@@ -162,8 +217,9 @@ export default class UpdateProfile extends Component {
                   Notify Low Balance
                 </Text>
                 <Picker
-                  selectedValue={this.state.notify_low_balance}
+                  defaultSelectedValue={this.state.userData.notify_low_balance}
                   // defaultValue={this.state.userData.notify_low_balance}
+                  // selectedValue={this.state.value}
                   style={{height: 50, width: 150}}
                   onValueChange={(itemValue, itemIndex) => {
                     this.setState({notify_low_balance: itemValue});
@@ -197,13 +253,13 @@ export default class UpdateProfile extends Component {
                 </Text>
                 <Picker
                   // selectedValue={this.state.initialOption}
-                  selectedValue={this.state.userData.notify_promotions}
+                  selectedValue={this.state.notify_promotions}
                   style={{height: 50, width: 150}}
                   onValueChange={(itemValue, itemIndex) => {
                     this.setState({notify_promotions: itemValue});
                   }}>
-                  <Picker.Item label="NO" value="no" />
-                  <Picker.Item label="YES" value="yes" />
+                  <Picker.Item label="NO" value="0" />
+                  <Picker.Item label="YES" value="1" />
                 </Picker>
               </View>
               <View style={{flex: 1, margin: 3}}>
@@ -216,8 +272,8 @@ export default class UpdateProfile extends Component {
                   onValueChange={(itemValue, itemIndex) => {
                     this.setState({selectedValue: itemValue});
                   }}>
-                  <Picker.Item label="NO" value="no" />
-                  <Picker.Item label="YES" value="yes" />
+                  <Picker.Item label="NO" value="0" />
+                  <Picker.Item label="YES" value="1" />
                 </Picker>
               </View>
             </View>
@@ -240,7 +296,9 @@ export default class UpdateProfile extends Component {
               />
             </KeyboardAvoidingView>
 
-            <TouchableOpacity style={BUTTONS.btnPrimary}>
+            <TouchableOpacity
+              onPress={() => this.updateProfile({email, phone, name})}
+              style={BUTTONS.btnPrimary}>
               <Text style={BUTTONS.btnFont}>Save</Text>
             </TouchableOpacity>
           </View>

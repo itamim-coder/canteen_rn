@@ -14,6 +14,8 @@ import SCREEN from '../theme/Screen';
 import BUTTONS from '../theme/Buttons';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import axios from 'axios';
+import {Button} from 'react-native';
+import DatePicker from 'react-native-date-picker';
 
 export default class Deposit extends Component {
   constructor(props) {
@@ -33,15 +35,17 @@ export default class Deposit extends Component {
       state: 'Cayman',
       currency: 'USD',
       save: 'yes',
+      date: new Date(),
+      open: false,
       //   transactionData: [],
     };
   }
   deposit = async () => {
-    const user = await AsyncStorage.getItem('userInfo');
+    const user = await AsyncStorage.getItem('token');
     const parse = JSON.parse(user);
 
-    const token = parse.token;
-    console.log(token);
+    const token = parse;
+    console.log("token",token);
     const data = {
       card_no: this.state.card_no,
       expiry_date: this.state.expiry_date,
@@ -69,7 +73,7 @@ export default class Deposit extends Component {
           console.log(res);
           if (res.data.status == true) {
             alert(res.data.message);
-            this.props.navigation.navigate('Transaction');
+            this.props.navigation.navigate('Profile');
           }
         },
         err => {
@@ -79,6 +83,7 @@ export default class Deposit extends Component {
       );
   };
   render() {
+    console.log(this.state.date);
     return (
       <SafeAreaView style={{flex: 1}}>
         <Statusbar />
@@ -98,9 +103,13 @@ export default class Deposit extends Component {
                 style={[INPUT.input, TYPOGRAPHY.h5]}
               />
             </View>
-            <Text style={[TYPOGRAPHY.h5]}>Expiry Date</Text>
+            <Text style={[TYPOGRAPHY.h5, {}]}>Expiry Date</Text>
             <View
-              style={[INPUT.inputContainer, {marginTop: 0, marginBottom: 35}]}>
+              style={[
+                INPUT.inputContainer,
+                {flexDirection: 'row', marginTop: 0, marginBottom: 35},
+              ]}>
+              {/* <Text>{this.state.date}</Text> */}
               <TextInput
                 value={this.state.expiry_date}
                 onChangeText={value => {
@@ -110,7 +119,24 @@ export default class Deposit extends Component {
                 placeholderTextColor={'grey'}
                 style={[INPUT.input, TYPOGRAPHY.h5]}
               />
+              <TouchableOpacity onPress={() => this.setState({open: true})}>
+                <Text>Select Date</Text>
+              </TouchableOpacity>
+              <DatePicker
+                modal
+                mode="date"
+                open={this.state.open}
+                date={this.state.date}
+                onConfirm={date => {
+                  this.setState({open: false});
+                  this.setState({date: date});
+                }}
+                onCancel={() => {
+                  this.setState({open: false});
+                }}
+              />
             </View>
+
             <Text style={[TYPOGRAPHY.h5]}>CCV</Text>
             <View
               style={[INPUT.inputContainer, {marginTop: 0, marginBottom: 35}]}>

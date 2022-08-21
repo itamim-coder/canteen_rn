@@ -96,7 +96,7 @@ export class MyCart extends Component {
   };
 
   renderCart = ({item}) => {
-    // console.log(item.quantity);
+    // console.log(item);
     // console.log(this.state.cart.id);
 
     console.log(item);
@@ -118,12 +118,12 @@ export class MyCart extends Component {
             }}>
             <Image
               style={{width: 100, height: 100}}
-              source={{uri: item.picture}}
+              // source={{uri: item.picture}}
             />
             <View>
               <View>
                 <Text style={[TYPOGRAPHY.h3, {fontSize: 15}]}>
-                  {item.description}
+                  {/* {item.description} */}
                   {/* {data.productName} */}
                 </Text>
               </View>
@@ -163,7 +163,7 @@ export class MyCart extends Component {
                       color: colors.white,
                       paddingHorizontal: 10,
                     }}>
-                    {this.state.count + item.quantity}
+                    {/* {this.state.count + item.quantity} */}
                   </Text>
                   <TouchableOpacity
                     onPress={() =>
@@ -189,7 +189,7 @@ export class MyCart extends Component {
                       fontWeight: 'bold',
                     },
                   ]}>
-                  ${item.quantity * item.price}
+                  {/* ${item.quantity * item.price} */}
                 </Text>
                 <TouchableOpacity
                   onPress={() => {

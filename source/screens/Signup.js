@@ -36,6 +36,7 @@ export default class Signup extends Component {
       password_confirmation_error: '',
       indicator: false,
       disabled: false,
+      user_type: 'parent',
       // registerUser: '',
     };
   }
@@ -96,6 +97,7 @@ export default class Signup extends Component {
         email: this.state.email,
         phone: this.state.phone,
         password: this.state.password,
+        user_type: this.state.user_type,
         password_confirmation: this.state.password_confirmation,
       };
       this.setState({indicator: true});
@@ -105,8 +107,9 @@ export default class Signup extends Component {
         .then(res => {
           let registerUser = res.data;
           this.setState({registerUser: registerUser});
-          AsyncStorage.setItem('registerUser', JSON.stringify(registerUser));
-
+          // AsyncStorage.setItem('userInfo', JSON.stringify(data));
+          AsyncStorage.setItem('token', JSON.stringify(res.data.token));
+          console.log(registerUser);
           const status = res.data.status;
           console.log(res.data);
           if (status == true) {

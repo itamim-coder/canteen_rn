@@ -8,6 +8,7 @@ import {
   ToastAndroid,
   TouchableOpacity,
   View,
+
 } from 'react-native';
 
 import {colors} from '../theme/colors';
@@ -25,6 +26,7 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 
 import Home from './Home';
 import {user_login} from '../api/user_api';
+import {ALERT_TYPE, Dialog, Root, Toast} from 'react-native-alert-notification';
 
 export class Login extends Component {
   constructor(props) {
@@ -37,6 +39,7 @@ export class Login extends Component {
       passerror: '',
       disabled: false,
       indicator: false,
+      token: '',
     };
   }
   // console.log(error)
@@ -76,16 +79,26 @@ export class Login extends Component {
         .post('https://laqil.com/public/api/login', data)
         .then(res => {
           let userInfo = res.data;
+          console.log(userInfo);
           this.setState({userInfo: userInfo});
           AsyncStorage.setItem('userInfo', JSON.stringify(userInfo));
-          AsyncStorage.setItem('token', res.data.token);
+          AsyncStorage.setItem('token', JSON.stringify(res.data.token));
           const status = res.data.data.status;
           console.log(res.data.token);
           if (status == 1) {
             // this.handleToken();
-            alert(res.data.message);
+            // alert(res.data.message);
+            // onPress={() =>
+            Toast.show({
+              type: ALERT_TYPE.SUCCESS,
+              title: 'Success',
+              textBody: 'Congrats! this is toast notification success',
+            });
+            // }
+
             this.setState({indicator: false});
             this.setState({disabled: false});
+
             this.props.navigation.navigate('TabNavigator');
           }
         })
@@ -93,10 +106,12 @@ export class Login extends Component {
           if (error.response) {
             // let emailerror = error.response.data.errors.email;
             // this.setState({emailerror: emailerror});
+
             alert(error.response.data.message);
-            // ToastAndroid.show(error.response.data.message, ToastAndroid.SHORT);
             this.setState({indicator: false});
             this.setState({disabled: false});
+            // ToastAndroid.show(error.response.data.message, ToastAndroid.SHORT);
+
             // return;
             // The request was made and the server responded with a status code
             // that falls out of the range of 2xx
@@ -107,16 +122,7 @@ export class Login extends Component {
         });
     }
   };
-  // handleToken = async () => {
-  //   const dataToken = await AsyncStorage.getItem('Token');
-  //   console.log(dataToken);
-  //   if (dataToken) {
-  //     this.props.navigation.navigate('Home');
-  //   } else {
-  //     // this.setState({token: dataToken});
-  //     this.props.navigation.navigate('Login');
-  //   }
-  // };
+
 
   render() {
     const loginContainer = {
@@ -135,89 +141,101 @@ export class Login extends Component {
     };
     // const val = useContext(AuthContext);
     return (
-      <SafeAreaView style={loginContainer}>
-        <View style={loginBox}>
-          <Text style={[TYPOGRAPHY.h1, {textAlign: 'center'}]}>Log in</Text>
-          <Text style={[TYPOGRAPHY.primary, {textAlign: 'center'}]}>
-            If you already have a YumCayman.ky account{'\n'}please log in below
-          </Text>
-          <View>
-            <View style={INPUT.inputContainer}>
-              <TextInput
-                value={this.state.email}
-                // onFocus={this.setState}
-                // onFocus={this.setState({error: ''})}
-                onChangeText={value => {
-                  this.setState({email: value, emailerror: ''});
-                }}
-                // onChangeText={text => setEmail(text)}
-                placeholder="Email"
-                placeholderTextColor={'grey'}
-                style={INPUT.input}
-              />
-            </View>
-            <Text style={{color: colors.bloodRed, fontFamily: Fonts.primary}}>
-              {this.state.emailerror}
+      <Root>
+        <SafeAreaView style={loginContainer}>
+          <View style={loginBox}>
+            <Text style={[TYPOGRAPHY.h1, {textAlign: 'center'}]}>Log in</Text>
+            <Text style={[TYPOGRAPHY.primary, {textAlign: 'center'}]}>
+              If you already have a YumCayman.ky account{'\n'}please log in
+              below
             </Text>
-            <View style={INPUT.inputContainer}>
-              <TextInput
-                value={this.state.password}
-                onChangeText={value => {
-                  this.setState({password: value, passerror: ''});
-                }}
-                // onChangeText={text => setPassword(text)}
-                placeholder="Password"
-                placeholderTextColor={'grey'}
-                style={INPUT.input}
-                secureTextEntry
-                // keyboardType="numeric"
-                // import
+            <View>
+              <View style={INPUT.inputContainer}>
+                <TextInput
+                  value={this.state.email}
+                  // onFocus={this.setState}
+                  // onFocus={this.setState({error: ''})}
+                  onChangeText={value => {
+                    this.setState({email: value, emailerror: ''});
+                  }}
+                  // onChangeText={text => setEmail(text)}
+                  placeholder="Email"
+                  placeholderTextColor={'grey'}
+                  style={INPUT.input}
+                />
+              </View>
+              <Text style={{color: colors.bloodRed, fontFamily: Fonts.primary}}>
+                {this.state.emailerror}
+              </Text>
+              <View style={INPUT.inputContainer}>
+                <TextInput
+                  value={this.state.password}
+                  onChangeText={value => {
+                    this.setState({password: value, passerror: ''});
+                  }}
+                  // onChangeText={text => setPassword(text)}
+                  placeholder="Password"
+                  placeholderTextColor={'grey'}
+                  style={INPUT.input}
+                  secureTextEntry
+                  // keyboardType="numeric"
+                  // import
+                />
+              </View>
+              <Text style={{color: colors.bloodRed, fontFamily: Fonts.primary}}>
+                {this.state.passerror}
+              </Text>
+              <Button
+                // onPress={() => {
+                //   Toast.show({
+                //     type: ALERT_TYPE.SUCCESS,
+                //     title: 'Success',
+                //     textBody: 'Congrats! this is toast notification success',
+                //   });
+                // }}
+                // onPress={handleSignin}
+
+                type="login"
+                navigation={this.props.navigation}
               />
-            </View>
-            <Text style={{color: colors.bloodRed, fontFamily: Fonts.primary}}>
-              {this.state.passerror}
-            </Text>
-            <Button
-              // onPress={() => {
-              //   this.making_api_call();
-              // }}
-              // onPress={handleSignin}
-              type="login"
-              navigation={this.props.navigation}
-            />
 
-            <TouchableOpacity
-              // onPress={handleSignin}
-
-              onPress={() => {
-                this.making_api_call();
-              }}
-              disabled={this.state.disabled}
-              style={BUTTONS.btnPrimary}>
-              {this.state.indicator ? (
-                <ActivityIndicator color={colors.white} />
-              ) : (
-                <Text style={BUTTONS.btnFont}>Login</Text>
-              )}
-            </TouchableOpacity>
-
-            <View style={loginBottom}>
               <TouchableOpacity
-                onPress={() => this.props.navigation.navigate('ResetRequest')}>
-                <Text style={{color: colors.light, fontFamily: Fonts.primary}}>
-                  Forgot Password?
-                </Text>
+                // onPress={handleSignin}
+
+                onPress={() => {
+                  this.making_api_call();
+                }}
+                disabled={this.state.disabled}
+                style={BUTTONS.btnPrimary}>
+                {this.state.indicator ? (
+                  <ActivityIndicator color={colors.white} />
+                ) : (
+                  <Text style={BUTTONS.btnFont}>Login</Text>
+                )}
               </TouchableOpacity>
-              <TouchableOpacity
-                onPress={() => this.props.navigation.navigate('Signup')}>
-                <Text style={{color: colors.light, fontFamily: Fonts.primary}}>
-                  Sign up
-                </Text>
-              </TouchableOpacity>
+
+              <View style={loginBottom}>
+                <TouchableOpacity
+                  onPress={() =>
+                    this.props.navigation.navigate('ResetRequest')
+                  }>
+                  <Text
+                    style={{color: colors.light, fontFamily: Fonts.primary}}>
+                    Forgot Password?
+                  </Text>
+                </TouchableOpacity>
+                <TouchableOpacity
+                  onPress={() => this.props.navigation.navigate('Signup')}>
+                  <Text
+                    style={{color: colors.light, fontFamily: Fonts.primary}}>
+                    Sign up
+                  </Text>
+                </TouchableOpacity>
+              </View>
             </View>
           </View>
-        </View>
-      </SafeAreaView>
+        </SafeAreaView>
+      </Root>
     );
   }
 }

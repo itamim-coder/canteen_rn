@@ -18,10 +18,16 @@ import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityI
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
 export default class Profile extends Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      name: '',
+    };
+  }
   handlelogout = async () => {
-    const user = await AsyncStorage.getItem('token');
+    const user = await AsyncStorage.getItem('userInfo');
     console.log(user);
-    AsyncStorage.removeItem('token');
+    AsyncStorage.removeItem('userInfo');
     // if (user == null) {
     this.props.navigation.navigate('Login');
   };
@@ -32,6 +38,18 @@ export default class Profile extends Component {
   //   this.props.navigation.navigate('TabNavigator');
   // }
   // };
+  getUser = async () => {
+    const user = await AsyncStorage.getItem('userInfo');
+    const parse = JSON.parse(user);
+    const name = parse.data.name;
+
+    this.setState({name: name});
+    // const token = parse.token;
+    console.log('token', parse.data.name);
+  };
+  componentDidMount() {
+    this.getUser();
+  }
   render() {
     return (
       <SafeAreaView style={{flex: 1}}>
@@ -44,7 +62,9 @@ export default class Profile extends Component {
             padding: 20,
           }}>
           <View>
-            <Text style={[TYPOGRAPHY.primary, {fontSize: 28}]}>Samantah</Text>
+            <Text style={[TYPOGRAPHY.primary, {fontSize: 28}]}>
+              {this.state.name}
+            </Text>
             <TouchableOpacity
               onPress={() => this.props.navigation.navigate('UpdateProfile')}>
               <Text
