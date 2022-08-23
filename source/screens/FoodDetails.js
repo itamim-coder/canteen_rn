@@ -23,6 +23,10 @@ import TYPOGRAPHY from '../theme/typography';
 import BUTTONS from '../theme/Buttons';
 import {Fonts} from '../theme/Fonts';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import {connect} from 'react-redux';
+import {addToCart} from '../../redux/cartSlice';
+import {MapDispatchToProps} from 'react-redux';
+import store from '../../redux';
 
 export class FoodDetails extends Component {
   constructor(props) {
@@ -40,6 +44,7 @@ export class FoodDetails extends Component {
     };
     // console.log('cart', this.state.cartProduct);
   }
+
   componentDidMount() {
     // console.log(this.state.id);
     this.setState({visible: true});
@@ -175,47 +180,63 @@ export class FoodDetails extends Component {
     //   // console.log(shoppingCart);
     // };
 
-    const addToCart = async added => {
-      const storedCart = await AsyncStorage.getItem('shopping-cart');
-      console.log('store', storedCart);
-      if (storedCart !== null) {
-        const result = JSON.parse(storedCart);
-        console.log('Update', result);
-        this.setState({cartProducts: result});
-      }
+    // const addToCart = async added => {
+    //   const storedCart = await AsyncStorage.getItem('shopping-cart');
+    //   console.log('store', storedCart);
+    //   if (storedCart !== null) {
+    //     const result = JSON.parse(storedCart);
+    //     console.log('Update', result);
+    //     this.setState({cartProducts: result});
+    //   }
+    //   const cartProduct = {
+    //     id: added.id,
+    //     description: added.description,
+    //     price: added.price,
+    //     picture: added.picture,
+    //   };
+    //   console.log('cart', cartProduct);
+    //   const updateCarts = [...this.state.cartProducts, cartProduct];
+    //   console.log('New', updateCarts);
+    //   this.setState({cartProducts: updateCarts});
+    //   const jsonUpdate = JSON.stringify(updateCarts);
+
+    //   await AsyncStorage.setItem('shopping-cart', jsonUpdate);
+    //   // let shoppingCart;
+    //   // const storedCart = await AsyncStorage.getItem('shopping-cart');
+    //   // console.log('storedCart', storedCart);
+    //   // if (storedCart) {
+    //   //   shoppingCart = JSON.parse(storedCart);
+    //   //   console.log('shopping', shoppingCart);
+    //   // } else {
+    //   //   shoppingCart = [...storedCart, {...cartProducts}];
+    //   //   console.log('else', shoppingCart);
+    //   //   const jsonValue = JSON.stringify(shoppingCart);
+    //   //   AsyncStorage.setItem('shopping-cart', jsonValue);
+    //   // }
+    // };
+    // const dispatch = useDispatch();
+
+    const add = added => {
       const cartProduct = {
         id: added.id,
         description: added.description,
         price: added.price,
         picture: added.picture,
+        quantity: 1,
+        // quantityPrice: price * quantity,
       };
-      console.log('cart', cartProduct);
-      const updateCarts = [...this.state.cartProducts, cartProduct];
-      console.log('New', updateCarts);
-      this.setState({cartProducts: updateCarts});
-      const jsonUpdate = JSON.stringify(updateCarts);
-
-      await AsyncStorage.setItem('shopping-cart', jsonUpdate);
-      // let shoppingCart;
-      // const storedCart = await AsyncStorage.getItem('shopping-cart');
-      // console.log('storedCart', storedCart);
-      // if (storedCart) {
-      //   shoppingCart = JSON.parse(storedCart);
-      //   console.log('shopping', shoppingCart);
-      // } else {
-      //   shoppingCart = [...storedCart, {...cartProducts}];
-      //   console.log('else', shoppingCart);
-      //   const jsonValue = JSON.stringify(shoppingCart);
-      //   AsyncStorage.setItem('shopping-cart', jsonValue);
-      // }
+      this.props.addToCart({cartProduct});
+      // console.log('cart', added.id);
     };
     const food = this.props.route.params.food;
 
     const {ingredients, pack_details, price, picture, description, id} =
       this.state?.foodDetails;
     const added = this.state.foodDetails;
-    // console.log('added', added);
-    // console.log('render', this.state?.foodDetails);
+    console.log('added', this.state.foodDetails);
+
+    // this.setState({cartProducts: cartProduct});
+    // console.log('render', cartProduct);
     return (
       <SafeAreaView style={detailsContainer}>
         <Statusbar name={description} type="food" />
@@ -265,7 +286,7 @@ export class FoodDetails extends Component {
                   <TouchableOpacity
                     // onPress={() => (id ? addToCart(id) : null)}
                     onPress={() => {
-                      addToCart(added);
+                      add(added);
                     }}
                     /* HERE IS WHERE WE'RE GOING TO SHOW OUR FIRST MESSAGE */
                     // showMessage({
@@ -366,5 +387,19 @@ export class FoodDetails extends Component {
     );
   }
 }
+const mapStateToProps = state => {
+  return {
+    carts: state.cart.carts,
+  };
+};
 
-export default FoodDetails;
+const mapDispatchToProps = dispatch => {
+  // console.log(cartProduct);
+  return {
+    addToCart: data => {
+      dispatch(addToCart(data));
+    },
+  };
+};
+
+export default connect(mapStateToProps, mapDispatchToProps)(FoodDetails);

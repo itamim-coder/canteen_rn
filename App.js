@@ -45,6 +45,8 @@ import AddStudent from './source/screens/AddStudent';
 import StudentDetails from './source/screens/StudentDetails';
 import Transaction from './source/screens/Transaction';
 import Deposit from './source/screens/Deposit';
+import {Provider} from 'react-redux';
+import store from './redux';
 
 const Stack = createNativeStackNavigator();
 const Tab = createBottomTabNavigator();
@@ -120,49 +122,51 @@ export default class App extends Component {
       );
     };
     return (
-      <NavigationContainer>
-        <Stack.Navigator screenOptions={{header: () => null}}>
-          {/* Auth  */}
+      <Provider store={store}>
+        <NavigationContainer>
+          <Stack.Navigator screenOptions={{header: () => null}}>
+            {/* Auth  */}
 
-          <Stack.Screen name="Login" component={Login} />
-          <Stack.Screen name="Signup" component={Signup} />
-          <Stack.Screen name="ResetRequest" component={ResetRequest} />
-          <Stack.Screen name="ConfirmPassword" component={ConfirmPassword} />
-          <Stack.Screen name="Verification" component={Verification} />
+            <Stack.Screen name="Login" component={Login} />
+            <Stack.Screen name="Signup" component={Signup} />
+            <Stack.Screen name="ResetRequest" component={ResetRequest} />
+            <Stack.Screen name="ConfirmPassword" component={ConfirmPassword} />
+            <Stack.Screen name="Verification" component={Verification} />
 
-          {/* Bottom Tab Navigation  */}
+            {/* Bottom Tab Navigation  */}
 
-          <Stack.Screen name="TabNavigator" component={TabNavigator} />
+            <Stack.Screen name="TabNavigator" component={TabNavigator} />
 
-          {/* Wallet  */}
-          <Stack.Screen name="Topup" component={Topup} />
-          <Stack.Screen name="AddtoWallet" component={AddtoWallet} />
+            {/* Wallet  */}
+            <Stack.Screen name="Topup" component={Topup} />
+            <Stack.Screen name="AddtoWallet" component={AddtoWallet} />
 
-          {/* Profile */}
-          <Stack.Screen
-            name="Profile"
-            component={Profile}
-            token={this.state.token}
-          />
-          <Stack.Screen name="UpdateProfile" component={UpdateProfile} />
-          <Stack.Screen name="ManageChildren" component={ManageChildren} />
-          <Stack.Screen name="MyOrder" component={MyOrder} />
-          <Stack.Screen name="StudentDetails" component={StudentDetails} />
-          <Stack.Screen name="Transaction" component={Transaction} />
-          <Stack.Screen name="Deposit" component={Deposit} />
-          <Stack.Screen name="AddStudent" component={AddStudent} />
+            {/* Profile */}
+            <Stack.Screen
+              name="Profile"
+              component={Profile}
+              token={this.state.token}
+            />
+            <Stack.Screen name="UpdateProfile" component={UpdateProfile} />
+            <Stack.Screen name="ManageChildren" component={ManageChildren} />
+            <Stack.Screen name="MyOrder" component={MyOrder} />
+            <Stack.Screen name="StudentDetails" component={StudentDetails} />
+            <Stack.Screen name="Transaction" component={Transaction} />
+            <Stack.Screen name="Deposit" component={Deposit} />
+            <Stack.Screen name="AddStudent" component={AddStudent} />
 
-          {/* Food Details */}
-          <Stack.Screen name="FoodDetails" component={FoodDetails} />
-          <Stack.Screen name="AllCategory" component={AllCategory} />
-          <Stack.Screen name="FilterCategory" component={FilterCategory} />
-          <Stack.Screen name="SchoolFood" component={SchoolFood} />
+            {/* Food Details */}
+            <Stack.Screen name="FoodDetails" component={FoodDetails} />
+            <Stack.Screen name="AllCategory" component={AllCategory} />
+            <Stack.Screen name="FilterCategory" component={FilterCategory} />
+            <Stack.Screen name="SchoolFood" component={SchoolFood} />
 
-          {/* Update Profile */}
-          <Stack.Screen name="Checkout" component={Checkout} />
-          <Stack.Screen name="Payment" component={Payment} />
-        </Stack.Navigator>
-      </NavigationContainer>
+            {/* Update Profile */}
+            <Stack.Screen name="Checkout" component={Checkout} />
+            <Stack.Screen name="Payment" component={Payment} />
+          </Stack.Navigator>
+        </NavigationContainer>
+      </Provider>
     );
   }
 }
