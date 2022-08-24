@@ -22,6 +22,11 @@ import Button from '../components/Button';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import {FOOD_LIST} from '../data/food-list';
 import {getStoredCart} from '../../Function/Cart';
+import {connect} from 'react-redux';
+import {reset, selectCart} from './../../redux/cartSlice';
+import {deleteFromCart} from './../../redux/cartSlice';
+import {increment} from '../../redux/counterSlice';
+// import {createConfigItem, parse} from '@babel/core';
 
 export class MyCart extends Component {
   constructor(props) {
@@ -32,6 +37,8 @@ export class MyCart extends Component {
       total: null,
       cart: [],
       indicator: false,
+      amount: '',
+      // count: initialValue || 0,
     };
   }
   findProducts = async () => {
@@ -75,33 +82,26 @@ export class MyCart extends Component {
     //   });
   }
 
-  dltFromCart = async id => {
-    // this.setState({indicator: true});
-    console.log(id);
-    const storedCart = await AsyncStorage.getItem('shopping-cart');
-    // console.log('before', storedCart);
-    if (storedCart) {
-      const shoppingCart = JSON.parse(storedCart);
-      if (id in shoppingCart) {
-        // console.log('exist');
-        delete shoppingCart[id];
-        const jsonValue = JSON.stringify(shoppingCart);
-        await AsyncStorage.setItem('shopping-cart', jsonValue);
-        // this.setState({cart: [...shoppingCart]});
-        console.log('after', shoppingCart);
-        this.setState({cart: shoppingCart});
-        // this.setState({indicator: false});
-      }
-    }
-  };
-
   renderCart = ({item}) => {
     // console.log(item);
     // console.log(this.state.cart.id);
-
-    console.log(item);
+    const dltFromCart = id => {
+      // this.setState({indicator: true});
+      console.log(id);
+      this.props.deleteFromCart({id: id});
+    };
+    console.log('new', item);
     // console.log(this.state.count);
-
+    const increment = item => {
+      // console.log(item);
+      const updateCart = {
+        ...item,
+        // item[quantity] = item.quantity + 1;
+        // item.quantity: item.quantity + 1,
+        // total: parse(item.amount * item.quantity),
+      };
+      console.log(updateCart);
+    };
     return (
       <View>
         {this.state.indicator ? (
@@ -111,19 +111,19 @@ export class MyCart extends Component {
             style={{
               flexDirection: 'row',
               backgroundColor: colors.white,
-              marginVertical: 5,
+              // marginVertical: 5,
               borderRadius: 6,
               alignItems: 'center',
               justifyContent: 'space-around',
             }}>
             <Image
-              style={{width: 100, height: 100}}
-              // source={{uri: item.picture}}
+              style={{width: '30%', height: 90}}
+              source={{uri: item.picture}}
             />
             <View>
               <View>
                 <Text style={[TYPOGRAPHY.h3, {fontSize: 15}]}>
-                  {/* {item.description} */}
+                  {item.description}
                   {/* {data.productName} */}
                 </Text>
               </View>
@@ -163,11 +163,13 @@ export class MyCart extends Component {
                       color: colors.white,
                       paddingHorizontal: 10,
                     }}>
+                    {item.quantity}
                     {/* {this.state.count + item.quantity} */}
                   </Text>
                   <TouchableOpacity
-                    onPress={() =>
-                      this.setState({count: this.state.count + 1})
+                    onPress={
+                      () => increment({item})
+                      // this.setState({count: this.state.count + 1})
                     }>
                     <Text
                       style={{
@@ -193,7 +195,7 @@ export class MyCart extends Component {
                 </Text>
                 <TouchableOpacity
                   onPress={() => {
-                    this.dltFromCart(item.id);
+                    dltFromCart(item.id);
                   }}>
                   <Text>X</Text>
                 </TouchableOpacity>
@@ -246,10 +248,11 @@ export class MyCart extends Component {
       paddingHorizontal: 30,
       marginBottom: 18,
     };
-    this.clearCart = () => {
-      AsyncStorage.removeItem('shopping-cart');
-      this.setState({cart: []});
+    const clearCart = () => {
+      this.props.reset();
     };
+    // const {carts} = this.props.carts;
+    console.log('cartssss', this.props.carts);
 
     return (
       <SafeAreaView style={cartContainer}>
@@ -263,13 +266,13 @@ export class MyCart extends Component {
             style={{marginTop: 20, flex: 1}}>
             {/* product card */}
             <FlatList
-              data={this.state.cart}
+              data={this.props.carts}
               renderItem={item => this.renderCart(item)}
             />
             <View>
               <TouchableOpacity
                 onPress={() => {
-                  this.clearCart();
+                  clearCart();
                 }}>
                 <Text>Clear Cart</Text>
               </TouchableOpacity>
@@ -283,7 +286,7 @@ export class MyCart extends Component {
                 </View>
 
                 <View>
-                  <Text style={TYPOGRAPHY.h5}>$200</Text>
+                  <Text style={TYPOGRAPHY.h5}>{this.props.length}</Text>
                   <Text style={TYPOGRAPHY.h5}>$200</Text>
                 </View>
               </View>
@@ -315,5 +318,23 @@ export class MyCart extends Component {
     );
   }
 }
+const mapStateToProps = state => {
+  return {
+    carts: state.cart,
+    length: state.cart.length,
+  };
+};
 
-export default MyCart;
+const mapDispatchToProps = dispatch => {
+  // console.log(cartProduct);
+  return {
+    deleteFromCart: id => {
+      dispatch(deleteFromCart(id));
+    },
+    reset: () => {
+      dispatch(reset());
+    },
+  };
+};
+
+export default connect(mapStateToProps, mapDispatchToProps)(MyCart);

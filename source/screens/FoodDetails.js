@@ -138,6 +138,7 @@ export class FoodDetails extends Component {
       fontSize: 15,
       color: colors.white,
     };
+   
 
     // const addToCart = async added => {
     //   console.log(added);
