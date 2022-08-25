@@ -3,13 +3,16 @@ import React, {Component} from 'react';
 import {createNativeStackNavigator} from '@react-navigation/native-stack';
 import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
 import {colors} from '../theme/colors';
-import Entypo from 'react-native-vector-icons/Entypo';
+import Feather from 'react-native-vector-icons/Feather';
+import EvilIcons from 'react-native-vector-icons/EvilIcons';
+import AntDesign from 'react-native-vector-icons/AntDesign';
 import Home from '../screens/Home';
 import MyOrder from '../screens/MyOrder';
 import {NavigationContainer} from '@react-navigation/native';
 import Login from '../screens/Login';
 import Signup from '../screens/Signup';
 import ResetRequest from '../screens/ResetRequest';
+import ConfirmPassword from '../screens/ConfirmPassword';
 import Verification from '../screens/Verification';
 import Topup from '../screens/Topup';
 import AddtoWallet from '../screens/AddtoWallet';
@@ -35,9 +38,7 @@ const Tab = createBottomTabNavigator();
 export class Navigation extends Component {
   constructor(props) {
     super(props);
-    this.state = {
-      token: '',
-    };
+    this.state = {};
   }
   componentDidMount() {
     this.handleToken();
@@ -51,11 +52,11 @@ export class Navigation extends Component {
     // const dataToken = await AsyncStorage.getItem('token');
     // // console.log(dataToken);
     if (!token) {
-    //   this.props.navigation.replace('Login');
+      //   this.props.navigation.replace('Login');
       this.setState({token: null});
     } else {
       this.setState({token: token});
-    //   this.props.navigation.replace('TabNavigator');
+      //   this.props.navigation.replace('TabNavigator');
     }
   };
   render() {
@@ -75,7 +76,8 @@ export class Navigation extends Component {
             component={Home}
             options={{
               tabBarIcon: ({color}) => (
-                <Entypo name="home" size={30} color={color} />
+                <AntDesign name="home" size={30} color={color} />
+                // <Entypo name="home" size={30} color={color} />
               ),
             }}
           />
@@ -84,7 +86,7 @@ export class Navigation extends Component {
             component={MyCart}
             options={{
               tabBarIcon: ({color}) => (
-                <Entypo name="shopping-cart" size={30} color={color} />
+                <AntDesign name="shoppingcart" size={30} color={color} />
               ),
               tabBarBadge: this.props.length,
             }}
@@ -94,7 +96,7 @@ export class Navigation extends Component {
             component={MyOrder}
             options={{
               tabBarIcon: ({color}) => (
-                <Entypo name="archive" size={30} color={color} />
+                <Feather name="list" size={30} color={color} />
               ),
             }}
           />
@@ -109,7 +111,7 @@ export class Navigation extends Component {
           <Stack.Screen name="Login" component={Login} />
           <Stack.Screen name="Signup" component={Signup} />
           <Stack.Screen name="ResetRequest" component={ResetRequest} />
-          {/* <Stack.Screen name="ConfirmPassword" component={ConfirmPassword} /> */}
+          <Stack.Screen name="ConfirmPassword" component={ConfirmPassword} />
           <Stack.Screen name="Verification" component={Verification} />
 
           {/* Bottom Tab Navigation  */}

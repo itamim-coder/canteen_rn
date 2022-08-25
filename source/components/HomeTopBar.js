@@ -97,7 +97,7 @@ export class HomeTopBar extends Component {
           </Picker>
         </View>
         <TouchableOpacity
-          onPress={() => this.props.navigation.navigate('Topup')}>
+          onPress={() => this.props.navigation.navigate('Transaction')}>
           <Image
             style={image}
             source={require('../../assets/images/ic_wallet.png')}

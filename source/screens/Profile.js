@@ -12,7 +12,7 @@ import {
 import {colors} from '../theme/colors';
 import TYPOGRAPHY from '../theme/typography';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
-// import Entypo from 'react-native-vector-icons/Entypo';
+
 import Entypo from 'react-native-vector-icons/Entypo';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import AsyncStorage from '@react-native-async-storage/async-storage';
@@ -28,23 +28,17 @@ export default class Profile extends Component {
     const user = await AsyncStorage.getItem('userInfo');
     console.log(user);
     AsyncStorage.removeItem('userInfo');
-    // if (user == null) {
+
     this.props.navigation.navigate('Login');
   };
-  // if (!dataToken) {
-  //   this.props.navigation.navigate('Login');
-  // } else {
-  //   // this.setState({token: dataToken});
-  //   this.props.navigation.navigate('TabNavigator');
-  // }
-  // };
+
   getUser = async () => {
     const user = await AsyncStorage.getItem('userInfo');
     const parse = JSON.parse(user);
     const name = parse.data.name;
 
     this.setState({name: name});
-    // const token = parse.token;
+
     console.log('token', parse.data.name);
   };
   componentDidMount() {
@@ -106,11 +100,16 @@ export default class Profile extends Component {
                 alignItems: 'center',
                 marginBottom: 5,
               }}>
-              <FontAwesome name="language" size={24} color="red" />
+              <MaterialCommunityIcons
+                name="human-male-child"
+                size={24}
+                color="red"
+              />
+
               <Text
                 style={[
                   TYPOGRAPHY.medium,
-                  {marginHorizontal: 20, fontSize: 20},
+                  {marginHorizontal: 20, fontSize: 18},
                 ]}>
                 Manage Children
               </Text>
@@ -128,7 +127,7 @@ export default class Profile extends Component {
               <Text
                 style={[
                   TYPOGRAPHY.medium,
-                  {marginHorizontal: 20, fontSize: 20},
+                  {marginHorizontal: 20, fontSize: 18},
                 ]}>
                 My Orders
               </Text>
@@ -141,30 +140,15 @@ export default class Profile extends Component {
                 marginBottom: 5,
               }}>
               <View style={{flexDirection: 'row', alignItems: 'center'}}>
-                <MaterialCommunityIcons
-                  name="comment-question"
-                  size={24}
-                  color="red"
-                />
+                <Entypo name="credit-card" size={24} color="red" />
                 <Text
                   style={[
                     TYPOGRAPHY.medium,
-                    {marginHorizontal: 20, fontSize: 20},
+                    {marginHorizontal: 20, fontSize: 18},
                   ]}>
                   Transaction
                 </Text>
               </View>
-              <Text
-                style={[
-                  TYPOGRAPHY.primary,
-                  {
-                    fontSize: 15,
-                    marginHorizontal: 45,
-                    color: colors.darkGrey,
-                  },
-                ]}>
-                Get your question answered
-              </Text>
             </TouchableOpacity>
             <TouchableOpacity
               style={{
@@ -181,22 +165,11 @@ export default class Profile extends Component {
                 <Text
                   style={[
                     TYPOGRAPHY.medium,
-                    {marginHorizontal: 20, fontSize: 20},
+                    {marginHorizontal: 20, fontSize: 18},
                   ]}>
                   Terms & Conditions
                 </Text>
               </View>
-              <Text
-                style={[
-                  TYPOGRAPHY.primary,
-                  {
-                    fontSize: 15,
-                    marginHorizontal: 45,
-                    color: colors.darkGrey,
-                  },
-                ]}>
-                Know terms of use
-              </Text>
             </TouchableOpacity>
             <TouchableOpacity
               style={{
@@ -214,22 +187,11 @@ export default class Profile extends Component {
                 <Text
                   style={[
                     TYPOGRAPHY.medium,
-                    {marginHorizontal: 25, fontSize: 20},
+                    {marginHorizontal: 25, fontSize: 18},
                   ]}>
                   Privacy Policy
                 </Text>
               </View>
-              <Text
-                style={[
-                  TYPOGRAPHY.primary,
-                  {
-                    fontSize: 15,
-                    marginHorizontal: 45,
-                    color: colors.darkGrey,
-                  },
-                ]}>
-                Companies privacy policy
-              </Text>
             </TouchableOpacity>
             <TouchableOpacity
               onPress={() => this.handlelogout()}
@@ -243,26 +205,14 @@ export default class Profile extends Component {
                 <Text
                   style={[
                     TYPOGRAPHY.medium,
-                    {marginHorizontal: 20, fontSize: 20},
+                    {marginHorizontal: 20, fontSize: 18},
                   ]}>
                   Logout
                 </Text>
               </View>
-              <Text
-                style={[
-                  TYPOGRAPHY.primary,
-                  {
-                    fontSize: 15,
-                    color: colors.darkGrey,
-                    marginHorizontal: 45,
-                  },
-                ]}>
-                Sign out from account
-              </Text>
             </TouchableOpacity>
           </ScrollView>
         </View>
-        {/* </View> */}
       </SafeAreaView>
     );
   }

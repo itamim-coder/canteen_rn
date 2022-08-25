@@ -12,17 +12,16 @@ import {
   View,
 } from 'react-native';
 import React, {Component} from 'react';
-import {FOOD_LIST} from '../data/food-list';
+
 import {colors} from '../theme/colors';
-import {CATEGORY_LIST} from '../data/category-list';
 
 import SCREEN from '../theme/Screen';
 import TYPOGRAPHY from '../theme/typography';
 import {Fonts} from '../theme/Fonts';
-import Seacrh from '../components/Seacrh';
+import Search from '../components/Search';
 import Popular from '../components/Popular';
 import HomeTopBar from '../components/HomeTopBar';
-import { Root } from 'react-native-alert-notification';
+import FloatCart from '../components/FloatCart';
 
 export class Home extends Component {
   // render Category item
@@ -41,7 +40,7 @@ export class Home extends Component {
       .then(res => {
         if (res.status == true) {
           this.setState({category: res.data});
-          // console.log(this.state.category);
+
           this.setState({visible: false});
         }
       });
@@ -85,17 +84,17 @@ export class Home extends Component {
       paddingBottom: 0,
     };
     return (
-      <Root>
-        <SafeAreaView style={homeContainer}>
-          {/* Home Top Section  */}
+      <SafeAreaView style={{flex: 1}}>
+        {/* Home Top Section  */}
 
+        <View style={homeContainer}>
           {/* <HomeTopBar /> */}
           <HomeTopBar navigation={this.props.navigation} />
 
           <ScrollView showsVerticalScrollIndicator={false}>
             {/* Search Box  */}
 
-            <Seacrh />
+            <Search />
 
             {/* Categories Section  */}
 
@@ -130,8 +129,9 @@ export class Home extends Component {
             {/* Popular Section  */}
             <Popular navigation={this.props.navigation} />
           </ScrollView>
-        </SafeAreaView>
-      </Root>
+        </View>
+        <FloatCart />
+      </SafeAreaView>
     );
   }
 }

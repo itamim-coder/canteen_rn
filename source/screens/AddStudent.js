@@ -177,9 +177,6 @@ export default class AddStudent extends Component {
     this.setState({selectedSchool: id});
   };
 
-  //   componentDidMount() {
-  //     this.addChild();
-  //   }
   render() {
     return (
       <SafeAreaView style={{flex: 1, backgroundColor: colors.white}}>
@@ -208,12 +205,9 @@ export default class AddStudent extends Component {
               style={[INPUT.inputContainer, {marginTop: 0, marginBottom: 35}]}>
               <TextInput
                 value={this.state.name}
-                // style={[TYPOGRAPHY.h5]}
-                // onFocus={this.setState({error: ''})}
                 onChangeText={value => {
                   this.setState({name: value});
                 }}
-                // onChangeText={text => setEmail(text)}
                 placeholder="Full Name"
                 placeholderTextColor={'grey'}
                 style={[INPUT.input, TYPOGRAPHY.h5]}
@@ -224,11 +218,9 @@ export default class AddStudent extends Component {
               style={[INPUT.inputContainer, {marginTop: 0, marginBottom: 35}]}>
               <TextInput
                 value={this.state.phone}
-                // onFocus={this.setState({error: ''})}
                 onChangeText={value => {
                   this.setState({phone: value, emailerror: ''});
                 }}
-                // onChangeText={text => setEmail(text)}
                 placeholder="Phone"
                 placeholderTextColor={'grey'}
                 style={[INPUT.input, TYPOGRAPHY.h5]}
@@ -240,17 +232,15 @@ export default class AddStudent extends Component {
               style={[INPUT.inputContainer, {marginTop: 0, marginBottom: 35}]}>
               <TextInput
                 value={this.state.email}
-                // onFocus={this.setState({error: ''})}
                 onChangeText={value => {
                   this.setState({email: value});
                 }}
-                // onChangeText={text => setEmail(text)}
                 placeholder="Email"
                 placeholderTextColor={'grey'}
                 style={[INPUT.input, TYPOGRAPHY.h5]}
               />
             </View>
-            <View style={{flex: 1}}>
+            <View style={{flex: 1, marginTop: 0, marginBottom: 35}}>
               <Text style={[TYPOGRAPHY.h5]}>Gender</Text>
               <Picker
                 selectedValue={this.state.gender}
@@ -267,11 +257,9 @@ export default class AddStudent extends Component {
               style={[INPUT.inputContainer, {marginTop: 0, marginBottom: 35}]}>
               <TextInput
                 value={this.state.password}
-                // onFocus={this.setState({error: ''})}
                 onChangeText={value => {
                   this.setState({password: value});
                 }}
-                // onChangeText={text => setEmail(text)}
                 placeholder="Password"
                 placeholderTextColor={'grey'}
                 style={[INPUT.input, TYPOGRAPHY.h5]}
@@ -282,11 +270,9 @@ export default class AddStudent extends Component {
               style={[INPUT.inputContainer, {marginTop: 0, marginBottom: 35}]}>
               <TextInput
                 value={this.state.password_confirmation}
-                // onFocus={this.setState({error: ''})}
                 onChangeText={value => {
                   this.setState({password_confirmation: value});
                 }}
-                // onChangeText={text => setEmail(text)}
                 placeholder="Password Confirmation"
                 placeholderTextColor={'grey'}
                 style={[INPUT.input, TYPOGRAPHY.h5]}
@@ -318,11 +304,11 @@ export default class AddStudent extends Component {
               />
             </View> */}
             <View style={{flexDirection: 'row'}}>
-              <View style={{flex: 1}}>
+              <View style={{flex: 1, marginBottom: 35}}>
                 <Text style={[TYPOGRAPHY.h5]}>Class</Text>
                 <Picker
                   selectedValue={this.state.selectedClass}
-                  style={{height: 50, width: 150}}
+                  style={{height: 50, width: width / 2 - 20}}
                   onValueChange={(itemValue, itemIndex) => {
                     this.setState({selectedClass: itemValue});
                   }}>
@@ -330,26 +316,18 @@ export default class AddStudent extends Component {
                   <Picker.Item label="2" value="2" />
                 </Picker>
               </View>
-              <View style={{flex: 1}}>
+              <View style={{flex: 1, marginBottom: 35}}>
                 <Text style={[TYPOGRAPHY.h5]}>Select School</Text>
                 <View style={{flexDirection: 'row', alignItems: 'center'}}>
                   <Picker
                     selectedValue={this.state.selectedSchool}
-                    style={{height: 50, width: width / 2}}
-                    // onValueChange={(modeValue, modeIndex) => this.setState({mode: modeValue})}>
-                    // {this.state.dataSource.map((item, key)=>(
-                    //         <Picker.Item label={item} value={item} key={key} />)
-                    //         )}
+                    style={{height: 50, width: width / 2 - 20}}
                     onValueChange={(itemValue, itemIndex, id) => {
-                      // this.pickerActivity(itemValue);
                       this.setState({selectedSchool: itemValue});
                     }}>
                     <Picker.Item label="Please select an option..." value="0" />
                     {this.state.schoolList.map(item => (
-                      // <TouchableOpacity>
-                      // console.log(item.id),
                       <Picker.Item label={item.name} value={item.id} />
-                      // </TouchableOpacity>
                     ))}
                   </Picker>
                 </View>
@@ -361,11 +339,9 @@ export default class AddStudent extends Component {
               style={[INPUT.inputContainer, {marginTop: 0, marginBottom: 35}]}>
               <TextInput
                 value={this.state.teacher}
-                // onFocus={this.setState({error: ''})}
                 onChangeText={value => {
                   this.setState({teacher: value});
                 }}
-                // onChangeText={text => setEmail(text)}
                 placeholder="Teacher"
                 placeholderTextColor={'grey'}
                 style={[INPUT.input, TYPOGRAPHY.h5]}
@@ -376,11 +352,9 @@ export default class AddStudent extends Component {
               style={[INPUT.inputContainer, {marginTop: 0, marginBottom: 35}]}>
               <TextInput
                 value={this.state.daily_spending_limit}
-                // onFocus={this.setState({error: ''})}
                 onChangeText={value => {
                   this.setState({daily_spending_limit: value});
                 }}
-                // onChangeText={text => setEmail(text)}
                 placeholder="Daily Spending Limit"
                 placeholderTextColor={'grey'}
                 style={[INPUT.input, TYPOGRAPHY.h5]}
@@ -391,11 +365,9 @@ export default class AddStudent extends Component {
               style={[INPUT.inputContainer, {marginTop: 0, marginBottom: 35}]}>
               <TextInput
                 value={this.state.homeroom}
-                // onFocus={this.setState({error: ''})}
                 onChangeText={value => {
                   this.setState({homeroom: value});
                 }}
-                // onChangeText={text => setEmail(text)}
                 placeholder="Home Room"
                 placeholderTextColor={'grey'}
                 style={[INPUT.input, TYPOGRAPHY.h5]}
@@ -406,11 +378,9 @@ export default class AddStudent extends Component {
               style={[INPUT.inputContainer, {marginTop: 0, marginBottom: 35}]}>
               <TextInput
                 value={this.state.dad_cell}
-                // onFocus={this.setState({error: ''})}
                 onChangeText={value => {
                   this.setState({dad_cell: value});
                 }}
-                // onChangeText={text => setEmail(text)}
                 placeholder="Dad Cell"
                 placeholderTextColor={'grey'}
                 style={[INPUT.input, TYPOGRAPHY.h5]}
@@ -421,7 +391,6 @@ export default class AddStudent extends Component {
               style={[INPUT.inputContainer, {marginTop: 0, marginBottom: 35}]}>
               <TextInput
                 value={this.state.dad_work_phone}
-                // onFocus={this.setState({error: ''})}
                 onChangeText={value => {
                   this.setState({dad_work_phone: value});
                 }}
@@ -435,11 +404,9 @@ export default class AddStudent extends Component {
               style={[INPUT.inputContainer, {marginTop: 0, marginBottom: 35}]}>
               <TextInput
                 value={this.state.dad_email}
-                // onFocus={this.setState({error: ''})}
                 onChangeText={value => {
                   this.setState({dad_email: value});
                 }}
-                // onChangeText={text => setEmail(text)}
                 placeholder="Dad Email"
                 placeholderTextColor={'grey'}
                 style={[INPUT.input, TYPOGRAPHY.h5]}
@@ -450,11 +417,9 @@ export default class AddStudent extends Component {
               style={[INPUT.inputContainer, {marginTop: 0, marginBottom: 35}]}>
               <TextInput
                 value={this.state.dad_work_email}
-                // onFocus={this.setState({error: ''})}
                 onChangeText={value => {
                   this.setState({dad_work_email: value});
                 }}
-                // onChangeText={text => setEmail(text)}
                 placeholder="Dad Work Email"
                 placeholderTextColor={'grey'}
                 style={[INPUT.input, TYPOGRAPHY.h5]}
@@ -465,11 +430,9 @@ export default class AddStudent extends Component {
               style={[INPUT.inputContainer, {marginTop: 0, marginBottom: 35}]}>
               <TextInput
                 value={this.state.mom_cell}
-                // onFocus={this.setState({error: ''})}
                 onChangeText={value => {
                   this.setState({mom_cell: value});
                 }}
-                // onChangeText={text => setEmail(text)}
                 placeholder="Mom Cell"
                 placeholderTextColor={'grey'}
                 style={[INPUT.input, TYPOGRAPHY.h5]}
@@ -480,11 +443,9 @@ export default class AddStudent extends Component {
               style={[INPUT.inputContainer, {marginTop: 0, marginBottom: 35}]}>
               <TextInput
                 value={this.state.mom_work_phone}
-                // onFocus={this.setState({error: ''})}
                 onChangeText={value => {
                   this.setState({mom_work_phone: value});
                 }}
-                // onChangeText={text => setEmail(text)}
                 placeholder="Mom Work Phone"
                 placeholderTextColor={'grey'}
                 style={[INPUT.input, TYPOGRAPHY.h5]}
@@ -495,11 +456,9 @@ export default class AddStudent extends Component {
               style={[INPUT.inputContainer, {marginTop: 0, marginBottom: 35}]}>
               <TextInput
                 value={this.state.mom_email}
-                // onFocus={this.setState({error: ''})}
                 onChangeText={value => {
                   this.setState({mom_email: value});
                 }}
-                // onChangeText={text => setEmail(text)}
                 placeholder="Mom Email"
                 placeholderTextColor={'grey'}
                 style={[INPUT.input, TYPOGRAPHY.h5]}
@@ -540,7 +499,7 @@ export default class AddStudent extends Component {
                 <Text style={[TYPOGRAPHY.h5]}>Health Condition</Text>
                 <Picker
                   selectedValue={this.state.health_conditions}
-                  style={{height: 50, width: 150}}
+                  style={{height: 50, width: width / 2 - 20}}
                   onValueChange={(itemValue, itemIndex) => {
                     this.setState({health_conditions: itemValue});
                   }}>
@@ -553,7 +512,7 @@ export default class AddStudent extends Component {
                   <Text style={[TYPOGRAPHY.h5]}>Health Condition</Text>
                   <Picker
                     selectedValue={this.state.active}
-                    style={{height: 50, width: 150}}
+                    style={{height: 50, width: width / 2 - 20}}
                     onValueChange={(itemValue, itemIndex) => {
                       this.setState({active: itemValue});
                     }}>
@@ -565,14 +524,12 @@ export default class AddStudent extends Component {
             </View>
             {this.state.type == 'Add' ? (
               <TouchableOpacity
-                // onPress={handleSignin}
-
                 onPress={() => {
                   this.addChild();
                 }}
                 disabled={this.state.disabled}
                 style={BUTTONS.btnPrimary}>
-                <Text style={BUTTONS.btnFont}>Add Student</Text>
+                <Text style={BUTTONS.btnFont}>Confirm Student</Text>
               </TouchableOpacity>
             ) : (
               <TouchableOpacity

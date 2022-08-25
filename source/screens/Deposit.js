@@ -16,6 +16,7 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import axios from 'axios';
 import {Button} from 'react-native';
 import DatePicker from 'react-native-date-picker';
+import {colors} from '../theme/colors';
 
 export default class Deposit extends Component {
   constructor(props) {
@@ -45,7 +46,7 @@ export default class Deposit extends Component {
     const parse = JSON.parse(user);
 
     const token = parse;
-    console.log("token",token);
+    console.log('token', token);
     const data = {
       card_no: this.state.card_no,
       expiry_date: this.state.expiry_date,
@@ -85,10 +86,9 @@ export default class Deposit extends Component {
   render() {
     console.log(this.state.date);
     return (
-      <SafeAreaView style={{flex: 1}}>
-        <Statusbar />
+      <SafeAreaView style={{flex: 1, backgroundColor: colors.white}}>
+        <Statusbar name={'Deposit'} />
         <ScrollView showsHorizontalScrollIndicator={false}>
-          <Text>Deposit</Text>
           <View style={[SCREEN.screen]}>
             <Text style={[TYPOGRAPHY.h5]}>Card No</Text>
             <View
@@ -109,7 +109,7 @@ export default class Deposit extends Component {
                 INPUT.inputContainer,
                 {flexDirection: 'row', marginTop: 0, marginBottom: 35},
               ]}>
-              {/* <Text>{this.state.date}</Text> */}
+      
               <TextInput
                 value={this.state.expiry_date}
                 onChangeText={value => {
@@ -119,9 +119,7 @@ export default class Deposit extends Component {
                 placeholderTextColor={'grey'}
                 style={[INPUT.input, TYPOGRAPHY.h5]}
               />
-              <TouchableOpacity onPress={() => this.setState({open: true})}>
-                <Text>Select Date</Text>
-              </TouchableOpacity>
+
               <DatePicker
                 modal
                 mode="date"

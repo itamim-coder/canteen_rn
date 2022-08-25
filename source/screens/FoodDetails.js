@@ -27,6 +27,7 @@ import {connect} from 'react-redux';
 import {addToCart} from '../../redux/cartSlice';
 import {MapDispatchToProps} from 'react-redux';
 import store from '../../redux';
+import FloatCart from '../components/FloatCart';
 
 export class FoodDetails extends Component {
   constructor(props) {
@@ -138,7 +139,6 @@ export class FoodDetails extends Component {
       fontSize: 15,
       color: colors.white,
     };
-   
 
     // const addToCart = async added => {
     //   console.log(added);
@@ -236,8 +236,6 @@ export class FoodDetails extends Component {
     const added = this.state.foodDetails;
     console.log('added', this.state.foodDetails);
 
-    // this.setState({cartProducts: cartProduct});
-    // console.log('render', cartProduct);
     return (
       <SafeAreaView style={detailsContainer}>
         <Statusbar name={description} type="food" />
@@ -269,7 +267,7 @@ export class FoodDetails extends Component {
                     justifyContent: 'center',
                   }}
                 />
-                <Text style={[TYPOGRAPHY.medium, {fontSize: 22}]}>
+                <Text style={[TYPOGRAPHY.h4, {fontSize: 20}]}>
                   {description}
                 </Text>
                 <Text style={[TYPOGRAPHY.h4, {color: colors.green}]}>
@@ -285,22 +283,9 @@ export class FoodDetails extends Component {
                   <Text style={TYPOGRAPHY.h3}>${price}.00</Text>
 
                   <TouchableOpacity
-                    // onPress={() => (id ? addToCart(id) : null)}
                     onPress={() => {
                       add(added);
                     }}
-                    /* HERE IS WHERE WE'RE GOING TO SHOW OUR FIRST MESSAGE */
-                    // showMessage({
-                    //   message: 'Added Successfully',
-                    //   description: 'Click here to check cart',
-                    //   type: 'success',
-                    //   icon: 'success',
-                    //   onPress: () => {
-                    //     this.props.navigation.navigate('My Cart');
-                    //     /* THIS FUNC/CB WILL BE CALLED AFTER MESSAGE PRESS */
-                    //   },
-                    // });
-                    // }}
                     style={{
                       backgroundColor: '#f5474a',
                       paddingVertical: 7,
@@ -317,7 +302,7 @@ export class FoodDetails extends Component {
                     </Text>
                   </TouchableOpacity>
                 </View>
-                <Text style={TYPOGRAPHY.h3}>About Product</Text>
+                <Text style={TYPOGRAPHY.h4}>About Product</Text>
                 <Text style={TYPOGRAPHY.primary}>{ingredients}</Text>
               </View>
 
@@ -383,7 +368,8 @@ export class FoodDetails extends Component {
       renderItem={item => this.renderItem(item)}
     />
   </ScrollView> */}
-        <FlashMessage position="top" />
+
+        <FloatCart navigation={this.props.navigation} />
       </SafeAreaView>
     );
   }

@@ -11,6 +11,7 @@ import {
   View,
 } from 'react-native';
 import {colors} from '../theme/colors';
+import AntDesign from 'react-native-vector-icons/AntDesign';
 
 import Statusbar from '../components/Statusbar';
 import FlashMessage from 'react-native-flash-message';
@@ -111,16 +112,22 @@ export class MyCart extends Component {
             style={{
               flexDirection: 'row',
               backgroundColor: colors.white,
-              // marginVertical: 5,
+              marginVertical: 5,
               borderRadius: 6,
               alignItems: 'center',
-              justifyContent: 'space-around',
+              justifyContent: 'space-between',
             }}>
             <Image
+              resizeMode="contain"
               style={{width: '30%', height: 90}}
               source={{uri: item.picture}}
             />
-            <View>
+            <View
+              style={{
+                // marginLeft: 10,
+
+                justifyContent: 'space-between',
+              }}>
               <View>
                 <Text style={[TYPOGRAPHY.h3, {fontSize: 15}]}>
                   {item.description}
@@ -129,79 +136,97 @@ export class MyCart extends Component {
               </View>
               <View
                 style={{
-                  flexDirection: 'row',
                   justifyContent: 'space-between',
-                  alignItems: 'center',
-                  // marginHorizontal:50,
-                }}>
-                <Text style={{color: colors.green, fontSize: 15}}>Custom</Text>
 
+                  flexDirection: 'row',
+                }}>
                 <View
                   style={{
                     flexDirection: 'row',
-                    marginHorizontal: 20,
-                    backgroundColor: colors.darkOrange,
-                    borderRadius: 5,
-                    paddingVertical: 5,
+                    justifyContent: 'space-between',
+                    alignItems: 'center',
                   }}>
-                  <TouchableOpacity
-                    onPress={() =>
-                      this.setState({count: this.state.count - 1})
-                    }>
-                    <Text
-                      style={{
-                        fontSize: 17,
-                        color: colors.white,
-                        paddingHorizontal: 10,
-                      }}>
-                      -
-                    </Text>
-                  </TouchableOpacity>
-                  <Text
-                    style={{
-                      fontSize: 17,
-                      color: colors.white,
-                      paddingHorizontal: 10,
-                    }}>
-                    {item.quantity}
-                    {/* {this.state.count + item.quantity} */}
+                  <Text style={{color: colors.green, fontSize: 15}}>
+                    Custom
                   </Text>
-                  <TouchableOpacity
-                    onPress={
-                      () => increment({item})
-                      // this.setState({count: this.state.count + 1})
-                    }>
+
+                  <View
+                    style={{
+                      flexDirection: 'row',
+                      marginHorizontal: 20,
+                      backgroundColor: colors.darkOrange,
+                      borderRadius: 5,
+                      paddingVertical: 5,
+                    }}>
+                    <TouchableOpacity
+                      onPress={() =>
+                        this.setState({count: this.state.count - 1})
+                      }>
+                      <Text
+                        style={{
+                          fontSize: 17,
+                          color: colors.white,
+                          paddingHorizontal: 10,
+                        }}>
+                        -
+                      </Text>
+                    </TouchableOpacity>
                     <Text
                       style={{
                         fontSize: 17,
                         color: colors.white,
                         paddingHorizontal: 10,
                       }}>
-                      +
+                      {item.quantity}
+                      {/* {this.state.count + item.quantity} */}
                     </Text>
-                  </TouchableOpacity>
+                    <TouchableOpacity
+                      onPress={
+                        () => increment({item})
+                        // this.setState({count: this.state.count + 1})
+                      }>
+                      <Text
+                        style={{
+                          fontSize: 17,
+                          color: colors.white,
+                          paddingHorizontal: 10,
+                        }}>
+                        +
+                      </Text>
+                    </TouchableOpacity>
+                  </View>
+
+                  <Text
+                    style={[
+                      TYPOGRAPHY.primary,
+                      {
+                        // marginHorizontal: 20,
+                        alignItems: 'center',
+                        fontWeight: 'bold',
+                      },
+                    ]}>
+                    <Text>${item.price}</Text>
+                    {/* ${item.quantity * item.price} */}
+                  </Text>
+
+                  <View />
                 </View>
-
-                <Text
-                  style={[
-                    TYPOGRAPHY.primary,
-                    {
-                      // marginHorizontal: 20,
-                      alignItems: 'center',
-                      fontWeight: 'bold',
-                    },
-                  ]}>
-                  {/* ${item.quantity * item.price} */}
-                </Text>
-                <TouchableOpacity
-                  onPress={() => {
-                    dltFromCart(item.id);
-                  }}>
-                  <Text>X</Text>
-                </TouchableOpacity>
-
-                <View />
               </View>
+            </View>
+            <View
+              style={{
+                marginBottom: 65,
+                padding: 3,
+                borderRadius: 50,
+                // borderWidth: 1,
+                backgroundColor: colors.red,
+              }}>
+              <TouchableOpacity
+                onPress={() => {
+                  dltFromCart(item.id);
+                }}>
+                <Text style={{color: colors.white}}>X</Text>
+              </TouchableOpacity>
             </View>
           </View>
         )}
@@ -251,12 +276,51 @@ export class MyCart extends Component {
     const clearCart = () => {
       this.props.reset();
     };
-    // const {carts} = this.props.carts;
-    console.log('cartssss', this.props.carts);
 
     return (
       <SafeAreaView style={cartContainer}>
-        <Statusbar name="My Cart" />
+        <View
+          style={{
+            flexDirection: 'row',
+            alignItems: 'center',
+            padding: 15,
+            backgroundColor: colors.white,
+          }}>
+          <TouchableOpacity
+            onPress={() => {
+              this.props.navigation.goBack();
+            }}
+            style={{flex: 0.1}}>
+            <AntDesign name="left" size={20} color="black" />
+          </TouchableOpacity>
+          <View style={{flex: 2}}>
+            <Text
+              style={[
+                TYPOGRAPHY.h4Bold,
+                {
+                  textAlign: 'center',
+                },
+              ]}>
+              Cart({this.props.length})
+            </Text>
+          </View>
+          <TouchableOpacity
+            onPress={() => {
+              clearCart();
+            }}>
+            <View
+              style={{
+                backgroundColor: '#FFD8DA',
+                paddingHorizontal: 5,
+                paddingVertical: 4,
+                borderRadius: 5,
+              }}>
+              <Text style={[TYPOGRAPHY.h6Bold, {color: colors.red}]}>
+                Clear Cart
+              </Text>
+            </View>
+          </TouchableOpacity>
+        </View>
 
         {/* full screen  */}
 
@@ -269,14 +333,7 @@ export class MyCart extends Component {
               data={this.props.carts}
               renderItem={item => this.renderCart(item)}
             />
-            <View>
-              <TouchableOpacity
-                onPress={() => {
-                  clearCart();
-                }}>
-                <Text>Clear Cart</Text>
-              </TouchableOpacity>
-            </View>
+
             {/* Total calculation */}
             <View style={{marginTop: 40}}>
               <View style={calculationCard}>

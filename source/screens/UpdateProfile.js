@@ -94,10 +94,10 @@ export default class UpdateProfile extends Component {
       .then(
         res => {
           console.log(res);
-          // if (res.data.status == true) {
-          //   alert(res.data.message);
-          //   this.props.navigation.navigate('Profile');
-          // }
+          if (res.data.status == true) {
+            alert(res.data.message);
+            this.props.navigation.navigate('Profile');
+          }
         },
         err => {
           console.log(err);
@@ -110,7 +110,6 @@ export default class UpdateProfile extends Component {
   }
 
   render() {
-    console.log('user', this.state.notify_low_balance);
     const {
       name,
       balance,
@@ -124,7 +123,7 @@ export default class UpdateProfile extends Component {
     } = this.state.userData;
     // this.setState({email: this.state.userData.email});
     return (
-      <SafeAreaView style={SCREEN.screen}>
+      <SafeAreaView style={[SCREEN.screen, {backgroundColor: colors.white}]}>
         <ScrollView showsVerticalScrollIndicator={false}>
           <View
             style={{
@@ -169,11 +168,11 @@ export default class UpdateProfile extends Component {
                   <TextInput
                     // onChangeText={text => setName(text)}
                     defaultValue={this.state.userData.balance}
-                    placeholderTextColor={'grey'}
+                    placeholderTextColor={'gray'}
                     editable={false}
                     style={[
                       INPUT.input,
-                      {color: colors.grey, backgroundColor: colors.light},
+                      {color: colors.gray, backgroundColor: colors.gray},
                     ]}
                   />
                 </View>
@@ -206,7 +205,7 @@ export default class UpdateProfile extends Component {
                 placeholderTextColor={'grey'}
                 style={[
                   INPUT.input,
-                  {color: colors.grey, backgroundColor: colors.light},
+                  {color: colors.grey, backgroundColor: colors.gray},
                 ]}
               />
             </View>
@@ -284,9 +283,6 @@ export default class UpdateProfile extends Component {
 
             <KeyboardAvoidingView style={INPUT.inputContainer}>
               <TextInput
-                // onChangeText={text => setPhone(text)}
-                //   placeholder="Enter Email Address"
-                // defaultValue="zahid@powah.com"
                 defaultValue={this.state.userData.notes}
                 multiline={true}
                 numberOfLines={3}
@@ -295,14 +291,13 @@ export default class UpdateProfile extends Component {
                 style={[INPUT.input, {color: colors.black}]}
               />
             </KeyboardAvoidingView>
-
-            <TouchableOpacity
-              onPress={() => this.updateProfile({email, phone, name})}
-              style={BUTTONS.btnPrimary}>
-              <Text style={BUTTONS.btnFont}>Save</Text>
-            </TouchableOpacity>
           </View>
         </ScrollView>
+        <TouchableOpacity
+          onPress={() => this.updateProfile({email, phone, name})}
+          style={BUTTONS.btnPrimary}>
+          <Text style={BUTTONS.btnFont}>Save</Text>
+        </TouchableOpacity>
       </SafeAreaView>
     );
   }

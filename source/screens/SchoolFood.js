@@ -12,6 +12,7 @@ import {SafeAreaView} from 'react-native-safe-area-context';
 import Statusbar from '../components/Statusbar';
 import TYPOGRAPHY from '../theme/typography';
 import {colors} from '../theme/colors';
+import FloatCart from '../components/FloatCart';
 const width = Dimensions.get('screen').width / 2 - 30;
 
 export default class SchoolFood extends Component {
@@ -82,6 +83,7 @@ export default class SchoolFood extends Component {
             <View
               style={{
                 padding: 5,
+                alignItems: 'center',
                 // backgroundColor: colors.red
               }}>
               <Image
@@ -154,6 +156,7 @@ export default class SchoolFood extends Component {
             renderItem={item => this.renderItem(item)}
           />
         </View>
+        <FloatCart />
       </SafeAreaView>
     );
   }

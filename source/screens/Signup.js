@@ -37,7 +37,6 @@ export default class Signup extends Component {
       indicator: false,
       disabled: false,
       user_type: 'parent',
-      // registerUser: '',
     };
   }
   validate_field = () => {
@@ -64,12 +63,10 @@ export default class Signup extends Component {
     } else if (email == '') {
       this.setState({email_error: 'Please enter your email'});
       return false;
-    }
-    //  else if (!email.match(/\S+@\S+\.\S+/)) {
-    //   this.setState({email_error: 'Invalid Email Address'});
-    //   return false;
-    // }
-    else if (phone == '') {
+    } else if (!email.match(/\S+@\S+\.\S+/)) {
+      this.setState({email_error: 'Email Address should be valid'});
+      return false;
+    } else if (phone == '') {
       this.setState({phone_error: 'Please enter your valid phone'});
       return false;
     } else if (password == '') {
@@ -107,7 +104,7 @@ export default class Signup extends Component {
         .then(res => {
           let registerUser = res.data;
           this.setState({registerUser: registerUser});
-          // AsyncStorage.setItem('userInfo', JSON.stringify(data));
+
           AsyncStorage.setItem('token', JSON.stringify(res.data.token));
           console.log(registerUser);
           const status = res.data.status;
@@ -122,11 +119,9 @@ export default class Signup extends Component {
         .catch(function (error) {
           if (error.response) {
             alert(error.response.data.message);
-            // The request was made and the server responded with a status code
-            // that falls out of the range of 2xx
+
             console.log(error.response.data.errors);
-            // console.log(error.response.status);
-            // console.log(error.response.headers);
+
             this.setState({indicator: false});
             this.setState({disabled: false});
           }
@@ -135,21 +130,35 @@ export default class Signup extends Component {
   };
 
   render() {
+    const container = {
+      backgroundColor: colors.white,
+      flex: 1,
+    };
+    const box = {
+      flex: 1,
+      justifyContent: 'center',
+    };
     return (
-      <SafeAreaView style={[SCREEN.screen, styles.loginContainer]}>
-        <View style={styles.loginBox}>
-          <Text style={[TYPOGRAPHY.h1, {textAlign: 'center'}]}>
+      <SafeAreaView style={[SCREEN.screen, container]}>
+        <View style={box}>
+          <Text style={[TYPOGRAPHY.h2, {textAlign: 'center'}]}>
             Create Account
           </Text>
-          <Text style={[TYPOGRAPHY.primary, {textAlign: 'center'}]}>
+          <Text
+            style={[
+              TYPOGRAPHY.primary,
+              {textAlign: 'center', color: colors.ash, marginVertical: 5},
+            ]}>
             If you don't have an account, please provide your email and phone to
             register.
           </Text>
 
           <View>
+            <Text style={[TYPOGRAPHY.h5, {color: colors.ash, marginBottom: 5}]}>
+              Full Name
+            </Text>
             <View style={INPUT.inputContainer}>
               <TextInput
-                // onChangeText={text => setName(text)}
                 value={this.state.name}
                 onChangeText={value => {
                   this.setState({name: value, name_error: ''});
@@ -161,6 +170,9 @@ export default class Signup extends Component {
             </View>
             <Text style={{color: colors.bloodRed, fontFamily: Fonts.primary}}>
               {this.state.name_error}
+            </Text>
+            <Text style={[TYPOGRAPHY.h5, {color: colors.ash, marginBottom: 5}]}>
+              Email Address
             </Text>
             <View style={INPUT.inputContainer}>
               <TextInput
@@ -176,10 +188,11 @@ export default class Signup extends Component {
             <Text style={{color: colors.bloodRed, fontFamily: Fonts.primary}}>
               {this.state.email_error}
             </Text>
-
+            <Text style={[TYPOGRAPHY.h5, {color: colors.ash, marginBottom: 5}]}>
+              Phone
+            </Text>
             <View style={INPUT.inputContainer}>
               <TextInput
-                // onChangeText={text => setPhone(text)}
                 value={this.state.phone}
                 onChangeText={value => {
                   this.setState({phone: value, phone_error: ''});
@@ -193,6 +206,9 @@ export default class Signup extends Component {
             <Text style={{color: colors.bloodRed, fontFamily: Fonts.primary}}>
               {this.state.phone_error}
             </Text>
+            <Text style={[TYPOGRAPHY.h5, {color: colors.ash, marginBottom: 5}]}>
+              Password
+            </Text>
             <View style={INPUT.inputContainer}>
               <TextInput
                 value={this.state.password}
@@ -203,12 +219,13 @@ export default class Signup extends Component {
                 placeholderTextColor={'grey'}
                 style={INPUT.input}
                 secureTextEntry
-                // keyboardType="numeric"
-                import
               />
             </View>
             <Text style={{color: colors.bloodRed, fontFamily: Fonts.primary}}>
               {this.state.password_error}
+            </Text>
+            <Text style={[TYPOGRAPHY.h5, {color: colors.ash, marginBottom: 5}]}>
+              Retype Password
             </Text>
             <View style={INPUT.inputContainer}>
               <TextInput
@@ -223,22 +240,13 @@ export default class Signup extends Component {
                 placeholderTextColor={'grey'}
                 style={INPUT.input}
                 secureTextEntry
-                // keyboardType="numeric"
               />
             </View>
             <Text style={{color: colors.bloodRed, fontFamily: Fonts.primary}}>
               {this.state.password_confirmation_error}
             </Text>
-            {/* <TouchableOpacity
-              // onPress={handleSignin}
-              onPress={() => {
-                this.register_api_call();
-              }}
-              style={BUTTONS.btnPrimary}>
-              <Text style={BUTTONS.btnFont}>Register</Text>
-            </TouchableOpacity> */}
+
             <TouchableOpacity
-              // onPress={handleSignin}
               disabled={this.state.disabled}
               onPress={() => {
                 this.register_api_call();
@@ -275,14 +283,3 @@ export default class Signup extends Component {
     );
   }
 }
-
-const styles = StyleSheet.create({
-  loginContainer: {
-    // backgroundColor: colors.white,
-    flex: 1,
-  },
-  loginBox: {
-    flex: 1,
-    justifyContent: 'center',
-  },
-});

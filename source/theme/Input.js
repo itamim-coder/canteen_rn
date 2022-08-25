@@ -6,18 +6,20 @@ import TYPOGRAPHY from './typography';
 const INPUT = StyleSheet.create({
   inputContainer: {
     flexDirection: 'row',
-    marginTop: 10,
+    // marginTop: 10,
+    borderWidth: 2,
+    borderColor: colors.gray,
+    borderRadius: 5,
   },
   input: {
     color: colors.black,
     fontFamily: Fonts.primary,
-    borderWidth: 0.5,
+
     paddingHorizontal: 15,
     paddingVertical: 10,
-    borderColor: colors.light,
+
     flex: 1,
     fontSize: 15,
-    borderRadius: 5,
   },
 });
 

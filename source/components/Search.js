@@ -3,7 +3,7 @@ import React, {Component} from 'react';
 import AntDesign from 'react-native-vector-icons/AntDesign';
 import {Fonts} from '../theme/Fonts';
 import {colors} from '../theme/colors';
-export class Seacrh extends Component {
+export default class Search extends Component {
   render() {
     const search = {
       marginVertical: 20,
@@ -41,5 +41,3 @@ export class Seacrh extends Component {
     );
   }
 }
-
-export default Seacrh;
