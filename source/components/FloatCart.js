@@ -14,33 +14,40 @@ export class FloatCart extends Component {
           <View
             style={{
               backgroundColor: 'rgba(52, 52, 52, 1)',
-              paddingVertical: 30,
+              paddingVertical: 20,
               paddingHorizontal: 20,
               flexDirection: 'row',
               justifyContent: 'space-between',
               alignItems: 'center',
             }}>
             <View style={{flexDirection: 'row'}}>
-              <Text style={[TYPOGRAPHY.medium, {color: colors.white}]}>
+              <Text style={[TYPOGRAPHY.h4, {color: colors.white}]}>
                 {this.props.length} Items
               </Text>
-              <Text style={[TYPOGRAPHY.medium, {color: colors.white}]}>
+              <Text style={[TYPOGRAPHY.h4, {color: colors.red}]}>
                 {' '}
                 |{' '}
+              </Text>
+              <Text style={[TYPOGRAPHY.h4, {color: colors.white}]}>
+                ${this.props.totalAmount}
               </Text>
             </View>
             <TouchableOpacity
               onPress={() => this.props.navigation.navigate('My Cart')}
               style={{
                 backgroundColor: colors.red,
-                paddingHorizontal: 10,
-                paddingVertical: 7,
+                paddingHorizontal: 15,
+                paddingVertical: 10,
                 borderRadius: 5,
                 flexDirection: 'row',
                 alignItems: 'center',
               }}>
               <Ionicons name="basket" size={24} color="white" />
-              <Text style={[TYPOGRAPHY.medium, {color: colors.white}]}>
+              <Text
+                style={[
+                  TYPOGRAPHY.medium,
+                  {color: colors.white, marginLeft: 5},
+                ]}>
                 View Cart
               </Text>
             </TouchableOpacity>
@@ -53,6 +60,7 @@ export class FloatCart extends Component {
 const mapStateToProps = state => {
   return {
     length: state.cart.length,
+    totalAmount: state.cart.reduce((acc, item) => acc + item.quantityPrice, 0),
   };
 };
 

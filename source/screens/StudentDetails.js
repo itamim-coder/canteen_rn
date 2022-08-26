@@ -188,24 +188,34 @@ export default class StudentDetails extends Component {
                 flexDirection: 'row',
                 justifyContent: 'space-between',
               },
-            ]}>
-            <TouchableOpacity
-              onPress={() =>
-                this.props.navigation.navigate('AddStudent', {
-                  id: id,
-                  type: 'Update',
-                })
-              }
-              style={[BUTTONS.btnPrimary, {paddingHorizontal: 40}]}>
-              <Text style={[BUTTONS.btnFont]}>Update</Text>
-            </TouchableOpacity>
-            <TouchableOpacity
-              onPress={() => this.handleDlt(id)}
-              style={[BUTTONS.btnPrimary, {paddingHorizontal: 40}]}>
-              <Text style={[BUTTONS.btnFont]}>Delete</Text>
-            </TouchableOpacity>
-          </View>
+            ]}
+          />
         </ScrollView>
+        <View
+          style={{
+            flexDirection: 'row',
+            justifyContent: 'space-between',
+            padding: 20,
+          }}>
+          <TouchableOpacity
+            onPress={() =>
+              this.props.navigation.navigate('AddStudent', {
+                id: id,
+                type: 'Update',
+              })
+            }
+            style={[BUTTONS.btnPrimary, {paddingHorizontal: 40}]}>
+            <Text style={[BUTTONS.btnFont]}>Update</Text>
+          </TouchableOpacity>
+          <TouchableOpacity
+            onPress={() => this.handleDlt(id)}
+            style={[
+              BUTTONS.btnPrimary,
+              {paddingHorizontal: 40},
+            ]}>
+            <Text style={[BUTTONS.btnFont]}>Delete</Text>
+          </TouchableOpacity>
+        </View>
       </SafeAreaView>
     );
   }

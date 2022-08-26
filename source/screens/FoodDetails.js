@@ -34,7 +34,7 @@ export class FoodDetails extends Component {
     super(props);
     this.state = {
       id: this.props.route?.params?.id,
-      quantity: this.props.route?.params?.quantity,
+      // quantity: this.props.route?.params?.quantity,
       name: this.props.route?.params?.id,
       price: this.props.route?.params?.id,
       description: this.props.route.params.description,
@@ -42,9 +42,21 @@ export class FoodDetails extends Component {
       cart: '',
       visible: false,
       cartProducts: [],
+      quantity: 1,
     };
-    // console.log('cart', this.state.cartProduct);
+    console.log('cart', this.state.quantity);
   }
+
+  increment = () => {
+    const count = this.state.quantity + 1;
+    this.setState({quantity: count});
+  };
+  decrement = () => {
+    if (this.state.quantity > 1) {
+      const count = this.state.quantity - 1;
+      this.setState({quantity: count});
+    }
+  };
 
   componentDidMount() {
     // console.log(this.state.id);
@@ -140,91 +152,14 @@ export class FoodDetails extends Component {
       color: colors.white,
     };
 
-    // const addToCart = async added => {
-    //   console.log(added);
-    //   // const cartProducts = {
-    //   //   id: added.id,
-    //   //   description: added.description,
-    //   //   price: added.price,
-    //   //   img: added.barcode,
-    //   // };
-    //   let shoppingCart;
-
-    //   //get shopping cart
-    //   const storedCart = await AsyncStorage.getItem('shopping-cart');
-    //   if (storedCart) {
-    //     shoppingCart = JSON.parse(storedCart);
-    //   } else {
-    //     shoppingCart = [];
-    //   }
-
-    //   // add quantity
-    //   // console.log(shoppingCart);
-    //   const quantity = shoppingCart[id];
-    //   // const product = shoppingCart[this.state.item];
-    //   // console.log(shoppingCart[id]);
-    //   if (quantity) {
-    //     const newQuantity = quantity + 1;
-
-    //     shoppingCart[id] = newQuantity;
-    //   } else {
-    //     shoppingCart[id] = 1;
-    //     shoppingCart[id] = {cartProducts};
-
-    //     // shoppingCart[product] = this.state.foodDetails;
-    //     // shoppingCart[id].push = added;
-    //   }
-    //   // console.log(this.state?.foodDetails);
-    //   console.log('shopping cart', shoppingCart);
-    //   const jsonValue = JSON.stringify(shoppingCart);
-    //   AsyncStorage.setItem('shopping-cart', jsonValue);
-    //   // console.log(shoppingCart);
-    // };
-
-    // const addToCart = async added => {
-    //   const storedCart = await AsyncStorage.getItem('shopping-cart');
-    //   console.log('store', storedCart);
-    //   if (storedCart !== null) {
-    //     const result = JSON.parse(storedCart);
-    //     console.log('Update', result);
-    //     this.setState({cartProducts: result});
-    //   }
-    //   const cartProduct = {
-    //     id: added.id,
-    //     description: added.description,
-    //     price: added.price,
-    //     picture: added.picture,
-    //   };
-    //   console.log('cart', cartProduct);
-    //   const updateCarts = [...this.state.cartProducts, cartProduct];
-    //   console.log('New', updateCarts);
-    //   this.setState({cartProducts: updateCarts});
-    //   const jsonUpdate = JSON.stringify(updateCarts);
-
-    //   await AsyncStorage.setItem('shopping-cart', jsonUpdate);
-    //   // let shoppingCart;
-    //   // const storedCart = await AsyncStorage.getItem('shopping-cart');
-    //   // console.log('storedCart', storedCart);
-    //   // if (storedCart) {
-    //   //   shoppingCart = JSON.parse(storedCart);
-    //   //   console.log('shopping', shoppingCart);
-    //   // } else {
-    //   //   shoppingCart = [...storedCart, {...cartProducts}];
-    //   //   console.log('else', shoppingCart);
-    //   //   const jsonValue = JSON.stringify(shoppingCart);
-    //   //   AsyncStorage.setItem('shopping-cart', jsonValue);
-    //   // }
-    // };
-    // const dispatch = useDispatch();
-
     const add = added => {
       const cartProduct = {
         id: added.id,
         description: added.description,
         price: added.price,
         picture: added.picture,
-        quantity: 1,
-        // quantityPrice: price * quantity,
+        quantity: this.state.quantity,
+        quantityPrice: added.price * this.state.quantity,
       };
       this.props.addToCart({cartProduct});
       // console.log('cart', added.id);
@@ -282,25 +217,57 @@ export class FoodDetails extends Component {
                   }}>
                   <Text style={TYPOGRAPHY.h3}>${price}.00</Text>
 
-                  <TouchableOpacity
-                    onPress={() => {
-                      add(added);
-                    }}
+                  <View
                     style={{
-                      backgroundColor: '#f5474a',
-                      paddingVertical: 7,
-                      paddingHorizontal: 10,
-                      borderRadius: 10,
                       flexDirection: 'row',
+                      alignItems: 'center',
+                      justifyContent: 'space-between',
                     }}>
-                    <Text style={[cartButton, {fontFamily: Fonts.primary}]}>
-                      Add{' '}
-                    </Text>
-                    <Text style={[cartButton, {fontFamily: Fonts.primary}]}>
-                      {' '}
-                      +
-                    </Text>
-                  </TouchableOpacity>
+                    <View
+                      style={{
+                        paddingVertical: 8,
+                        // paddingHorizontal: 20,
+                        borderRadius: 5,
+                        backgroundColor: colors.gray,
+                        marginRight: 15,
+                        flexDirection: 'row',
+                        alignItems: 'center',
+                        justifyContent: 'space-evenly',
+                      }}>
+                      <TouchableOpacity
+                        onPress={() => this.decrement()}
+                        style={{paddingHorizontal: 15}}>
+                        <Text>-</Text>
+                      </TouchableOpacity>
+                      <Text>{this.state.quantity}</Text>
+                      <TouchableOpacity
+                        onPress={() => this.increment()}
+                        style={{paddingHorizontal: 15}}>
+                        <Text>+</Text>
+                      </TouchableOpacity>
+                    </View>
+                    <View>
+                      <TouchableOpacity
+                        onPress={() => {
+                          add(added);
+                        }}
+                        style={{
+                          backgroundColor: '#f5474a',
+                          paddingVertical: 5,
+                          paddingHorizontal: 10,
+                          borderRadius: 5,
+                          flexDirection: 'row',
+                        }}>
+                        <Text style={[cartButton, {fontFamily: Fonts.primary}]}>
+                          Add{' '}
+                        </Text>
+                        <Text style={[cartButton, {fontFamily: Fonts.primary}]}>
+                          {' '}
+                          +
+                        </Text>
+                      </TouchableOpacity>
+                    </View>
+                  </View>
                 </View>
                 <Text style={TYPOGRAPHY.h4}>About Product</Text>
                 <Text style={TYPOGRAPHY.primary}>{ingredients}</Text>

@@ -53,8 +53,9 @@ export default class UpdateProfile extends Component {
       .then(
         res => {
           this.setState({userData: res.data?.data});
-          console.log(res.data?.data);
-          // this.setState({notify_low_balance: res.data.data.notify_low_balance});
+
+          this.setState({notify_low_balance: res.data.data.notify_low_balance});
+          console.log(this.state.notify_low_balance);
         },
         err => {
           console.log(err);
@@ -216,11 +217,12 @@ export default class UpdateProfile extends Component {
                   Notify Low Balance
                 </Text>
                 <Picker
-                  defaultSelectedValue={this.state.userData.notify_low_balance}
+                  // defaultSelectedValue={this.state.userData.notify_low_balance}
                   // defaultValue={this.state.userData.notify_low_balance}
-                  // selectedValue={this.state.value}
+                  selectedValue={this.state.notify_low_balance}
                   style={{height: 50, width: 150}}
                   onValueChange={(itemValue, itemIndex) => {
+                    console.log('item', this.state.notify_low_balance);
                     this.setState({notify_low_balance: itemValue});
                   }}>
                   <Picker.Item label="NO" value="0" />

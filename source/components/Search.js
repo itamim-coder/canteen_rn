@@ -25,6 +25,9 @@ export default class Search extends Component {
     const searchInput = {
       color: '#b4b4b4',
       fontFamily: Fonts.primary,
+  
+
+      flex: 1,
     };
     return (
       <View style={search}>

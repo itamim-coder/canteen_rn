@@ -24,7 +24,7 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import {FOOD_LIST} from '../data/food-list';
 import {getStoredCart} from '../../Function/Cart';
 import {connect} from 'react-redux';
-import {reset, selectCart} from './../../redux/cartSlice';
+import {addToCart, reset, selectCart} from './../../redux/cartSlice';
 import {deleteFromCart} from './../../redux/cartSlice';
 import {increment} from '../../redux/counterSlice';
 // import {createConfigItem, parse} from '@babel/core';
@@ -38,7 +38,7 @@ export class MyCart extends Component {
       total: null,
       cart: [],
       indicator: false,
-      amount: '',
+      quantity: '',
       // count: initialValue || 0,
     };
   }
@@ -85,23 +85,27 @@ export class MyCart extends Component {
 
   renderCart = ({item}) => {
     // console.log(item);
+    const {quantity} = item;
     // console.log(this.state.cart.id);
     const dltFromCart = id => {
       // this.setState({indicator: true});
-      console.log(id);
+
       this.props.deleteFromCart({id: id});
     };
-    console.log('new', item);
+
     // console.log(this.state.count);
     const increment = item => {
-      // console.log(item);
+      const count = item.quantity + 1;
       const updateCart = {
-        ...item,
-        // item[quantity] = item.quantity + 1;
-        // item.quantity: item.quantity + 1,
-        // total: parse(item.amount * item.quantity),
+        id: item.item.id,
+        description: item.item.description,
+        price: item.item.price,
+        picture: item.item.picture,
+        quantity: count,
+        quantityPrice: item.item.price * count,
       };
       console.log(updateCart);
+      // this.props.addToCart({updateCart});
     };
     return (
       <View>
@@ -129,9 +133,8 @@ export class MyCart extends Component {
                 justifyContent: 'space-between',
               }}>
               <View>
-                <Text style={[TYPOGRAPHY.h3, {fontSize: 15}]}>
+                <Text style={[TYPOGRAPHY.h4Bold, {fontSize: 13}]}>
                   {item.description}
-                  {/* {data.productName} */}
                 </Text>
               </View>
               <View
@@ -146,17 +149,17 @@ export class MyCart extends Component {
                     justifyContent: 'space-between',
                     alignItems: 'center',
                   }}>
-                  <Text style={{color: colors.green, fontSize: 15}}>
+                  <Text style={{color: colors.green, fontSize: 14}}>
                     Custom
                   </Text>
 
                   <View
                     style={{
                       flexDirection: 'row',
-                      marginHorizontal: 20,
-                      backgroundColor: colors.darkOrange,
+                      marginHorizontal: 30,
+                      backgroundColor: colors.red,
                       borderRadius: 5,
-                      paddingVertical: 5,
+                      paddingVertical: 4,
                     }}>
                     <TouchableOpacity
                       onPress={() =>
@@ -164,32 +167,29 @@ export class MyCart extends Component {
                       }>
                       <Text
                         style={{
-                          fontSize: 17,
+                          fontSize: 15,
                           color: colors.white,
-                          paddingHorizontal: 10,
+                          paddingHorizontal: 7,
                         }}>
                         -
                       </Text>
                     </TouchableOpacity>
                     <Text
                       style={{
-                        fontSize: 17,
+                        fontSize: 15,
                         color: colors.white,
-                        paddingHorizontal: 10,
+                        paddingHorizontal: 5,
                       }}>
-                      {item.quantity}
+                      {quantity}
                       {/* {this.state.count + item.quantity} */}
                     </Text>
                     <TouchableOpacity
-                      onPress={
-                        () => increment({item})
-                        // this.setState({count: this.state.count + 1})
-                      }>
+                      onPress={() => increment({item, quantity})}>
                       <Text
                         style={{
-                          fontSize: 17,
+                          fontSize: 15,
                           color: colors.white,
-                          paddingHorizontal: 10,
+                          paddingHorizontal: 7,
                         }}>
                         +
                       </Text>
@@ -205,8 +205,7 @@ export class MyCart extends Component {
                         fontWeight: 'bold',
                       },
                     ]}>
-                    <Text>${item.price}</Text>
-                    {/* ${item.quantity * item.price} */}
+                    <Text>${item.quantityPrice}</Text>
                   </Text>
 
                   <View />
@@ -276,7 +275,7 @@ export class MyCart extends Component {
     const clearCart = () => {
       this.props.reset();
     };
-
+    console.log(this.props.totalAmount);
     return (
       <SafeAreaView style={cartContainer}>
         <View
@@ -343,7 +342,7 @@ export class MyCart extends Component {
                 </View>
 
                 <View>
-                  <Text style={TYPOGRAPHY.h5}>{this.props.length}</Text>
+                  <Text style={TYPOGRAPHY.h5}>${this.props.totalAmount}</Text>
                   <Text style={TYPOGRAPHY.h5}>$200</Text>
                 </View>
               </View>
@@ -377,14 +376,19 @@ export class MyCart extends Component {
 }
 const mapStateToProps = state => {
   return {
+    // carts: state.cart.carts,
     carts: state.cart,
     length: state.cart.length,
+    totalAmount: state.cart.reduce((acc, item) => acc + item.quantityPrice, 0),
   };
 };
 
 const mapDispatchToProps = dispatch => {
   // console.log(cartProduct);
   return {
+    addToCart: data => {
+      dispatch(addToCart(data));
+    },
     deleteFromCart: id => {
       dispatch(deleteFromCart(id));
     },

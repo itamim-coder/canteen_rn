@@ -38,28 +38,29 @@ const Tab = createBottomTabNavigator();
 export class Navigation extends Component {
   constructor(props) {
     super(props);
-    this.state = {};
+    this.state = {
+      token: '',
+    };
   }
   componentDidMount() {
     this.handleToken();
   }
   handleToken = async () => {
     const user = await AsyncStorage.getItem('token');
-    const parse = JSON.parse(user);
-
-    const token = parse.token;
-
+    const token = JSON.parse(user);
+    this.setState({token: token});
     // const dataToken = await AsyncStorage.getItem('token');
-    // // console.log(dataToken);
+    // console.log(token);
     if (!token) {
-      //   this.props.navigation.replace('Login');
+      this.props.navigation.navigate('Login');
       this.setState({token: null});
     } else {
       this.setState({token: token});
-      //   this.props.navigation.replace('TabNavigator');
+      this.props.navigation.navigate('Home');
     }
   };
   render() {
+    console.log('state', this.state?.token);
     const TabNavigator = () => {
       return (
         <Tab.Navigator
