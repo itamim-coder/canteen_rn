@@ -226,7 +226,7 @@ export class FoodDetails extends Component {
                     <View
                       style={{
                         paddingVertical: 8,
-                        // paddingHorizontal: 20,
+                    
                         borderRadius: 5,
                         backgroundColor: colors.gray,
                         marginRight: 15,
@@ -236,13 +236,13 @@ export class FoodDetails extends Component {
                       }}>
                       <TouchableOpacity
                         onPress={() => this.decrement()}
-                        style={{paddingHorizontal: 15}}>
+                        style={{marginHorizontal: 15,}}>
                         <Text>-</Text>
                       </TouchableOpacity>
-                      <Text>{this.state.quantity}</Text>
+                      <Text style={{paddingHorizontal:4,}}>{this.state.quantity}</Text>
                       <TouchableOpacity
                         onPress={() => this.increment()}
-                        style={{paddingHorizontal: 15}}>
+                        style={{marginHorizontal: 15,}}>
                         <Text>+</Text>
                       </TouchableOpacity>
                     </View>
@@ -254,7 +254,7 @@ export class FoodDetails extends Component {
                         style={{
                           backgroundColor: '#f5474a',
                           paddingVertical: 5,
-                          paddingHorizontal: 10,
+                          paddingHorizontal: 15,
                           borderRadius: 5,
                           flexDirection: 'row',
                         }}>

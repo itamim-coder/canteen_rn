@@ -42,49 +42,8 @@ export class MyCart extends Component {
       // count: initialValue || 0,
     };
   }
-  findProducts = async () => {
-    const storedCart = await AsyncStorage.getItem('shopping-cart');
-    console.log('find', storedCart);
-    if (storedCart !== null) {
-      const result = JSON.parse(storedCart);
-      console.log('find2', result);
-      this.setState({cart: result});
-    }
-  };
-
-  async componentDidMount() {
-    await this.findProducts();
-    // const store = await getStoredCart();
-    // console.log('store', store);
-    // fetch('https://laqil.com/public/api/product-list')
-    //   .then(res => res.json())
-    //   .then(res => {
-    //     // this.setState({products: res});
-    //     // this.setState({foods: res});
-    //     if (res.status == true) {
-    //       this.setState({products: res.data});
-    //       // return this.state.foods;
-    //       // this.setState({visible: false});
-    //     }
-    //     // console.log(this.state.products);
-    //     const {products} = this.state;
-    //     const savedCart = [];
-    //     console.log(products);
-    //     for (const id in store) {
-    //       // console.log(id);
-    //       const addedProduct = products.find(product => product.id == id);
-    //       if (addedProduct) {
-    //         const quantity = store[id];
-    //         addedProduct.quantity = quantity;
-    //         savedCart.push(addedProduct);
-    //       }
-    //     }
-    //     this.setState({cart: savedCart});
-    //   });
-  }
 
   renderCart = ({item}) => {
-    // console.log(item);
     const {quantity} = item;
     // console.log(this.state.cart.id);
     const dltFromCart = id => {
@@ -129,10 +88,10 @@ export class MyCart extends Component {
             <View
               style={{
                 // marginLeft: 10,
-
+                // backgroundColor: colors.red,
                 justifyContent: 'space-between',
               }}>
-              <View>
+              <View style={{marginBottom: 15}}>
                 <Text style={[TYPOGRAPHY.h4Bold, {fontSize: 13}]}>
                   {item.description}
                 </Text>
