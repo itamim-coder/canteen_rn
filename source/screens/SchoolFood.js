@@ -156,7 +156,7 @@ export default class SchoolFood extends Component {
             renderItem={item => this.renderItem(item)}
           />
         </View>
-        <FloatCart />
+        <FloatCart navigation={this.props.navigation}/>
       </SafeAreaView>
     );
   }

@@ -127,10 +127,10 @@ export class Home extends Component {
             )}
 
             {/* Popular Section  */}
-            <Popular navigation={this.props.navigation} />
+            <Popular />
           </ScrollView>
         </View>
-        <FloatCart />
+        <FloatCart navigation={this.props.navigation} />
       </SafeAreaView>
     );
   }
