@@ -28,6 +28,7 @@ import {addToCart} from '../../redux/cartSlice';
 import {MapDispatchToProps} from 'react-redux';
 import store from '../../redux';
 import FloatCart from '../components/FloatCart';
+import CounterButton from '../components/CounterButton';
 
 export class FoodDetails extends Component {
   constructor(props) {
@@ -44,7 +45,7 @@ export class FoodDetails extends Component {
       cartProducts: [],
       quantity: 1,
     };
-    console.log('cart', this.state.quantity);
+    console.log('foodetails', this.state.quantity);
   }
 
   increment = () => {
@@ -162,14 +163,13 @@ export class FoodDetails extends Component {
         quantityPrice: added.price * this.state.quantity,
       };
       this.props.addToCart({cartProduct});
-      // console.log('cart', added.id);
     };
     const food = this.props.route.params.food;
 
     const {ingredients, pack_details, price, picture, description, id} =
       this.state?.foodDetails;
     const added = this.state.foodDetails;
-    console.log('added', this.state.foodDetails);
+    // console.log('added', this.state.foodDetails);
 
     return (
       <SafeAreaView style={detailsContainer}>
@@ -215,7 +215,7 @@ export class FoodDetails extends Component {
                     alignItems: 'center',
                     paddingVertical: 10,
                   }}>
-                  <Text style={TYPOGRAPHY.h3}>${price}.00</Text>
+                  <Text style={TYPOGRAPHY.h4Bold}>${price}.00</Text>
 
                   <View
                     style={{
@@ -225,24 +225,42 @@ export class FoodDetails extends Component {
                     }}>
                     <View
                       style={{
-                        paddingVertical: 8,
-                    
+                        // paddingVertical: 8,
+
                         borderRadius: 5,
                         backgroundColor: colors.gray,
                         marginRight: 15,
                         flexDirection: 'row',
                         alignItems: 'center',
                         justifyContent: 'space-evenly',
+                        borderRadius: 5,
                       }}>
                       <TouchableOpacity
                         onPress={() => this.decrement()}
-                        style={{marginHorizontal: 15,}}>
+                        style={{
+                          padding: 8,
+                          // backgroundColor: colors.red,
+                          borderRadius: 5,
+                          marginRight: 2,
+                        }}>
                         <Text>-</Text>
                       </TouchableOpacity>
-                      <Text style={{paddingHorizontal:4,}}>{this.state.quantity}</Text>
+                      <Text
+                        style={{
+                          padding: 8,
+                          // backgroundColor: colors.red,
+                          borderRadius: 5,
+                          marginRight: 2,
+                        }}>
+                        {this.state.quantity}
+                      </Text>
                       <TouchableOpacity
                         onPress={() => this.increment()}
-                        style={{marginHorizontal: 15,}}>
+                        style={{
+                          padding: 8,
+                          // backgroundColor: colors.red,
+                          borderRadius: 5,
+                        }}>
                         <Text>+</Text>
                       </TouchableOpacity>
                     </View>
@@ -258,11 +276,14 @@ export class FoodDetails extends Component {
                           borderRadius: 5,
                           flexDirection: 'row',
                         }}>
-                        <Text style={[cartButton, {fontFamily: Fonts.primary}]}>
-                          Add{' '}
+                        <Text
+                          style={[
+                            cartButton,
+                            {fontFamily: Fonts.primary, marginRight: 15},
+                          ]}>
+                          Add
                         </Text>
                         <Text style={[cartButton, {fontFamily: Fonts.primary}]}>
-                          {' '}
                           +
                         </Text>
                       </TouchableOpacity>
@@ -344,6 +365,7 @@ export class FoodDetails extends Component {
 const mapStateToProps = state => {
   return {
     carts: state.cart.carts,
+    cart: state.cart,
   };
 };
 

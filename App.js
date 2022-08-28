@@ -59,29 +59,9 @@ const Tab = createBottomTabNavigator();
 export default class App extends Component {
   constructor(props) {
     super(props);
-    this.state = {
-      token: '',
-    };
+    this.state = {};
   }
-  componentDidMount() {
-    this.handleToken();
-  }
-  handleToken = async () => {
-    const user = await AsyncStorage.getItem('userInfo');
-    const parse = JSON.parse(user);
 
-    const token = parse.token;
-
-    // const dataToken = await AsyncStorage.getItem('token');
-    // // console.log(dataToken);
-    if (!token) {
-      // this.props.navigation.replace('Login');
-      this.setState({token: null});
-    } else {
-      this.setState({token: token});
-      // this.props.navigation.replace('TabNavigator');
-    }
-  };
   render() {
     console.log('token', this.state?.token);
 

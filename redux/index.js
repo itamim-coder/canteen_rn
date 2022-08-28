@@ -8,6 +8,7 @@ import counterReducer from './counterSlice';
 import cartReducer from './cartSlice';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import {persistReducer} from 'redux-persist';
+import authSlice from './authSlice';
 // import {get} from 'react-native/Libraries/Utilities/PixelRatio';
 
 const persistConfig = {
@@ -20,6 +21,7 @@ const persistConfig = {
 const rootReducer = combineReducers({
   counter: counterReducer,
   cart: cartReducer,
+  auth: authSlice,
 });
 
 const persistedReducer = persistReducer(persistConfig, rootReducer);

@@ -25,21 +25,23 @@ export default class Profile extends Component {
     };
   }
   handlelogout = async () => {
-    const user = await AsyncStorage.getItem('userInfo');
+    const user = await AsyncStorage.getItem('isLoggedIn');
     console.log(user);
-    AsyncStorage.removeItem('userInfo');
+    AsyncStorage.clear();
+    // console.log(this.props.navigation.replace('Login'));
+    // this.props.navigation.replace('Login');
 
-    this.props.navigation.navigate('Login');
+    this.props.navigation.navigate({name: 'Login'});
   };
 
   getUser = async () => {
-    const user = await AsyncStorage.getItem('userInfo');
+    const user = await AsyncStorage.getItem('isLoggedIn');
     const parse = JSON.parse(user);
-    const name = parse.data.name;
+    // const name = parse.data.name;
 
-    this.setState({name: name});
+    // this.setState({name: name});
 
-    console.log('token', parse.data.name);
+    console.log('token', parse);
   };
   componentDidMount() {
     this.getUser();

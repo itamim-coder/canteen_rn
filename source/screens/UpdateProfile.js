@@ -37,6 +37,7 @@ export default class UpdateProfile extends Component {
       notes: '',
       is_locked: '1',
       status: '1',
+      prev: '',
     };
   }
   getProfile = async () => {
@@ -65,7 +66,8 @@ export default class UpdateProfile extends Component {
   updateProfile = async ({email}) => {
     console.log('item', email);
     this.setState({email: email});
-
+   
+    console.log(this.state.phone);
     const user = await AsyncStorage.getItem('userInfo');
     const parse = JSON.parse(user);
 
@@ -84,7 +86,7 @@ export default class UpdateProfile extends Component {
       // notify_promotions: this.state.notify_promotions,
       // notify_orders: this.state.notify_orders,
       // low_balance_point: this.state.low_balance_point,
-      // notes: this.state.notes,
+      notes: this.state.notes,
     };
 
     console.log(data);
@@ -296,7 +298,7 @@ export default class UpdateProfile extends Component {
           </View>
         </ScrollView>
         <TouchableOpacity
-          onPress={() => this.updateProfile({email, phone, name})}
+          onPress={() => this.updateProfile({email, phone, name, notes})}
           style={BUTTONS.btnPrimary}>
           <Text style={BUTTONS.btnFont}>Save</Text>
         </TouchableOpacity>

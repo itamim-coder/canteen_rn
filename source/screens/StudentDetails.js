@@ -209,10 +209,7 @@ export default class StudentDetails extends Component {
           </TouchableOpacity>
           <TouchableOpacity
             onPress={() => this.handleDlt(id)}
-            style={[
-              BUTTONS.btnPrimary,
-              {paddingHorizontal: 40},
-            ]}>
+            style={[BUTTONS.btnPrimary, {paddingHorizontal: 40}]}>
             <Text style={[BUTTONS.btnFont]}>Delete</Text>
           </TouchableOpacity>
         </View>

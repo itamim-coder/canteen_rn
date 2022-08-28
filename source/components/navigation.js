@@ -30,37 +30,22 @@ import SchoolFood from '../screens/SchoolFood';
 import Checkout from '../screens/Checkout';
 import Payment from '../screens/Payment';
 import MyCart from '../screens/MyCart';
-import {connect} from 'react-redux';
+import {connect, Provider} from 'react-redux';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import store from '../../redux';
 
 const Stack = createNativeStackNavigator();
 const Tab = createBottomTabNavigator();
+
 export class Navigation extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      token: '',
+      // token: '',
     };
   }
-  componentDidMount() {
-    this.handleToken();
-  }
-  handleToken = async () => {
-    const user = await AsyncStorage.getItem('token');
-    const token = JSON.parse(user);
-    this.setState({token: token});
-    // const dataToken = await AsyncStorage.getItem('token');
-    // console.log(token);
-    if (!token) {
-      this.props.navigation.navigate('Login');
-      this.setState({token: null});
-    } else {
-      this.setState({token: token});
-      this.props.navigation.navigate('Home');
-    }
-  };
+
   render() {
-    console.log('state', this.state?.token);
     const TabNavigator = () => {
       return (
         <Tab.Navigator
@@ -78,7 +63,6 @@ export class Navigation extends Component {
             options={{
               tabBarIcon: ({color}) => (
                 <AntDesign name="home" size={30} color={color} />
-                // <Entypo name="home" size={30} color={color} />
               ),
             }}
           />
@@ -104,31 +88,50 @@ export class Navigation extends Component {
         </Tab.Navigator>
       );
     };
+    const MainStack = () => {
+      return (
+        <Stack.Navigator screenOptions={{header: () => null}}>
+          <Stack.Screen name="TabNavigator" component={TabNavigator} />
+          <Stack.Screen name="Profile" component={Profile} />
+          <Stack.Screen name="FoodDetails" component={FoodDetails} />
+          <Stack.Screen name="AllCategory" component={AllCategory} />
+          <Stack.Screen name="FilterCategory" component={FilterCategory} />
+          <Stack.Screen name="SchoolFood" component={SchoolFood} />
+        </Stack.Navigator>
+      );
+    };
+    const AuthStack = () => {
+      return (
+        <Stack.Navigator screenOptions={{header: () => null}}>
+          <Stack.Screen name="Login" component={Login} />
+        </Stack.Navigator>
+      );
+    };
+    const RootNavigation = () => {
+      return (
+        <NavigationContainer>
+          <MainStack />
+        </NavigationContainer>
+      );
+    };
+
+    const token = this.props.token.auth.authToken;
+    console.log('token up', token);
     return (
       <NavigationContainer>
         <Stack.Navigator screenOptions={{header: () => null}}>
-          {/* Auth  */}
-
           <Stack.Screen name="Login" component={Login} />
           <Stack.Screen name="Signup" component={Signup} />
           <Stack.Screen name="ResetRequest" component={ResetRequest} />
           <Stack.Screen name="ConfirmPassword" component={ConfirmPassword} />
           <Stack.Screen name="Verification" component={Verification} />
 
-          {/* Bottom Tab Navigation  */}
-
           <Stack.Screen name="TabNavigator" component={TabNavigator} />
 
-          {/* Wallet  */}
           <Stack.Screen name="Topup" component={Topup} />
           <Stack.Screen name="AddtoWallet" component={AddtoWallet} />
 
-          {/* Profile */}
-          <Stack.Screen
-            name="Profile"
-            component={Profile}
-            // token={this.state.token}
-          />
+          <Stack.Screen name="Profile" component={Profile} />
           <Stack.Screen name="UpdateProfile" component={UpdateProfile} />
           <Stack.Screen name="ManageChildren" component={ManageChildren} />
           <Stack.Screen name="MyOrder" component={MyOrder} />
@@ -137,13 +140,11 @@ export class Navigation extends Component {
           <Stack.Screen name="Deposit" component={Deposit} />
           <Stack.Screen name="AddStudent" component={AddStudent} />
 
-          {/* Food Details */}
           <Stack.Screen name="FoodDetails" component={FoodDetails} />
           <Stack.Screen name="AllCategory" component={AllCategory} />
           <Stack.Screen name="FilterCategory" component={FilterCategory} />
           <Stack.Screen name="SchoolFood" component={SchoolFood} />
 
-          {/* Update Profile */}
           <Stack.Screen name="Checkout" component={Checkout} />
           <Stack.Screen name="Payment" component={Payment} />
         </Stack.Navigator>
@@ -155,6 +156,7 @@ export class Navigation extends Component {
 const mapStateToProps = state => {
   return {
     length: state.cart.length,
+    token: state,
   };
 };
 

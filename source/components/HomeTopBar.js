@@ -1,9 +1,9 @@
-import {Image, Text, TouchableOpacity, View} from 'react-native';
+import {Dimensions, Image, Text, TouchableOpacity, View} from 'react-native';
 import React, {Component} from 'react';
 import TYPOGRAPHY from '../theme/typography';
 import {Picker} from '@react-native-picker/picker';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-
+const width = Dimensions.get('screen').width;
 export class HomeTopBar extends Component {
   constructor(props) {
     super(props);
@@ -24,30 +24,8 @@ export class HomeTopBar extends Component {
       });
   }
   pickerActivity = async id => {
-    // console.log(id);
     this.setState({selectedValue: id});
-    // let gotid;
 
-    // const getId = await AsyncStorage.getItem('schoolId');
-
-    // if (getId) {
-    //   gotid = JSON.parse(getId);
-    //   console.log(gotid);
-    // } else {
-    //   gotid = {};
-    // }
-    // const jsonValue = JSON.stringify(gotid);
-    // // const schoolId = await AsyncStorage.setItem('schoolId', id);
-
-    // AsyncStorage.setItem('schoolId', jsonValue);
-    // console.log(getId);
-    // const sclstring = JSON.stringify(schoolId);
-    // const getId = await AsyncStorage.getItem('schoolId');
-    // // const get = JSON.stringify(getId);
-    // if (getId != null) {
-    //   this.setState({selectedValue: getId});
-    // }
-    //
     if (id != 0) {
       this.props.navigation.navigate('SchoolFood', {id: id});
     }
@@ -64,6 +42,7 @@ export class HomeTopBar extends Component {
       flexDirection: 'row',
       justifyContent: 'space-between',
       paddingBottom: 10,
+      // width: width,
     };
     return (
       <View style={topBar}>
@@ -74,11 +53,15 @@ export class HomeTopBar extends Component {
             source={require('../../assets/images/profile.png')}
           />
         </TouchableOpacity>
-        <View style={{flexDirection: 'row', alignItems: 'center'}}>
-          {/* <Text style={[TYPOGRAPHY.small]}>Select School</Text> */}
+        <View
+          style={{
+            flexDirection: 'row',
+            alignItems: 'center',
+            width: width / 2,
+          }}>
           <Picker
             selectedValue={this.state.selectedValue}
-            style={{height: 30, width: 250}}
+            style={{height: 30, width: 200}}
             // onValueChange={(modeValue, modeIndex) => this.setState({mode: modeValue})}>
             // {this.state.dataSource.map((item, key)=>(
             //         <Picker.Item label={item} value={item} key={key} />)

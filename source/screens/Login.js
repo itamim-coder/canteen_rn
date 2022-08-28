@@ -18,13 +18,14 @@ import {Fonts} from '../theme/Fonts';
 import INPUT from '../theme/Input';
 import SCREEN from '../theme/Screen';
 import Button from '../components/Button';
-
+import {Signin} from '../../redux/authAction';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 
 import axios from 'axios';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import {connect} from 'react-redux';
 
-export default class Login extends Component {
+export class Login extends Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -37,6 +38,7 @@ export default class Login extends Component {
       indicator: false,
       token: '',
       secureTextEntry: true,
+      flag: 0,
     };
   }
 
@@ -60,8 +62,10 @@ export default class Login extends Component {
   making_api_call = () => {
     if (this.validate_field()) {
       const data = {email: this.state.email, password: this.state.password};
-      this.setState({indicator: true});
 
+      this.setState({indicator: true});
+      let flag = 1;
+      this.setState({flag: 1});
       this.setState({disabled: true});
       axios
         .post('https://laqil.com/public/api/login', data)
@@ -70,22 +74,31 @@ export default class Login extends Component {
           let userInfo = res.data;
           console.log(userInfo);
           this.setState({userInfo: userInfo});
+
           AsyncStorage.setItem('userInfo', JSON.stringify(userInfo));
           AsyncStorage.setItem('token', JSON.stringify(res.data.token));
           const status = res.data.data.status;
           console.log(res.data.token);
           if (status == 1) {
+            AsyncStorage.setItem('isLoggedIn', '1');
+
             alert(res.data.message);
-            this.setState({indicator: false});
-            this.setState({disabled: false});
-            this.props.navigation.navigate('TabNavigator');
+            // this.setState({indicator: false});
+            // this.setState({disabled: false});
+            console.log(this.props.navigation.navigate('TabNavigator'));
+            let flag = 0;
+            this.setState({flag: 0});
+            // this.props.navigation.navigate('TabNavigator');
           }
         })
         .catch(function (error) {
           if (error.response) {
             alert(error.response.data.message);
-            this.setState({indicator: false});
-            this.setState({disabled: false});
+            // this.setState({indicator: false});
+            // this.setState({disabled: false});
+            let flag = 0;
+            this.setState({flag: 0});
+            console.log(flag);
           }
         });
     }
@@ -106,7 +119,7 @@ export default class Login extends Component {
       flexDirection: 'row',
       justifyContent: 'space-between',
     };
-
+    console.log('signin', this.props.Signin);
     return (
       <SafeAreaView style={loginContainer}>
         <View style={loginBox}>
@@ -128,6 +141,7 @@ export default class Login extends Component {
                 onChangeText={value => {
                   this.setState({email: value, emailerror: ''});
                 }}
+                autoCapitalize="none"
                 placeholder="Email"
                 placeholderTextColor={'grey'}
                 style={INPUT.input}
@@ -178,7 +192,7 @@ export default class Login extends Component {
             <Text style={{color: colors.bloodRed, fontFamily: Fonts.primary}}>
               {this.state.passerror}
             </Text>
-            {/* <Button type="login" navigation={this.props.navigation} /> */}
+            <Button type="login" navigation={this.props.navigation} />
 
             <TouchableOpacity
               onPress={() => {
@@ -213,3 +227,13 @@ export default class Login extends Component {
     );
   }
 }
+const mapDispatchToProps = dispatch => {
+  // console.log(cartProduct);
+  return {
+    Signin: (email, password) => {
+      dispatch(Signin(email, password));
+    },
+  };
+};
+
+export default connect(mapDispatchToProps)(Login);

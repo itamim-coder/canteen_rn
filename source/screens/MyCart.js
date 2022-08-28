@@ -27,6 +27,7 @@ import {connect} from 'react-redux';
 import {addToCart, reset, selectCart} from './../../redux/cartSlice';
 import {deleteFromCart} from './../../redux/cartSlice';
 import {increment} from '../../redux/counterSlice';
+import CounterButton from '../components/CounterButton';
 // import {createConfigItem, parse} from '@babel/core';
 
 export class MyCart extends Component {
@@ -38,34 +39,59 @@ export class MyCart extends Component {
       total: null,
       cart: [],
       indicator: false,
-      quantity: '',
+      newQuantity: '',
+      // quantity: '',
       // count: initialValue || 0,
     };
+    console.log('props', this.props.carts);
   }
+  increment = value => {
+    console.log(value);
+    const count = value + 1;
+    this.setState({quantity: count});
+  };
 
+  dltFromCart = id => {
+    // this.setState({indicator: true});
+
+    this.props.deleteFromCart({id: id});
+  };
   renderCart = ({item}) => {
     const {quantity} = item;
-    // console.log(this.state.cart.id);
-    const dltFromCart = id => {
-      // this.setState({indicator: true});
-
-      this.props.deleteFromCart({id: id});
-    };
+    console.log('quan', quantity);
 
     // console.log(this.state.count);
-    const increment = item => {
-      const count = item.quantity + 1;
-      const updateCart = {
-        id: item.item.id,
-        description: item.item.description,
-        price: item.item.price,
-        picture: item.item.picture,
-        quantity: count,
-        quantityPrice: item.item.price * count,
-      };
-      console.log(updateCart);
-      // this.props.addToCart({updateCart});
+    // const increment = item => {
+    //   const count = item.quantity + 1;
+    //   const updateCart = {
+    //     id: item.item.id,
+    //     description: item.item.description,
+    //     price: item.item.price,
+    //     picture: item.item.picture,
+    //     quantity: count,
+    //     quantityPrice: item.item.price * count,
+    //   };
+    //   console.log(updateCart);
+    //   // this.props.addToCart({updateCart});
+    // };
+    const onAmountChange = (value, item) => {
+      console.log('val', value);
     };
+    const decrement = item => {
+      console.log(item.item.quantity);
+
+      if (item.item.quantity > 1) {
+        const count = item.item.quantity - 1;
+        console.log('count ', count);
+        item.item.quantity = count;
+        // this.setState({newQuantity: item.item.quantity});
+        // console.log('val -quan', count);
+      }
+      console.log(item);
+      // console.log(item.item.quantity);
+    };
+    // item.quantity = this.state.newQuantity;
+    // console.log('nq', item);
     return (
       <View>
         {this.state.indicator ? (
@@ -78,21 +104,25 @@ export class MyCart extends Component {
               marginVertical: 5,
               borderRadius: 6,
               alignItems: 'center',
-              justifyContent: 'space-between',
+              flex: 1,
+              // justifyContent: 'space-between',
             }}>
-            <Image
-              resizeMode="contain"
-              style={{width: '30%', height: 90}}
-              source={{uri: item.picture}}
-            />
+            <View style={{flex: 1, backgroundColor: colors.red}}>
+              <Image
+                resizeMode="cover"
+                style={{width: '100%', height: 90}}
+                source={{uri: item.picture}}
+              />
+            </View>
             <View
               style={{
-                // marginLeft: 10,
+                flex: 3,
+                marginLeft: 10,
                 // backgroundColor: colors.red,
                 justifyContent: 'space-between',
               }}>
               <View style={{marginBottom: 15}}>
-                <Text style={[TYPOGRAPHY.h4Bold, {fontSize: 13}]}>
+                <Text style={[TYPOGRAPHY.h4Bold, {fontSize: 14}]}>
                   {item.description}
                 </Text>
               </View>
@@ -105,66 +135,43 @@ export class MyCart extends Component {
                 <View
                   style={{
                     flexDirection: 'row',
+                    flex: 1,
+                    // backgroundColor: colors.red,
                     justifyContent: 'space-between',
                     alignItems: 'center',
                   }}>
-                  <Text style={{color: colors.green, fontSize: 14}}>
+                  {/* <Text style={{color: colors.green, fontSize: 14}}>
                     Custom
+                  </Text> */}
+                  <Text
+                    style={[
+                      TYPOGRAPHY.primary,
+                      {
+                        backgroundColor: colors.lightgreen,
+                        paddingHorizontal: 10,
+                        paddingVertical: 2,
+                        borderRadius: 5,
+                        color: colors.green,
+                        fontWeight: 'bold',
+                      },
+                    ]}>
+                    Qty: {quantity} x Price: {item.price}
                   </Text>
-
-                  <View
-                    style={{
-                      flexDirection: 'row',
-                      marginHorizontal: 30,
-                      backgroundColor: colors.red,
-                      borderRadius: 5,
-                      paddingVertical: 4,
-                    }}>
-                    <TouchableOpacity
-                      onPress={() =>
-                        this.setState({count: this.state.count - 1})
-                      }>
-                      <Text
-                        style={{
-                          fontSize: 15,
-                          color: colors.white,
-                          paddingHorizontal: 7,
-                        }}>
-                        -
-                      </Text>
-                    </TouchableOpacity>
-                    <Text
-                      style={{
-                        fontSize: 15,
-                        color: colors.white,
-                        paddingHorizontal: 5,
-                      }}>
-                      {quantity}
-                      {/* {this.state.count + item.quantity} */}
-                    </Text>
-                    <TouchableOpacity
-                      onPress={() => increment({item, quantity})}>
-                      <Text
-                        style={{
-                          fontSize: 15,
-                          color: colors.white,
-                          paddingHorizontal: 7,
-                        }}>
-                        +
-                      </Text>
-                    </TouchableOpacity>
-                  </View>
 
                   <Text
                     style={[
                       TYPOGRAPHY.primary,
                       {
-                        // marginHorizontal: 20,
-                        alignItems: 'center',
+                        backgroundColor: colors.lightgreen,
+                        paddingHorizontal: 10,
+                        paddingVertical: 2,
+                        borderRadius: 5,
+                        color: colors.green,
+                        fontWeight: 'bold',
                         fontWeight: 'bold',
                       },
                     ]}>
-                    <Text>${item.quantityPrice}</Text>
+                    ${item.quantityPrice}
                   </Text>
 
                   <View />
@@ -181,7 +188,7 @@ export class MyCart extends Component {
               }}>
               <TouchableOpacity
                 onPress={() => {
-                  dltFromCart(item.id);
+                  this.dltFromCart(item.id);
                 }}>
                 <Text style={{color: colors.white}}>X</Text>
               </TouchableOpacity>
