@@ -41,8 +41,21 @@ export class Navigation extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      // token: '',
+      token: '',
     };
+  }
+
+  getUser = async () => {
+    const user = await AsyncStorage.getItem('isLoggedIn');
+    const parse = JSON.parse(user);
+    // const name = parse.data.name;
+
+    this.setState({token: parse});
+
+    console.log('token', parse);
+  };
+  componentDidMount() {
+    this.getUser();
   }
 
   render() {
@@ -88,38 +101,52 @@ export class Navigation extends Component {
         </Tab.Navigator>
       );
     };
-    const MainStack = () => {
-      return (
-        <Stack.Navigator screenOptions={{header: () => null}}>
-          <Stack.Screen name="TabNavigator" component={TabNavigator} />
-          <Stack.Screen name="Profile" component={Profile} />
-          <Stack.Screen name="FoodDetails" component={FoodDetails} />
-          <Stack.Screen name="AllCategory" component={AllCategory} />
-          <Stack.Screen name="FilterCategory" component={FilterCategory} />
-          <Stack.Screen name="SchoolFood" component={SchoolFood} />
-        </Stack.Navigator>
-      );
-    };
-    const AuthStack = () => {
-      return (
-        <Stack.Navigator screenOptions={{header: () => null}}>
-          <Stack.Screen name="Login" component={Login} />
-        </Stack.Navigator>
-      );
-    };
-    const RootNavigation = () => {
-      return (
-        <NavigationContainer>
-          <MainStack />
-        </NavigationContainer>
-      );
-    };
-
-    const token = this.props.token.auth.authToken;
-    console.log('token up', token);
+    // const MainStack = () => {
+    //   return (
+    //     <Stack.Navigator screenOptions={{header: () => null}}>
+    //       <Stack.Screen name="TabNavigator" component={TabNavigator} />
+    //       <Stack.Screen name="Profile" component={Profile} />
+    //       <Stack.Screen name="FoodDetails" component={FoodDetails} />
+    //       <Stack.Screen name="AllCategory" component={AllCategory} />
+    //       <Stack.Screen name="FilterCategory" component={FilterCategory} />
+    //       <Stack.Screen name="SchoolFood" component={SchoolFood} />
+    //     </Stack.Navigator>
+    //   );
+    // };
+    // const AuthStack = () => {
+    //   return (
+    //     <Stack.Navigator screenOptions={{header: () => null}}>
+    //       <Stack.Screen name="Login" component={Login} />
+    //     </Stack.Navigator>
+    //   );
+    // };
+    // const RootNavigation = () => {
+    //   return (
+    //     <NavigationContainer>
+    //       <MainStack />
+    //     </NavigationContainer>
+    //   );
+    // };
+    console.log('state', this.state.token);
     return (
       <NavigationContainer>
         <Stack.Navigator screenOptions={{header: () => null}}>
+          {/* {this.state?.token === null ? (
+            <Stack.Screen name="Login" component={Login} />
+          ) : (
+            <>
+              <Stack.Screen name="TabNavigator" component={TabNavigator} />
+              <Stack.Screen name="Profile" component={Profile} />
+              <Stack.Screen name="UpdateProfile" component={UpdateProfile} />
+              <Stack.Screen name="ManageChildren" component={ManageChildren} />
+              <Stack.Screen name="MyOrder" component={MyOrder} />
+              <Stack.Screen name="StudentDetails" component={StudentDetails} />
+
+              <Stack.Screen name="Transaction" component={Transaction} />
+              <Stack.Screen name="Deposit" component={Deposit} />
+              <Stack.Screen name="AddStudent" component={AddStudent} />
+            </>
+          )} */}
           <Stack.Screen name="Login" component={Login} />
           <Stack.Screen name="Signup" component={Signup} />
           <Stack.Screen name="ResetRequest" component={ResetRequest} />

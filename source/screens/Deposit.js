@@ -109,7 +109,6 @@ export default class Deposit extends Component {
                 INPUT.inputContainer,
                 {flexDirection: 'row', marginTop: 0, marginBottom: 35},
               ]}>
-      
               <TextInput
                 value={this.state.expiry_date}
                 onChangeText={value => {
@@ -118,20 +117,6 @@ export default class Deposit extends Component {
                 placeholder="Expiry Data"
                 placeholderTextColor={'grey'}
                 style={[INPUT.input, TYPOGRAPHY.h5]}
-              />
-
-              <DatePicker
-                modal
-                mode="date"
-                open={this.state.open}
-                date={this.state.date}
-                onConfirm={date => {
-                  this.setState({open: false});
-                  this.setState({date: date});
-                }}
-                onCancel={() => {
-                  this.setState({open: false});
-                }}
               />
             </View>
 

@@ -76,10 +76,28 @@ export default class ManageChildren extends Component {
               flexDirection: 'row',
             }}>
             <View style={{marginRight: 20}}>
-              <Image
-                style={{height: 35, width: 35}}
-                source={require('../../assets/images/profile.png')}
-              />
+              {item.profile_picture === null ? (
+                <>
+                  <Image
+                    resizeMode="contain"
+                    style={{
+                      width: 35,
+                      height: 35,
+                      borderRadius: 50,
+                      // backgroundColor: colors.red,
+                    }}
+                    source={require('../../assets/images/profile.png')}
+                  />
+                </>
+              ) : (
+                <>
+                  <Image
+                    style={{height: 35, width: 35}}
+                    // source={require('../../assets/images/profile.png')}
+                    source={{uri: item.profile_picture}}
+                  />
+                </>
+              )}
             </View>
             <View>
               <Text style={TYPOGRAPHY.h4}>{item.name}</Text>

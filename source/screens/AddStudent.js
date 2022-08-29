@@ -19,6 +19,9 @@ import TYPOGRAPHY from '../theme/typography';
 import {Picker} from '@react-native-picker/picker';
 import {colors} from '../theme/colors';
 import {Fonts} from '../theme/Fonts';
+import {launchImageLibrary} from 'react-native-image-picker';
+import {TouchableRipple} from 'react-native-paper';
+import {multiline} from 'deprecated-react-native-prop-types/DeprecatedTextInputPropTypes';
 const width = Dimensions.get('screen').width;
 export default class AddStudent extends Component {
   constructor(props) {
@@ -55,6 +58,8 @@ export default class AddStudent extends Component {
       schoolList: [],
       id: this.props.route.params.id,
       type: this.props.route.params.type,
+      response: null,
+      upload_picture: null,
     };
     console.log(this.props.route.params);
   }
@@ -90,6 +95,7 @@ export default class AddStudent extends Component {
       notes: this.state.notes,
       health_conditions: this.state.health_conditions,
       active: this.state.active,
+      profile_picture: this.state.upload_picture,
     };
 
     console.log(data);
@@ -102,6 +108,7 @@ export default class AddStudent extends Component {
           console.log(res.data);
           if (res.data.status == true) {
             alert(res.data.message);
+            this.props.navigation.navigate('Profile');
           }
         },
         err => {
@@ -176,6 +183,30 @@ export default class AddStudent extends Component {
   pickerActivity = async id => {
     this.setState({selectedSchool: id});
   };
+  openGallery = () => {
+    const options = {
+      storageOptions: {
+        path: 'images',
+        mediaType: 'photo',
+      },
+      includeBase64: true,
+    };
+
+    launchImageLibrary(options, response => {
+      console.log(response);
+      if (response.didCancel) {
+        alert('User Cancelled');
+      } else if (response.error) {
+        alert(response.error);
+      } else if (response.customButton) {
+        alert(response.customButton);
+      } else {
+        // console.log(response.asset);
+        this.setState({response: response});
+        this.setState({upload_picture: response.assets[0].fileName});
+      }
+    });
+  };
 
   render() {
     return (
@@ -193,11 +224,42 @@ export default class AddStudent extends Component {
                 <Text style={[TYPOGRAPHY.h3]}>{this.state.type} Student</Text>
               </View>
               <View>
-                <Image
-                  resizeMode="contain"
-                  style={{width: 80, height: 80}}
-                  source={require('../../assets/images/profile.png')}
-                />
+                <TouchableOpacity onPress={() => this.openGallery()}>
+                  {this.state.response === null ? (
+                    <>
+                      <Image
+                        resizeMode="contain"
+                        style={{
+                          width: 80,
+                          height: 80,
+                          borderRadius: 50,
+                          // backgroundColor: colors.red,
+                        }}
+                        source={require('../../assets/images/profile.png')}
+                      />
+                    </>
+                  ) : (
+                    <>
+                      {this.state.response?.assets &&
+                        this.state.response?.assets.map(({uri}) => (
+                          // this.setState({profile_picture: uri}),
+                          <View key={uri}>
+                            <Image
+                              resizeMode="contain"
+                              resizeMethod="scale"
+                              style={{
+                                width: 80,
+                                height: 80,
+                                borderRadius: 50,
+                                // backgroundColor: colors.red,
+                              }}
+                              source={{uri}}
+                            />
+                          </View>
+                        ))}
+                    </>
+                  )}
+                </TouchableOpacity>
               </View>
             </View>
             <Text style={[TYPOGRAPHY.h5]}>Full Name</Text>
@@ -213,7 +275,7 @@ export default class AddStudent extends Component {
                 style={[INPUT.input, TYPOGRAPHY.h5]}
               />
             </View>
-            <Text style={[TYPOGRAPHY.h5]}>Phone Number</Text>
+            <Text style={[TYPOGRAPHY.h5]}>Student Phone</Text>
             <View
               style={[INPUT.inputContainer, {marginTop: 0, marginBottom: 35}]}>
               <TextInput
@@ -221,13 +283,13 @@ export default class AddStudent extends Component {
                 onChangeText={value => {
                   this.setState({phone: value, emailerror: ''});
                 }}
-                placeholder="Phone"
+                placeholder="Student Phone"
                 placeholderTextColor={'grey'}
                 style={[INPUT.input, TYPOGRAPHY.h5]}
                 keyboardType={'numeric'}
               />
             </View>
-            <Text style={[TYPOGRAPHY.h5]}>Email</Text>
+            <Text style={[TYPOGRAPHY.h5]}>Student Email</Text>
             <View
               style={[INPUT.inputContainer, {marginTop: 0, marginBottom: 35}]}>
               <TextInput
@@ -235,7 +297,7 @@ export default class AddStudent extends Component {
                 onChangeText={value => {
                   this.setState({email: value});
                 }}
-                placeholder="Email"
+                placeholder="Student Email"
                 placeholderTextColor={'grey'}
                 style={[INPUT.input, TYPOGRAPHY.h5]}
               />

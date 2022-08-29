@@ -41,7 +41,9 @@ export class HomeTopBar extends Component {
     const topBar = {
       flexDirection: 'row',
       justifyContent: 'space-between',
-      paddingBottom: 10,
+      alignItems: 'center',
+
+      // paddingBottom: 10,
       // width: width,
     };
     return (

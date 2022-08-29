@@ -79,16 +79,18 @@ export class Login extends Component {
           AsyncStorage.setItem('token', JSON.stringify(res.data.token));
           const status = res.data.data.status;
           console.log(res.data.token);
+          this.setState({indicator: false});
+          this.setState({disabled: false});
           if (status == 1) {
             AsyncStorage.setItem('isLoggedIn', '1');
 
             alert(res.data.message);
             // this.setState({indicator: false});
             // this.setState({disabled: false});
-            console.log(this.props.navigation.navigate('TabNavigator'));
+            // console.log(this.props.navigation.navigate('TabNavigator'));
             let flag = 0;
             this.setState({flag: 0});
-            // this.props.navigation.navigate('TabNavigator');
+            this.props.navigation.navigate('TabNavigator');
           }
         })
         .catch(function (error) {
@@ -119,7 +121,7 @@ export class Login extends Component {
       flexDirection: 'row',
       justifyContent: 'space-between',
     };
-    console.log('signin', this.props.Signin);
+    console.log('signin', this.props.dispatch);
     return (
       <SafeAreaView style={loginContainer}>
         <View style={loginBox}>

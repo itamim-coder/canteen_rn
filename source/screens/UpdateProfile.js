@@ -19,7 +19,7 @@ import INPUT from '../theme/Input';
 import BUTTONS from '../theme/Buttons';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import axios from 'axios';
-
+import {launchCamera, launchImageLibrary} from 'react-native-image-picker';
 export default class UpdateProfile extends Component {
   constructor(props) {
     super(props);
@@ -38,7 +38,13 @@ export default class UpdateProfile extends Component {
       is_locked: '1',
       status: '1',
       prev: '',
+      response: null,
+      fetch_email: '',
     };
+    console.log('item', this.state.userData);
+  }
+  componentDidMount() {
+    this.getProfile();
   }
   getProfile = async () => {
     const user = await AsyncStorage.getItem('userInfo');
@@ -53,6 +59,7 @@ export default class UpdateProfile extends Component {
       })
       .then(
         res => {
+          console.log(res.data);
           this.setState({userData: res.data?.data});
 
           this.setState({notify_low_balance: res.data.data.notify_low_balance});
@@ -63,10 +70,10 @@ export default class UpdateProfile extends Component {
         },
       );
   };
+
   updateProfile = async ({email}) => {
-    console.log('item', email);
     this.setState({email: email});
-   
+
     console.log(this.state.phone);
     const user = await AsyncStorage.getItem('userInfo');
     const parse = JSON.parse(user);
@@ -74,8 +81,9 @@ export default class UpdateProfile extends Component {
     const token = parse.token;
     console.log(token);
     const data = {
-      name: this.state.name,
-      phone: this.state.phone,
+      name: (this.state.name && this.state.name) || this.state.userData.name,
+      phone:
+        (this.state.phone && this.state.phone) || this.state.userData.phone,
 
       email: this.state.email,
       is_locked: this.state.is_locked,
@@ -86,6 +94,7 @@ export default class UpdateProfile extends Component {
       // notify_promotions: this.state.notify_promotions,
       // notify_orders: this.state.notify_orders,
       // low_balance_point: this.state.low_balance_point,
+      // response: null,
       notes: this.state.notes,
     };
 
@@ -108,9 +117,29 @@ export default class UpdateProfile extends Component {
       );
   };
 
-  componentDidMount() {
-    this.getProfile();
-  }
+  openGallery = () => {
+    const options = {
+      storageOptions: {
+        path: 'images',
+        mediaType: 'photo',
+      },
+      includeBase64: true,
+    };
+
+    launchImageLibrary(options, response => {
+      console.log(response);
+      if (response.didCancel) {
+        alert('User Cancelled');
+      } else if (response.error) {
+        alert(response.error);
+      } else if (response.customButton) {
+        alert(response.customButton);
+      } else {
+        console.log(options);
+        // this.setState({response: response});
+      }
+    });
+  };
 
   render() {
     const {
@@ -124,7 +153,8 @@ export default class UpdateProfile extends Component {
       low_balance_point,
       notes,
     } = this.state.userData;
-    // this.setState({email: this.state.userData.email});
+    // this.setState({fetch_email: this.state.userData.email});
+    console.log('response', this.state.userData.name);
     return (
       <SafeAreaView style={[SCREEN.screen, {backgroundColor: colors.white}]}>
         <ScrollView showsVerticalScrollIndicator={false}>
@@ -139,10 +169,42 @@ export default class UpdateProfile extends Component {
             <View>
               <Text style={[TYPOGRAPHY.primary, {fontSize: 28}]}>Profile</Text>
             </View>
-            <Image
-              style={{width: 80, height: 80}}
-              source={require('../../assets/images/profile.png')}
-            />
+
+            <TouchableOpacity onPress={() => this.openGallery()}>
+              {this.state.response === null ? (
+                <>
+                  <Image
+                    resizeMode="contain"
+                    style={{
+                      width: 80,
+                      height: 80,
+                      borderRadius: 50,
+                      // backgroundColor: colors.red,
+                    }}
+                    source={require('../../assets/images/profile.png')}
+                  />
+                </>
+              ) : (
+                <>
+                  {this.state.response?.assets &&
+                    this.state.response?.assets.map(({uri}) => (
+                      <View key={uri}>
+                        <Image
+                          resizeMode="contain"
+                          resizeMethod="scale"
+                          style={{
+                            width: 80,
+                            height: 80,
+                            borderRadius: 50,
+                            // backgroundColor: colors.red,
+                          }}
+                          source={{uri}}
+                        />
+                      </View>
+                    ))}
+                </>
+              )}
+            </TouchableOpacity>
           </View>
 
           <View>
@@ -154,7 +216,9 @@ export default class UpdateProfile extends Component {
                 <View style={INPUT.inputContainer}>
                   <TextInput
                     onChangeText={value => {
-                      this.setState({name: value});
+                      this.setState({
+                        name: value ? value : this.state.userData.name,
+                      });
                     }}
                     placeholder="Enter Full Name"
                     defaultValue={this.state.userData.name}
