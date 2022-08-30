@@ -18,13 +18,12 @@ import {Fonts} from '../theme/Fonts';
 import INPUT from '../theme/Input';
 import SCREEN from '../theme/Screen';
 import Button from '../components/Button';
-import {AuthContext} from '../context/AuthContext';
+import {Signin} from '../../redux/authAction';
+import Ionicons from 'react-native-vector-icons/Ionicons';
 
 import axios from 'axios';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-
-import Home from './Home';
-import {user_login} from '../api/user_api';
+import {connect} from 'react-redux';
 
 export class Login extends Component {
   constructor(props) {
@@ -37,9 +36,12 @@ export class Login extends Component {
       passerror: '',
       disabled: false,
       indicator: false,
+      token: '',
+      secureTextEntry: true,
+      flag: 0,
     };
   }
-  // console.log(error)
+
   validate_field = () => {
     const {email, password} = this.state;
 
@@ -59,64 +61,50 @@ export class Login extends Component {
 
   making_api_call = () => {
     if (this.validate_field()) {
-      // user_login({
-      //   email: this.state.email,
-      //   password: this.state.password,
-      // }).then(result => {
-
-      //   console.log(result);
-
-      //   console.log(this.state.email);
-      //   console.log(this.state.password);
-      // });
       const data = {email: this.state.email, password: this.state.password};
+
       this.setState({indicator: true});
-      // this.setState({disabled: true});
+      let flag = 1;
+      this.setState({flag: 1});
+      this.setState({disabled: true});
       axios
         .post('https://laqil.com/public/api/login', data)
         .then(res => {
+          console.log('response start');
           let userInfo = res.data;
+          console.log(userInfo);
           this.setState({userInfo: userInfo});
+
           AsyncStorage.setItem('userInfo', JSON.stringify(userInfo));
-          AsyncStorage.setItem('token', res.data.token);
+          AsyncStorage.setItem('token', JSON.stringify(res.data.token));
           const status = res.data.data.status;
           console.log(res.data.token);
+          this.setState({indicator: false});
+          this.setState({disabled: false});
           if (status == 1) {
-            // this.handleToken();
+            AsyncStorage.setItem('isLoggedIn', '1');
+
             alert(res.data.message);
-            this.setState({indicator: false});
-            this.setState({disabled: false});
+            // this.setState({indicator: false});
+            // this.setState({disabled: false});
+            // console.log(this.props.navigation.navigate('TabNavigator'));
+            let flag = 0;
+            this.setState({flag: 0});
             this.props.navigation.navigate('TabNavigator');
           }
         })
         .catch(function (error) {
           if (error.response) {
-            // let emailerror = error.response.data.errors.email;
-            // this.setState({emailerror: emailerror});
             alert(error.response.data.message);
-            // ToastAndroid.show(error.response.data.message, ToastAndroid.SHORT);
-            this.setState({indicator: false});
-            this.setState({disabled: false});
-            // return;
-            // The request was made and the server responded with a status code
-            // that falls out of the range of 2xx
-            // console.log(error.response);
-            // console.log(error.response.status);
-            // console.log(error.response.headers);
+            // this.setState({indicator: false});
+            // this.setState({disabled: false});
+            let flag = 0;
+            this.setState({flag: 0});
+            console.log(flag);
           }
         });
     }
   };
-  // handleToken = async () => {
-  //   const dataToken = await AsyncStorage.getItem('Token');
-  //   console.log(dataToken);
-  //   if (dataToken) {
-  //     this.props.navigation.navigate('Home');
-  //   } else {
-  //     // this.setState({token: dataToken});
-  //     this.props.navigation.navigate('Login');
-  //   }
-  // };
 
   render() {
     const loginContainer = {
@@ -133,68 +121,88 @@ export class Login extends Component {
       flexDirection: 'row',
       justifyContent: 'space-between',
     };
-    // const val = useContext(AuthContext);
+    console.log('signin', this.props.dispatch);
     return (
       <SafeAreaView style={loginContainer}>
         <View style={loginBox}>
-          <Text style={[TYPOGRAPHY.h1, {textAlign: 'center'}]}>Log in</Text>
-          <Text style={[TYPOGRAPHY.primary, {textAlign: 'center'}]}>
+          <Text style={[TYPOGRAPHY.h2, {textAlign: 'center'}]}>Sign in</Text>
+          <Text
+            style={[
+              TYPOGRAPHY.primary,
+              {textAlign: 'center', color: colors.ash, marginVertical: 5},
+            ]}>
             If you already have a YumCayman.ky account{'\n'}please log in below
           </Text>
           <View>
-            <View style={INPUT.inputContainer}>
+            <Text style={[TYPOGRAPHY.h5, {color: colors.ash, marginBottom: 5}]}>
+              Email Address
+            </Text>
+            <View style={[INPUT.inputContainer]}>
               <TextInput
                 value={this.state.email}
-                // onFocus={this.setState}
-                // onFocus={this.setState({error: ''})}
                 onChangeText={value => {
                   this.setState({email: value, emailerror: ''});
                 }}
-                // onChangeText={text => setEmail(text)}
+                autoCapitalize="none"
                 placeholder="Email"
                 placeholderTextColor={'grey'}
                 style={INPUT.input}
               />
             </View>
+
             <Text style={{color: colors.bloodRed, fontFamily: Fonts.primary}}>
               {this.state.emailerror}
             </Text>
-            <View style={INPUT.inputContainer}>
-              <TextInput
-                value={this.state.password}
-                onChangeText={value => {
-                  this.setState({password: value, passerror: ''});
-                }}
-                // onChangeText={text => setPassword(text)}
-                placeholder="Password"
-                placeholderTextColor={'grey'}
-                style={INPUT.input}
-                secureTextEntry
-                // keyboardType="numeric"
-                // import
-              />
+            <Text style={[TYPOGRAPHY.h5, {color: colors.ash, marginBottom: 5}]}>
+              Password
+            </Text>
+            <View>
+              <View style={[INPUT.inputContainer]}>
+                <TextInput
+                  value={this.state.password}
+                  onChangeText={value => {
+                    this.setState({password: value, passerror: ''});
+                  }}
+                  placeholder="Password"
+                  placeholderTextColor={'grey'}
+                  style={[INPUT.input]}
+                  secureTextEntry={this.state.secureTextEntry}
+                />
+                {this.state.secureTextEntry === true ? (
+                  <TouchableOpacity
+                    onPress={() => this.setState({secureTextEntry: false})}>
+                    <Ionicons
+                      name="eye-off"
+                      size={24}
+                      color="black"
+                      style={{margin: 10, color: colors.light}}
+                    />
+                  </TouchableOpacity>
+                ) : (
+                  <TouchableOpacity
+                    onPress={() => this.setState({secureTextEntry: true})}>
+                    <Ionicons
+                      name="eye"
+                      size={24}
+                      color="black"
+                      style={{margin: 10}}
+                    />
+                  </TouchableOpacity>
+                )}
+              </View>
             </View>
             <Text style={{color: colors.bloodRed, fontFamily: Fonts.primary}}>
               {this.state.passerror}
             </Text>
-            <Button
-              // onPress={() => {
-              //   this.making_api_call();
-              // }}
-              // onPress={handleSignin}
-              type="login"
-              navigation={this.props.navigation}
-            />
+            {/* <Button type="login" navigation={this.props.navigation} /> */}
 
             <TouchableOpacity
-              // onPress={handleSignin}
-
               onPress={() => {
                 this.making_api_call();
               }}
               disabled={this.state.disabled}
               style={BUTTONS.btnPrimary}>
-              {this.state.indicator ? (
+              {this.state.indicator === true ? (
                 <ActivityIndicator color={colors.white} />
               ) : (
                 <Text style={BUTTONS.btnFont}>Login</Text>
@@ -221,5 +229,13 @@ export class Login extends Component {
     );
   }
 }
+const mapDispatchToProps = dispatch => {
+  // console.log(cartProduct);
+  return {
+    Signin: (email, password) => {
+      dispatch(Signin(email, password));
+    },
+  };
+};
 
-export default Login;
+export default connect(mapDispatchToProps)(Login);

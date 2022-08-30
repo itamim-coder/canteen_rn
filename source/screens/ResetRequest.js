@@ -17,14 +17,12 @@ import Button from '../components/Button';
 import {Fonts} from '../theme/Fonts';
 import BUTTONS from '../theme/Buttons';
 import axios from 'axios';
-import AsyncStorage from '@react-native-async-storage/async-storage';
 
 export default class ResetRequest extends Component {
   constructor(props) {
     super(props);
     this.state = {
       email: '',
-
       emailerror: '',
       resetInfo: '',
       disabled: false,
@@ -34,7 +32,7 @@ export default class ResetRequest extends Component {
   validate_field = () => {
     const {email} = this.state;
     if (email == '') {
-      this.setState({emailerror: 'email input'});
+      this.setState({emailerror: 'Please input your register email'});
       return false;
     }
     return true;
@@ -49,7 +47,6 @@ export default class ResetRequest extends Component {
         .then(res => {
           let resetInfo = res.data;
           this.setState({resetInfo: resetInfo});
-          AsyncStorage.setItem('resetInfo', JSON.stringify(resetInfo));
 
           const status = res.data.status;
           console.log(status);
@@ -62,22 +59,8 @@ export default class ResetRequest extends Component {
         })
         .catch(function (error) {
           if (error.response) {
-            // let emailerror = error.response.data.errors.email;
-
-            // this.setState({emailerror: emailerror});
             alert(error.response.data.errors.email);
-
-            // ToastAndroid.show(error.response.data.message, ToastAndroid.SHORT);
-            // this.setState({indicator: false});
-            // this.setState({disabled: false});
-
-            // return;
-            // The request was made and the server responded with a status code
-            // that falls out of the range of 2xx
             console.log(error.response.data.errors);
-
-            // console.log(error.response.status);
-            // console.log(error.response.headers);
           }
         });
     }
@@ -85,14 +68,16 @@ export default class ResetRequest extends Component {
 
   render() {
     return (
-      <SafeAreaView style={SCREEN.screen}>
+      <SafeAreaView style={[SCREEN.screen, {backgroundColor: colors.white}]}>
         <View>
           <Text style={[TYPOGRAPHY.h2]}>Reset Password</Text>
-          <Text style={[TYPOGRAPHY.primary]}>
+          <Text style={[TYPOGRAPHY.primary, {color: colors.ash}]}>
             Enter your email verification code will be sent on given email
           </Text>
           <View style={styles.otpBox}>
-            <Text style={[TYPOGRAPHY.primary]}>Enter your email</Text>
+            <Text style={[TYPOGRAPHY.h5, {color: colors.ash, marginBottom: 5}]}>
+              Enter your email
+            </Text>
             <View style={INPUT.inputContainer}>
               <TextInput
                 value={this.state.email}
@@ -108,8 +93,6 @@ export default class ResetRequest extends Component {
               {this.state.emailerror}
             </Text>
             <TouchableOpacity
-              // onPress={handleSignin}
-
               onPress={() => {
                 this.reset_api_call();
               }}
@@ -121,7 +104,6 @@ export default class ResetRequest extends Component {
                 <Text style={BUTTONS.btnFont}>Submit</Text>
               )}
             </TouchableOpacity>
-            {/* <Button type="submit" navigation={this.props.navigation} /> */}
           </View>
         </View>
       </SafeAreaView>

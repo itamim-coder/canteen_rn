@@ -37,10 +37,3 @@ export default class AddtoWallet extends Component {
     );
   }
 }
-
-const styles = StyleSheet.create({
-  headText: {
-    fontSize: 20,
-    fontWeight: 'bold',
-  },
-});

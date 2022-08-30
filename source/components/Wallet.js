@@ -9,21 +9,21 @@ export default class Wallet extends Component {
     return (
       <View
         style={{
-          backgroundColor: colors.grey,
+          backgroundColor: colors.gray,
           flex: 1,
           borderTopLeftRadius: 55,
           borderTopRightRadius: 55,
           padding: 15,
         }}>
         <View style={{marginTop: 30, paddingBottom: 20}}>
-          <Text style={TYPOGRAPHY.h3}>Wallets</Text>
+          <Text style={TYPOGRAPHY.h4Bold}>Wallets</Text>
         </View>
         <TouchableOpacity style={styles.paymentBox}>
           <Image
             style={styles.paymentImg}
             source={require('../../assets/images/payment/payPal.png')}
           />
-          <Text style={[TYPOGRAPHY.medium, {paddingLeft: 20, fontSize: 20}]}>
+          <Text style={[TYPOGRAPHY.medium, {paddingLeft: 20, fontSize: 17}]}>
             Paypel
           </Text>
         </TouchableOpacity>
@@ -32,7 +32,7 @@ export default class Wallet extends Component {
             style={styles.paymentImg}
             source={require('../../assets/images/payment/payumoney.png')}
           />
-          <Text style={[TYPOGRAPHY.medium, {paddingLeft: 20, fontSize: 20}]}>
+          <Text style={[TYPOGRAPHY.medium, {paddingLeft: 20, fontSize: 17}]}>
             PayU money
           </Text>
         </TouchableOpacity>
@@ -41,18 +41,18 @@ export default class Wallet extends Component {
             style={styles.paymentImg}
             source={require('../../assets/images/payment/stripe.png')}
           />
-          <Text style={[TYPOGRAPHY.medium, {paddingLeft: 20, fontSize: 20}]}>
+          <Text style={[TYPOGRAPHY.medium, {paddingLeft: 20, fontSize: 17}]}>
             Stripe
           </Text>
         </TouchableOpacity>
         <View style={{marginTop: 30}}>
-          <Text style={[TYPOGRAPHY.h3, {paddingBottom: 20}]}>Card</Text>
+          <Text style={[TYPOGRAPHY.h4Bold, {paddingBottom: 20}]}>Card</Text>
           <TouchableOpacity style={styles.paymentBox}>
             <Image
               style={[styles.paymentImg, {resizeMode: 'contain'}]}
               source={require('../../assets/images/payment/card.png')}
             />
-            <Text style={[TYPOGRAPHY.medium, {paddingLeft: 20, fontSize: 20}]}>
+            <Text style={[TYPOGRAPHY.medium, {paddingLeft: 20, fontSize: 17}]}>
               Bank
             </Text>
           </TouchableOpacity>

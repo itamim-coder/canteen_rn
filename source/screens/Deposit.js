@@ -14,6 +14,9 @@ import SCREEN from '../theme/Screen';
 import BUTTONS from '../theme/Buttons';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import axios from 'axios';
+import {Button} from 'react-native';
+import DatePicker from 'react-native-date-picker';
+import {colors} from '../theme/colors';
 
 export default class Deposit extends Component {
   constructor(props) {
@@ -33,15 +36,17 @@ export default class Deposit extends Component {
       state: 'Cayman',
       currency: 'USD',
       save: 'yes',
+      date: new Date(),
+      open: false,
       //   transactionData: [],
     };
   }
   deposit = async () => {
-    const user = await AsyncStorage.getItem('userInfo');
+    const user = await AsyncStorage.getItem('token');
     const parse = JSON.parse(user);
 
-    const token = '1|ZE85ycMus7eRT0dk9h2IJZIp1RBSNgd1n9KYxMHZ';
-    console.log(token);
+    const token = parse;
+    console.log('token', token);
     const data = {
       card_no: this.state.card_no,
       expiry_date: this.state.expiry_date,
@@ -79,11 +84,11 @@ export default class Deposit extends Component {
       );
   };
   render() {
+    console.log(this.state.date);
     return (
-      <SafeAreaView style={{flex: 1}}>
-        <Statusbar />
+      <SafeAreaView style={{flex: 1, backgroundColor: colors.white}}>
+        <Statusbar name={'Deposit'} />
         <ScrollView showsHorizontalScrollIndicator={false}>
-          <Text>Deposit</Text>
           <View style={[SCREEN.screen]}>
             <Text style={[TYPOGRAPHY.h5]}>Card No</Text>
             <View
@@ -98,9 +103,12 @@ export default class Deposit extends Component {
                 style={[INPUT.input, TYPOGRAPHY.h5]}
               />
             </View>
-            <Text style={[TYPOGRAPHY.h5]}>Expiry Date</Text>
+            <Text style={[TYPOGRAPHY.h5, {}]}>Expiry Date</Text>
             <View
-              style={[INPUT.inputContainer, {marginTop: 0, marginBottom: 35}]}>
+              style={[
+                INPUT.inputContainer,
+                {flexDirection: 'row', marginTop: 0, marginBottom: 35},
+              ]}>
               <TextInput
                 value={this.state.expiry_date}
                 onChangeText={value => {
@@ -111,6 +119,7 @@ export default class Deposit extends Component {
                 style={[INPUT.input, TYPOGRAPHY.h5]}
               />
             </View>
+
             <Text style={[TYPOGRAPHY.h5]}>CCV</Text>
             <View
               style={[INPUT.inputContainer, {marginTop: 0, marginBottom: 35}]}>

@@ -11,6 +11,7 @@ import {
   View,
 } from 'react-native';
 import {colors} from '../theme/colors';
+import AntDesign from 'react-native-vector-icons/AntDesign';
 
 import Statusbar from '../components/Statusbar';
 import FlashMessage from 'react-native-flash-message';
@@ -22,6 +23,12 @@ import Button from '../components/Button';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import {FOOD_LIST} from '../data/food-list';
 import {getStoredCart} from '../../Function/Cart';
+import {connect} from 'react-redux';
+import {addToCart, reset, selectCart} from './../../redux/cartSlice';
+import {deleteFromCart} from './../../redux/cartSlice';
+import {increment} from '../../redux/counterSlice';
+import CounterButton from '../components/CounterButton';
+// import {createConfigItem, parse} from '@babel/core';
 
 export class MyCart extends Component {
   constructor(props) {
@@ -32,65 +39,59 @@ export class MyCart extends Component {
       total: null,
       cart: [],
       indicator: false,
+      newQuantity: '',
+      // quantity: '',
+      // count: initialValue || 0,
     };
+    console.log('props', this.props.carts);
   }
-
-  async componentDidMount() {
-    const store = await getStoredCart();
-    console.log('store', store);
-    fetch('https://laqil.com/public/api/product-list')
-      .then(res => res.json())
-      .then(res => {
-        // this.setState({products: res});
-        // this.setState({foods: res});
-        if (res.status == true) {
-          this.setState({products: res.data});
-          // return this.state.foods;
-          // this.setState({visible: false});
-        }
-        // console.log(this.state.products);
-        const {products} = this.state;
-        const savedCart = [];
-        console.log(products);
-        for (const id in store) {
-          // console.log(id);
-          const addedProduct = products.find(product => product.id == id);
-          if (addedProduct) {
-            const quantity = store[id];
-            addedProduct.quantity = quantity;
-            savedCart.push(addedProduct);
-          }
-        }
-        this.setState({cart: savedCart});
-      });
-  }
-  dltFromCart = async id => {
-    // this.setState({indicator: true});
-    console.log(id);
-    const storedCart = await AsyncStorage.getItem('shopping-cart');
-    // console.log('before', storedCart);
-    if (storedCart) {
-      const shoppingCart = JSON.parse(storedCart);
-      if (id in shoppingCart) {
-        // console.log('exist');
-        delete shoppingCart[id];
-        const jsonValue = JSON.stringify(shoppingCart);
-        await AsyncStorage.setItem('shopping-cart', jsonValue);
-        // this.setState({cart: [...shoppingCart]});
-        console.log('after', shoppingCart);
-        this.setState({cart: shoppingCart});
-        // this.setState({indicator: false});
-      }
-    }
+  increment = value => {
+    console.log(value);
+    const count = value + 1;
+    this.setState({quantity: count});
   };
 
+  dltFromCart = id => {
+    // this.setState({indicator: true});
+
+    this.props.deleteFromCart({id: id});
+  };
   renderCart = ({item}) => {
-    // console.log(item.quantity);
-    // console.log(this.state.cart.id);
+    const {quantity} = item;
+    console.log('quan', quantity);
 
-    console.log(item.quantity);
-    console.log(this.state.count);
+    // console.log(this.state.count);
+    // const increment = item => {
+    //   const count = item.quantity + 1;
+    //   const updateCart = {
+    //     id: item.item.id,
+    //     description: item.item.description,
+    //     price: item.item.price,
+    //     picture: item.item.picture,
+    //     quantity: count,
+    //     quantityPrice: item.item.price * count,
+    //   };
+    //   console.log(updateCart);
+    //   // this.props.addToCart({updateCart});
+    // };
+    const onAmountChange = (value, item) => {
+      console.log('val', value);
+    };
+    const decrement = item => {
+      console.log(item.item.quantity);
 
+      if (item.item.quantity > 1) {
+        const count = item.item.quantity - 1;
+        console.log('count ', count);
+        item.item.quantity = count;
+        // this.setState({newQuantity: item.item.quantity});
+        // console.log('val -quan', count);
+      }
+      console.log(item);
+      // console.log(item.item.quantity);
+    };
+    // item.quantity = this.state.newQuantity;
+    // console.log('nq', item);
     return (
       <View>
         {this.state.indicator ? (
@@ -103,92 +104,94 @@ export class MyCart extends Component {
               marginVertical: 5,
               borderRadius: 6,
               alignItems: 'center',
-              justifyContent: 'space-around',
+              flex: 1,
+              // justifyContent: 'space-between',
             }}>
-            <Image
-              style={{width: 100, height: 100}}
-              source={{uri: item.picture}}
-            />
-            <View>
-              <View>
-                <Text style={[TYPOGRAPHY.h3, {fontSize: 15}]}>
+            <View style={{flex: 1, backgroundColor: colors.red}}>
+              <Image
+                resizeMode="cover"
+                style={{width: '100%', height: 90}}
+                source={{uri: item.picture}}
+              />
+            </View>
+            <View
+              style={{
+                flex: 3,
+                marginLeft: 10,
+                // backgroundColor: colors.red,
+                justifyContent: 'space-between',
+              }}>
+              <View style={{marginBottom: 15}}>
+                <Text style={[TYPOGRAPHY.h4Bold, {fontSize: 14}]}>
                   {item.description}
-                  {/* {data.productName} */}
                 </Text>
               </View>
               <View
                 style={{
-                  flexDirection: 'row',
                   justifyContent: 'space-between',
-                  alignItems: 'center',
-                  // marginHorizontal:50,
-                }}>
-                <Text style={{color: colors.green, fontSize: 15}}>Custom</Text>
 
+                  flexDirection: 'row',
+                }}>
                 <View
                   style={{
                     flexDirection: 'row',
-                    marginHorizontal: 20,
-                    backgroundColor: colors.darkOrange,
-                    borderRadius: 5,
-                    paddingVertical: 5,
+                    flex: 1,
+                    // backgroundColor: colors.red,
+                    justifyContent: 'space-between',
+                    alignItems: 'center',
                   }}>
-                  <TouchableOpacity
-                    onPress={() =>
-                      this.setState({count: this.state.count - 1})
-                    }>
-                    <Text
-                      style={{
-                        fontSize: 17,
-                        color: colors.white,
-                        paddingHorizontal: 10,
-                      }}>
-                      -
-                    </Text>
-                  </TouchableOpacity>
+                  {/* <Text style={{color: colors.green, fontSize: 14}}>
+                    Custom
+                  </Text> */}
                   <Text
-                    style={{
-                      fontSize: 17,
-                      color: colors.white,
-                      paddingHorizontal: 10,
-                    }}>
-                    {this.state.count + item.quantity}
-                  </Text>
-                  <TouchableOpacity
-                    onPress={() =>
-                      this.setState({count: this.state.count + 1})
-                    }>
-                    <Text
-                      style={{
-                        fontSize: 17,
-                        color: colors.white,
+                    style={[
+                      TYPOGRAPHY.primary,
+                      {
+                        backgroundColor: colors.lightgreen,
                         paddingHorizontal: 10,
-                      }}>
-                      +
-                    </Text>
-                  </TouchableOpacity>
+                        paddingVertical: 2,
+                        borderRadius: 5,
+                        color: colors.green,
+                        fontWeight: 'bold',
+                      },
+                    ]}>
+                    Qty: {quantity} x Price: {item.price}
+                  </Text>
+
+                  <Text
+                    style={[
+                      TYPOGRAPHY.primary,
+                      {
+                        backgroundColor: colors.lightgreen,
+                        paddingHorizontal: 10,
+                        paddingVertical: 2,
+                        borderRadius: 5,
+                        color: colors.green,
+                        fontWeight: 'bold',
+                        fontWeight: 'bold',
+                      },
+                    ]}>
+                    ${item.quantityPrice}
+                  </Text>
+
+                  <View />
                 </View>
-
-                <Text
-                  style={[
-                    TYPOGRAPHY.primary,
-                    {
-                      marginHorizontal: 20,
-                      alignItems: 'center',
-                      fontWeight: 'bold',
-                    },
-                  ]}>
-                  ${item.quantity * item.price}
-                </Text>
-                <TouchableOpacity
-                  onPress={() => {
-                    this.dltFromCart(item.id);
-                  }}>
-                  <Text>X</Text>
-                </TouchableOpacity>
-
-                <View />
               </View>
+            </View>
+            <View
+              style={{
+                marginBottom: 65,
+                padding: 3,
+                borderRadius: 50,
+                // borderWidth: 1,
+                backgroundColor: colors.red,
+              }}>
+              <TouchableOpacity
+                onPress={() => {
+                  this.dltFromCart(item.id);
+                }}>
+                <Text style={{color: colors.white}}>X</Text>
+              </TouchableOpacity>
             </View>
           </View>
         )}
@@ -201,7 +204,7 @@ export class MyCart extends Component {
     const cartContainer = {
       ...SCREEN.screen,
       padding: 0,
-      backgroundColor: colors.black,
+      // backgroundColor: colors.black,
     };
 
     const cartDetails = {
@@ -235,14 +238,54 @@ export class MyCart extends Component {
       paddingHorizontal: 30,
       marginBottom: 18,
     };
-    this.clearCart = () => {
-      AsyncStorage.removeItem('shopping-cart');
-      this.setState({cart: []});
+    const clearCart = () => {
+      this.props.reset();
     };
-
+    console.log(this.props.totalAmount);
     return (
       <SafeAreaView style={cartContainer}>
-        <Statusbar name="My Cart" />
+        <View
+          style={{
+            flexDirection: 'row',
+            alignItems: 'center',
+            padding: 15,
+            backgroundColor: colors.white,
+          }}>
+          <TouchableOpacity
+            onPress={() => {
+              this.props.navigation.goBack();
+            }}
+            style={{flex: 0.1}}>
+            <AntDesign name="left" size={20} color="black" />
+          </TouchableOpacity>
+          <View style={{flex: 2}}>
+            <Text
+              style={[
+                TYPOGRAPHY.h4Bold,
+                {
+                  textAlign: 'center',
+                },
+              ]}>
+              Cart({this.props.length})
+            </Text>
+          </View>
+          <TouchableOpacity
+            onPress={() => {
+              clearCart();
+            }}>
+            <View
+              style={{
+                backgroundColor: '#FFD8DA',
+                paddingHorizontal: 5,
+                paddingVertical: 4,
+                borderRadius: 5,
+              }}>
+              <Text style={[TYPOGRAPHY.h6Bold, {color: colors.red}]}>
+                Clear Cart
+              </Text>
+            </View>
+          </TouchableOpacity>
+        </View>
 
         {/* full screen  */}
 
@@ -252,17 +295,10 @@ export class MyCart extends Component {
             style={{marginTop: 20, flex: 1}}>
             {/* product card */}
             <FlatList
-              data={this.state.cart}
+              data={this.props.carts}
               renderItem={item => this.renderCart(item)}
             />
-            <View>
-              <TouchableOpacity
-                onPress={() => {
-                  this.clearCart();
-                }}>
-                <Text>Clear Cart</Text>
-              </TouchableOpacity>
-            </View>
+
             {/* Total calculation */}
             <View style={{marginTop: 40}}>
               <View style={calculationCard}>
@@ -272,7 +308,7 @@ export class MyCart extends Component {
                 </View>
 
                 <View>
-                  <Text style={TYPOGRAPHY.h5}>$200</Text>
+                  <Text style={TYPOGRAPHY.h5}>${this.props.totalAmount}</Text>
                   <Text style={TYPOGRAPHY.h5}>$200</Text>
                 </View>
               </View>
@@ -304,5 +340,28 @@ export class MyCart extends Component {
     );
   }
 }
+const mapStateToProps = state => {
+  return {
+    // carts: state.cart.carts,
+    carts: state.cart,
+    length: state.cart.length,
+    totalAmount: state.cart.reduce((acc, item) => acc + item.quantityPrice, 0),
+  };
+};
 
-export default MyCart;
+const mapDispatchToProps = dispatch => {
+  // console.log(cartProduct);
+  return {
+    addToCart: data => {
+      dispatch(addToCart(data));
+    },
+    deleteFromCart: id => {
+      dispatch(deleteFromCart(id));
+    },
+    reset: () => {
+      dispatch(reset());
+    },
+  };
+};
+
+export default connect(mapStateToProps, mapDispatchToProps)(MyCart);

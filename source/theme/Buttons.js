@@ -14,7 +14,7 @@ const BUTTONS = StyleSheet.create({
   btnFont: {
     color: colors.white,
     fontFamily: Fonts.primaryMedium,
-    fontSize: 17,
+    fontSize: 15,
   },
 });
 

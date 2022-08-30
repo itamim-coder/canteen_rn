@@ -10,7 +10,7 @@ export default class Payment extends Component {
   render() {
     const paymentContainer = {backgroundColor: colors.black, flex: 1};
     const amountText = {
-      ...TYPOGRAPHY.h3,
+      ...TYPOGRAPHY.h4Bold,
       color: colors.pink,
     };
     return (
@@ -24,7 +24,7 @@ export default class Payment extends Component {
             padding: 10,
             backgroundColor: colors.white,
           }}>
-          <Text style={TYPOGRAPHY.h3}>Amount to Pay</Text>
+          <Text style={TYPOGRAPHY.h4Bold}>Amount to Pay</Text>
           <Text style={amountText}>$100</Text>
         </View>
         <Wallet />
@@ -33,9 +33,4 @@ export default class Payment extends Component {
   }
 }
 
-const styles = StyleSheet.create({
-  headText: {
-    fontSize: 20,
-    fontWeight: 'bold',
-  },
-});
+

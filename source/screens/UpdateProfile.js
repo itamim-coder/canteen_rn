@@ -17,17 +17,146 @@ import SCREEN from '../theme/Screen';
 import TYPOGRAPHY from '../theme/typography';
 import INPUT from '../theme/Input';
 import BUTTONS from '../theme/Buttons';
-
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import axios from 'axios';
+import {launchCamera, launchImageLibrary} from 'react-native-image-picker';
 export default class UpdateProfile extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      selectedValue: 'no',
+      selectedValue: '0',
+      name: '',
+      phone: '',
+      email: '',
+      display_name: '',
+      userData: {},
+      notify_low_balance: '',
+      notify_promotions: '',
+      notify_orders: '',
+      low_balance_point: '',
+      notes: '',
+      is_locked: '1',
+      status: '1',
+      prev: '',
+      response: null,
+      fetch_email: '',
     };
+    console.log('item', this.state.userData);
   }
+  componentDidMount() {
+    this.getProfile();
+  }
+  getProfile = async () => {
+    const user = await AsyncStorage.getItem('userInfo');
+    const parse = JSON.parse(user);
+
+    const token = parse.token;
+    console.log('token', user);
+
+    axios
+      .get('https://laqil.com/public/api/profile', {
+        headers: {Authorization: `Bearer ${token}`},
+      })
+      .then(
+        res => {
+          console.log(res.data);
+          this.setState({userData: res.data?.data});
+
+          this.setState({notify_low_balance: res.data.data.notify_low_balance});
+          console.log(this.state.notify_low_balance);
+        },
+        err => {
+          console.log(err);
+        },
+      );
+  };
+
+  updateProfile = async ({email}) => {
+    this.setState({email: email});
+
+    console.log(this.state.phone);
+    const user = await AsyncStorage.getItem('userInfo');
+    const parse = JSON.parse(user);
+
+    const token = parse.token;
+    console.log(token);
+    const data = {
+      name: (this.state.name && this.state.name) || this.state.userData.name,
+      phone:
+        (this.state.phone && this.state.phone) || this.state.userData.phone,
+
+      email: this.state.email,
+      is_locked: this.state.is_locked,
+      status: this.state.status,
+      // display_name: this.state.display_name,
+
+      // notify_low_balance: this.status.notify_low_balance,
+      // notify_promotions: this.state.notify_promotions,
+      // notify_orders: this.state.notify_orders,
+      // low_balance_point: this.state.low_balance_point,
+      // response: null,
+      notes: this.state.notes,
+    };
+
+    console.log(data);
+    axios
+      .post('https://laqil.com/public/api/update-profile', data, {
+        headers: {Authorization: `Bearer ${token}`},
+      })
+      .then(
+        res => {
+          console.log(res);
+          if (res.data.status == true) {
+            alert(res.data.message);
+            this.props.navigation.navigate('Profile');
+          }
+        },
+        err => {
+          console.log(err);
+        },
+      );
+  };
+
+  openGallery = () => {
+    const options = {
+      storageOptions: {
+        path: 'images',
+        mediaType: 'photo',
+      },
+      includeBase64: true,
+    };
+
+    launchImageLibrary(options, response => {
+      console.log(response);
+      if (response.didCancel) {
+        alert('User Cancelled');
+      } else if (response.error) {
+        alert(response.error);
+      } else if (response.customButton) {
+        alert(response.customButton);
+      } else {
+        console.log(options);
+        // this.setState({response: response});
+      }
+    });
+  };
+
   render() {
+    const {
+      name,
+      balance,
+      email,
+      phone,
+      notify_low_balance,
+      notify_promotions,
+      notify_orders,
+      low_balance_point,
+      notes,
+    } = this.state.userData;
+    // this.setState({fetch_email: this.state.userData.email});
+    console.log('response', this.state.userData.name);
     return (
-      <SafeAreaView style={SCREEN.screen}>
+      <SafeAreaView style={[SCREEN.screen, {backgroundColor: colors.white}]}>
         <ScrollView showsVerticalScrollIndicator={false}>
           <View
             style={{
@@ -40,10 +169,42 @@ export default class UpdateProfile extends Component {
             <View>
               <Text style={[TYPOGRAPHY.primary, {fontSize: 28}]}>Profile</Text>
             </View>
-            <Image
-              style={{width: 80, height: 80}}
-              source={require('../../assets/images/profile.png')}
-            />
+
+            <TouchableOpacity onPress={() => this.openGallery()}>
+              {this.state.response === null ? (
+                <>
+                  <Image
+                    resizeMode="contain"
+                    style={{
+                      width: 80,
+                      height: 80,
+                      borderRadius: 50,
+                      // backgroundColor: colors.red,
+                    }}
+                    source={require('../../assets/images/profile.png')}
+                  />
+                </>
+              ) : (
+                <>
+                  {this.state.response?.assets &&
+                    this.state.response?.assets.map(({uri}) => (
+                      <View key={uri}>
+                        <Image
+                          resizeMode="contain"
+                          resizeMethod="scale"
+                          style={{
+                            width: 80,
+                            height: 80,
+                            borderRadius: 50,
+                            // backgroundColor: colors.red,
+                          }}
+                          source={{uri}}
+                        />
+                      </View>
+                    ))}
+                </>
+              )}
+            </TouchableOpacity>
           </View>
 
           <View>
@@ -54,9 +215,13 @@ export default class UpdateProfile extends Component {
                 </Text>
                 <View style={INPUT.inputContainer}>
                   <TextInput
-                    // onChangeText={text => setName(text)}
+                    onChangeText={value => {
+                      this.setState({
+                        name: value ? value : this.state.userData.name,
+                      });
+                    }}
                     placeholder="Enter Full Name"
-                    defaultValue="Zahid"
+                    defaultValue={this.state.userData.name}
                     placeholderTextColor={'grey'}
                     style={INPUT.input}
                   />
@@ -69,12 +234,12 @@ export default class UpdateProfile extends Component {
                 <View style={INPUT.inputContainer}>
                   <TextInput
                     // onChangeText={text => setName(text)}
-                    defaultValue="3820"
-                    placeholderTextColor={'grey'}
+                    defaultValue={this.state.userData.balance}
+                    placeholderTextColor={'gray'}
                     editable={false}
                     style={[
                       INPUT.input,
-                      {color: colors.grey, backgroundColor: colors.light},
+                      {color: colors.gray, backgroundColor: colors.gray},
                     ]}
                   />
                 </View>
@@ -85,9 +250,11 @@ export default class UpdateProfile extends Component {
             </Text>
             <View style={INPUT.inputContainer}>
               <TextInput
-                // onChangeText={text => setName(text)}
+                onChangeText={value => {
+                  this.setState({phone: value});
+                }}
                 placeholder="Enter Phone Number"
-                defaultValue="+0085324324"
+                defaultValue={this.state.userData.phone}
                 placeholderTextColor={'grey'}
                 style={INPUT.input}
                 keyboardType="numeric"
@@ -100,12 +267,12 @@ export default class UpdateProfile extends Component {
               <TextInput
                 // onChangeText={text => setPhone(text)}
                 placeholder="Enter Email Address"
-                defaultValue="zahid@powah.com"
+                defaultValue={this.state.userData.email}
                 editable={false}
                 placeholderTextColor={'grey'}
                 style={[
                   INPUT.input,
-                  {color: colors.grey, backgroundColor: colors.light},
+                  {color: colors.grey, backgroundColor: colors.gray},
                 ]}
               />
             </View>
@@ -116,13 +283,16 @@ export default class UpdateProfile extends Component {
                   Notify Low Balance
                 </Text>
                 <Picker
-                  selectedValue={this.state.selectedValue}
+                  // defaultSelectedValue={this.state.userData.notify_low_balance}
+                  // defaultValue={this.state.userData.notify_low_balance}
+                  selectedValue={this.state.notify_low_balance}
                   style={{height: 50, width: 150}}
                   onValueChange={(itemValue, itemIndex) => {
-                    this.setState({selectedValue: itemValue});
+                    console.log('item', this.state.notify_low_balance);
+                    this.setState({notify_low_balance: itemValue});
                   }}>
-                  <Picker.Item label="NO" value="no" />
-                  <Picker.Item label="YES" value="yes" />
+                  <Picker.Item label="NO" value="0" />
+                  <Picker.Item label="YES" value="1" />
                 </Picker>
               </View>
               <View style={{flex: 1, margin: 3}}>
@@ -133,6 +303,7 @@ export default class UpdateProfile extends Component {
                   <TextInput
                     // onChangeText={text => setName(text)}
                     // defaultValue="3820"
+                    defaultValue={this.state.userData.low_balance_point}
                     placeholderTextColor={'grey'}
                     // editable={false}
                     style={[INPUT.input, {color: colors.black}]}
@@ -148,13 +319,14 @@ export default class UpdateProfile extends Component {
                   Notify Promotions
                 </Text>
                 <Picker
-                  selectedValue={this.state.selectedValue}
+                  // selectedValue={this.state.initialOption}
+                  selectedValue={this.state.notify_promotions}
                   style={{height: 50, width: 150}}
                   onValueChange={(itemValue, itemIndex) => {
-                    this.setState({selectedValue: itemValue});
+                    this.setState({notify_promotions: itemValue});
                   }}>
-                  <Picker.Item label="NO" value="no" />
-                  <Picker.Item label="YES" value="yes" />
+                  <Picker.Item label="NO" value="0" />
+                  <Picker.Item label="YES" value="1" />
                 </Picker>
               </View>
               <View style={{flex: 1, margin: 3}}>
@@ -167,8 +339,8 @@ export default class UpdateProfile extends Component {
                   onValueChange={(itemValue, itemIndex) => {
                     this.setState({selectedValue: itemValue});
                   }}>
-                  <Picker.Item label="NO" value="no" />
-                  <Picker.Item label="YES" value="yes" />
+                  <Picker.Item label="NO" value="0" />
+                  <Picker.Item label="YES" value="1" />
                 </Picker>
               </View>
             </View>
@@ -179,9 +351,7 @@ export default class UpdateProfile extends Component {
 
             <KeyboardAvoidingView style={INPUT.inputContainer}>
               <TextInput
-                // onChangeText={text => setPhone(text)}
-                //   placeholder="Enter Email Address"
-                // defaultValue="zahid@powah.com"
+                defaultValue={this.state.userData.notes}
                 multiline={true}
                 numberOfLines={3}
                 // editable={false}
@@ -189,12 +359,13 @@ export default class UpdateProfile extends Component {
                 style={[INPUT.input, {color: colors.black}]}
               />
             </KeyboardAvoidingView>
-
-            <TouchableOpacity style={BUTTONS.btnPrimary}>
-              <Text style={BUTTONS.btnFont}>Save</Text>
-            </TouchableOpacity>
           </View>
         </ScrollView>
+        <TouchableOpacity
+          onPress={() => this.updateProfile({email, phone, name, notes})}
+          style={BUTTONS.btnPrimary}>
+          <Text style={BUTTONS.btnFont}>Save</Text>
+        </TouchableOpacity>
       </SafeAreaView>
     );
   }

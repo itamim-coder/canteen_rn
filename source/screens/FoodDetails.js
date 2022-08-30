@@ -23,29 +23,49 @@ import TYPOGRAPHY from '../theme/typography';
 import BUTTONS from '../theme/Buttons';
 import {Fonts} from '../theme/Fonts';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import {connect} from 'react-redux';
+import {addToCart} from '../../redux/cartSlice';
+import {MapDispatchToProps} from 'react-redux';
+import store from '../../redux';
+import FloatCart from '../components/FloatCart';
+import CounterButton from '../components/CounterButton';
 
 export class FoodDetails extends Component {
   constructor(props) {
     super(props);
     this.state = {
       id: this.props.route?.params?.id,
-      quantity: this.props.route?.params?.quantity,
+      // quantity: this.props.route?.params?.quantity,
       name: this.props.route?.params?.id,
       price: this.props.route?.params?.id,
       description: this.props.route.params.description,
       foodDetails: {},
       cart: '',
       visible: false,
+      cartProducts: [],
+      quantity: 1,
     };
-    console.log('product', this.props.route.params.item);
+    console.log('foodetails', this.state.quantity);
   }
+
+  increment = () => {
+    const count = this.state.quantity + 1;
+    this.setState({quantity: count});
+  };
+  decrement = () => {
+    if (this.state.quantity > 1) {
+      const count = this.state.quantity - 1;
+      this.setState({quantity: count});
+    }
+  };
+
   componentDidMount() {
-    console.log(this.state.id);
+    // console.log(this.state.id);
     this.setState({visible: true});
     fetch(`https://laqil.com/public/api/product-details/${this.state.id}`)
       .then(res => res.json())
       .then(res => {
-        console.log(res.data);
+        // console.log(res.data);
         // this.setState({foods: res});
         if (res.status == true) {
           this.setState({foodDetails: res.data});
@@ -133,46 +153,24 @@ export class FoodDetails extends Component {
       color: colors.white,
     };
 
-    const addToCart = async added => {
-      console.log(added);
-      let shoppingCart;
-
-      //get shopping cart
-      const storedCart = await AsyncStorage.getItem('shopping-cart');
-      if (storedCart) {
-        shoppingCart = JSON.parse(storedCart);
-      } else {
-        shoppingCart = {};
-      }
-
-      // add quantity
-      // console.log(shoppingCart);
-      const quantity = shoppingCart[id];
-      // const product = shoppingCart[this.state.item];
-      // console.log(shoppingCart[id]);
-      if (quantity) {
-        const newQuantity = quantity + 1;
-
-        shoppingCart[id] = newQuantity;
-      } else {
-        shoppingCart[id] = 1;
-        // shoppingCart[product] = this.state.foodDetails;
-        // shoppingCart[id].push = added;
-      }
-      // console.log(this.state?.foodDetails);
-      console.log('shopping cart', shoppingCart);
-      const jsonValue = JSON.stringify(shoppingCart);
-      AsyncStorage.setItem('shopping-cart', jsonValue);
-      // console.log(shoppingCart);
+    const add = added => {
+      const cartProduct = {
+        id: added.id,
+        description: added.description,
+        price: added.price,
+        picture: added.picture,
+        quantity: this.state.quantity,
+        quantityPrice: added.price * this.state.quantity,
+      };
+      this.props.addToCart({cartProduct});
     };
-
     const food = this.props.route.params.food;
 
     const {ingredients, pack_details, price, picture, description, id} =
       this.state?.foodDetails;
     const added = this.state.foodDetails;
-    // console.log('added', added);
-    // console.log('render', this.state?.foodDetails);
+    // console.log('added', this.state.foodDetails);
+
     return (
       <SafeAreaView style={detailsContainer}>
         <Statusbar name={description} type="food" />
@@ -204,7 +202,7 @@ export class FoodDetails extends Component {
                     justifyContent: 'center',
                   }}
                 />
-                <Text style={[TYPOGRAPHY.medium, {fontSize: 22}]}>
+                <Text style={[TYPOGRAPHY.h4, {fontSize: 20}]}>
                   {description}
                 </Text>
                 <Text style={[TYPOGRAPHY.h4, {color: colors.green}]}>
@@ -217,42 +215,82 @@ export class FoodDetails extends Component {
                     alignItems: 'center',
                     paddingVertical: 10,
                   }}>
-                  <Text style={TYPOGRAPHY.h3}>${price}.00</Text>
+                  <Text style={TYPOGRAPHY.h4Bold}>${price}.00</Text>
 
-                  <TouchableOpacity
-                    // onPress={() => (id ? addToCart(id) : null)}
-                    onPress={() => {
-                      addToCart(added);
-                    }}
-                    /* HERE IS WHERE WE'RE GOING TO SHOW OUR FIRST MESSAGE */
-                    // showMessage({
-                    //   message: 'Added Successfully',
-                    //   description: 'Click here to check cart',
-                    //   type: 'success',
-                    //   icon: 'success',
-                    //   onPress: () => {
-                    //     this.props.navigation.navigate('My Cart');
-                    //     /* THIS FUNC/CB WILL BE CALLED AFTER MESSAGE PRESS */
-                    //   },
-                    // });
-                    // }}
+                  <View
                     style={{
-                      backgroundColor: '#f5474a',
-                      paddingVertical: 7,
-                      paddingHorizontal: 10,
-                      borderRadius: 10,
                       flexDirection: 'row',
+                      alignItems: 'center',
+                      justifyContent: 'space-between',
                     }}>
-                    <Text style={[cartButton, {fontFamily: Fonts.primary}]}>
-                      Add{' '}
-                    </Text>
-                    <Text style={[cartButton, {fontFamily: Fonts.primary}]}>
-                      {' '}
-                      +
-                    </Text>
-                  </TouchableOpacity>
+                    <View
+                      style={{
+                        // paddingVertical: 8,
+
+                        borderRadius: 5,
+                        backgroundColor: colors.gray,
+                        marginRight: 15,
+                        flexDirection: 'row',
+                        alignItems: 'center',
+                        justifyContent: 'space-evenly',
+                        borderRadius: 5,
+                      }}>
+                      <TouchableOpacity
+                        onPress={() => this.decrement()}
+                        style={{
+                          padding: 8,
+                          // backgroundColor: colors.red,
+                          borderRadius: 5,
+                          marginRight: 2,
+                        }}>
+                        <Text>-</Text>
+                      </TouchableOpacity>
+                      <Text
+                        style={{
+                          padding: 8,
+                          // backgroundColor: colors.red,
+                          borderRadius: 5,
+                          marginRight: 2,
+                        }}>
+                        {this.state.quantity}
+                      </Text>
+                      <TouchableOpacity
+                        onPress={() => this.increment()}
+                        style={{
+                          padding: 8,
+                          // backgroundColor: colors.red,
+                          borderRadius: 5,
+                        }}>
+                        <Text>+</Text>
+                      </TouchableOpacity>
+                    </View>
+                    <View>
+                      <TouchableOpacity
+                        onPress={() => {
+                          add(added);
+                        }}
+                        style={{
+                          backgroundColor: '#f5474a',
+                          paddingVertical: 5,
+                          paddingHorizontal: 15,
+                          borderRadius: 5,
+                          flexDirection: 'row',
+                        }}>
+                        <Text
+                          style={[
+                            cartButton,
+                            {fontFamily: Fonts.primary, marginRight: 15},
+                          ]}>
+                          Add
+                        </Text>
+                        <Text style={[cartButton, {fontFamily: Fonts.primary}]}>
+                          +
+                        </Text>
+                      </TouchableOpacity>
+                    </View>
+                  </View>
                 </View>
-                <Text style={TYPOGRAPHY.h3}>About Product</Text>
+                <Text style={TYPOGRAPHY.h4}>About Product</Text>
                 <Text style={TYPOGRAPHY.primary}>{ingredients}</Text>
               </View>
 
@@ -318,10 +356,26 @@ export class FoodDetails extends Component {
       renderItem={item => this.renderItem(item)}
     />
   </ScrollView> */}
-        <FlashMessage position="top" />
+
+        <FloatCart navigation={this.props.navigation} />
       </SafeAreaView>
     );
   }
 }
+const mapStateToProps = state => {
+  return {
+    carts: state.cart.carts,
+    cart: state.cart,
+  };
+};
 
-export default FoodDetails;
+const mapDispatchToProps = dispatch => {
+  // console.log(cartProduct);
+  return {
+    addToCart: data => {
+      dispatch(addToCart(data));
+    },
+  };
+};
+
+export default connect(mapStateToProps, mapDispatchToProps)(FoodDetails);

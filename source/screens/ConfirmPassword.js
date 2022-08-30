@@ -25,9 +25,9 @@ export default class ResetRequest extends Component {
     super(props);
     this.state = {
       email: '',
-      emailerror: '',
+      email_error: '',
       code: '',
-      codeerror: '',
+      code_error: '',
       password: '',
       password_confirmation: '',
       password_error: '',
@@ -39,8 +39,41 @@ export default class ResetRequest extends Component {
   }
   validate_field = () => {
     const {code, email, password, password_confirmation} = this.state;
-    if (email == '') {
-      this.setState({emailerror: 'email input'});
+    if (
+      code == '' &&
+      email == '' &&
+      password == '' &&
+      password_confirmation == ''
+    ) {
+      this.setState({code_error: 'Please enter your code'});
+      this.setState({email_error: 'Please enter your register email'});
+
+      this.setState({password_error: 'Please enter your New password'});
+      this.setState({
+        password_confirmation_error: 'Please enter your New retype password',
+      });
+      return false;
+    } else if (code == '') {
+      this.setState({code_error: 'Please enter your code'});
+      return false;
+    } else if (password == '') {
+      this.setState({password_error: 'Please enter your New password'});
+      return false;
+    } else if (password_confirmation == '') {
+      this.setState({
+        password_confirmation_error: 'Please enter your New retype password',
+      });
+      return false;
+    } else if (password !== password_confirmation) {
+      this.setState({
+        password_confirmation_error: 'Password didnot match',
+      });
+      return false;
+    } else if (email == '') {
+      this.setState({email_error: 'email input'});
+      return false;
+    } else if (!email.match(/\S+@\S+\.\S+/)) {
+      this.setState({email_error: 'Email Address should be valid'});
       return false;
     }
     return true;
@@ -61,7 +94,6 @@ export default class ResetRequest extends Component {
         .then(res => {
           let confirmInfo = res.data;
           this.setState({resetInfo: confirmInfo});
-          AsyncStorage.setItem('confirmInfo', JSON.stringify(confirmInfo));
 
           const status = res.data.status;
           console.log(status);
@@ -74,22 +106,9 @@ export default class ResetRequest extends Component {
         })
         .catch(function (error) {
           if (error.response) {
-            // let emailerror = error.response.data.errors.email;
-
-            // this.setState({emailerror: emailerror});
             alert(error.response.data.errors.email);
 
-            // ToastAndroid.show(error.response.data.message, ToastAndroid.SHORT);
-            // this.setState({indicator: false});
-            // this.setState({disabled: false});
-
-            // return;
-            // The request was made and the server responded with a status code
-            // that falls out of the range of 2xx
             console.log(error.response.data.errors);
-
-            // console.log(error.response.status);
-            // console.log(error.response.headers);
           }
         });
     }
@@ -97,19 +116,21 @@ export default class ResetRequest extends Component {
 
   render() {
     return (
-      <SafeAreaView style={SCREEN.screen}>
+      <SafeAreaView style={[SCREEN.screen, {backgroundColor: colors.white}]}>
         <KeyboardAvoidingView>
           <Text style={[TYPOGRAPHY.h2]}>Reset Password</Text>
-          <Text style={[TYPOGRAPHY.primary]}>
+          <Text style={[TYPOGRAPHY.primary, {color: colors.ash}]}>
             Enter your email verification code will be sent on given email
           </Text>
           <View style={styles.otpBox}>
-            <Text style={[TYPOGRAPHY.primary]}>Enter your Code</Text>
+            <Text style={[TYPOGRAPHY.h5, {color: colors.ash, marginBottom: 5}]}>
+              Enter your Code
+            </Text>
             <View style={INPUT.inputContainer}>
               <TextInput
                 value={this.state.code}
                 onChangeText={value => {
-                  this.setState({code: value, codeerror: ''});
+                  this.setState({code: value, code_error: ''});
                 }}
                 placeholder="Code"
                 placeholderTextColor={'grey'}
@@ -117,14 +138,16 @@ export default class ResetRequest extends Component {
               />
             </View>
             <Text style={{color: colors.bloodRed, fontFamily: Fonts.primary}}>
-              {this.state.codeerror}
+              {this.state.code_error}
             </Text>
-            <Text style={[TYPOGRAPHY.primary]}>New Password</Text>
+            <Text style={[TYPOGRAPHY.h5, {color: colors.ash, marginBottom: 5}]}>
+              New Password
+            </Text>
             <View style={INPUT.inputContainer}>
               <TextInput
                 value={this.state.password}
                 onChangeText={value => {
-                  this.setState({password: value, passworderror: ''});
+                  this.setState({password: value, password_error: ''});
                 }}
                 placeholder="new password"
                 secureTextEntry
@@ -133,9 +156,11 @@ export default class ResetRequest extends Component {
               />
             </View>
             <Text style={{color: colors.bloodRed, fontFamily: Fonts.primary}}>
-              {this.state.passworderror}
+              {this.state.password_error}
             </Text>
-            <Text style={[TYPOGRAPHY.primary]}>Retype your password</Text>
+            <Text style={[TYPOGRAPHY.h5, {color: colors.ash, marginBottom: 5}]}>
+              Retype your password
+            </Text>
             <View style={INPUT.inputContainer}>
               <TextInput
                 value={this.state.password_confirmation}
@@ -154,12 +179,14 @@ export default class ResetRequest extends Component {
             <Text style={{color: colors.bloodRed, fontFamily: Fonts.primary}}>
               {this.state.password_confirmation_error}
             </Text>
-            <Text style={[TYPOGRAPHY.primary]}>Enter your email</Text>
+            <Text style={[TYPOGRAPHY.h5, {color: colors.ash, marginBottom: 5}]}>
+              Enter your email
+            </Text>
             <View style={INPUT.inputContainer}>
               <TextInput
                 value={this.state.email}
                 onChangeText={value => {
-                  this.setState({email: value, emailerror: ''});
+                  this.setState({email: value, email_error: ''});
                 }}
                 placeholder="Email"
                 placeholderTextColor={'grey'}
@@ -167,11 +194,9 @@ export default class ResetRequest extends Component {
               />
             </View>
             <Text style={{color: colors.bloodRed, fontFamily: Fonts.primary}}>
-              {this.state.emailerror}
+              {this.state.email_error}
             </Text>
             <TouchableOpacity
-              // onPress={handleSignin}
-
               onPress={() => {
                 this.confirmation_api_call();
               }}
@@ -183,7 +208,6 @@ export default class ResetRequest extends Component {
                 <Text style={BUTTONS.btnFont}>Confirm</Text>
               )}
             </TouchableOpacity>
-            {/* <Button type="submit" navigation={this.props.navigation} /> */}
           </View>
         </KeyboardAvoidingView>
       </SafeAreaView>

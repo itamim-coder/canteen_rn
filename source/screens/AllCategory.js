@@ -4,7 +4,7 @@ import {SafeAreaView} from 'react-native-safe-area-context';
 import Statusbar from '../components/Statusbar';
 import SCREEN from '../theme/Screen';
 import TYPOGRAPHY from '../theme/typography';
-import {CATEGORY_LIST} from '../data/category-list';
+
 import {colors} from '../theme/colors';
 
 export default class AllCategory extends Component {

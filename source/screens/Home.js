@@ -12,16 +12,16 @@ import {
   View,
 } from 'react-native';
 import React, {Component} from 'react';
-import {FOOD_LIST} from '../data/food-list';
+
 import {colors} from '../theme/colors';
-import {CATEGORY_LIST} from '../data/category-list';
 
 import SCREEN from '../theme/Screen';
 import TYPOGRAPHY from '../theme/typography';
 import {Fonts} from '../theme/Fonts';
-import Seacrh from '../components/Seacrh';
+import Search from '../components/Search';
 import Popular from '../components/Popular';
 import HomeTopBar from '../components/HomeTopBar';
+import FloatCart from '../components/FloatCart';
 
 export class Home extends Component {
   // render Category item
@@ -40,7 +40,7 @@ export class Home extends Component {
       .then(res => {
         if (res.status == true) {
           this.setState({category: res.data});
-          // console.log(this.state.category);
+
           this.setState({visible: false});
         }
       });
@@ -84,47 +84,53 @@ export class Home extends Component {
       paddingBottom: 0,
     };
     return (
-      <SafeAreaView style={homeContainer}>
+      <SafeAreaView style={{flex: 1}}>
         {/* Home Top Section  */}
 
-        {/* <HomeTopBar /> */}
-        <HomeTopBar navigation={this.props.navigation} />
+        <View style={homeContainer}>
+          {/* <HomeTopBar /> */}
+          <HomeTopBar navigation={this.props.navigation} />
 
-        <ScrollView showsVerticalScrollIndicator={false}>
-          {/* Search Box  */}
+          <ScrollView showsVerticalScrollIndicator={false}>
+            {/* Search Box  */}
 
-          <Seacrh />
+            <Search />
 
-          {/* Categories Section  */}
+            {/* Categories Section  */}
 
-          <View style={{flexDirection: 'row', justifyContent: 'space-between'}}>
-            <Text style={[TYPOGRAPHY.h4, {fontWeight: 'bold'}]}>
-              Categories
-            </Text>
-            <TouchableOpacity
-              onPress={() =>
-                this.props.navigation.navigate('AllCategory', {
-                  category: this.state.category,
-                })
-              }>
-              <Text style={[TYPOGRAPHY.h5, {color: colors.red}]}>See More</Text>
-            </TouchableOpacity>
-          </View>
-          {this.state.visible ? (
-            <ActivityIndicator color={colors.red} />
-          ) : (
-            <FlatList
-              horizontal
-              data={this.state?.category.slice(0, 6)}
-              keyExtractor={item => item.id}
-              showsHorizontalScrollIndicator={false}
-              renderItem={this.renderCategory}
-            />
-          )}
+            <View
+              style={{flexDirection: 'row', justifyContent: 'space-between'}}>
+              <Text style={[TYPOGRAPHY.h4, {fontWeight: 'bold'}]}>
+                Categories
+              </Text>
+              <TouchableOpacity
+                onPress={() =>
+                  this.props.navigation.navigate('AllCategory', {
+                    category: this.state.category,
+                  })
+                }>
+                <Text style={[TYPOGRAPHY.h5, {color: colors.red}]}>
+                  See More
+                </Text>
+              </TouchableOpacity>
+            </View>
+            {this.state.visible ? (
+              <ActivityIndicator color={colors.red} />
+            ) : (
+              <FlatList
+                horizontal
+                data={this.state?.category.slice(0, 6)}
+                keyExtractor={item => item.id}
+                showsHorizontalScrollIndicator={false}
+                renderItem={this.renderCategory}
+              />
+            )}
 
-          {/* Popular Section  */}
-          <Popular navigation={this.props.navigation} />
-        </ScrollView>
+            {/* Popular Section  */}
+            <Popular />
+          </ScrollView>
+        </View>
+        <FloatCart navigation={this.props.navigation} />
       </SafeAreaView>
     );
   }
