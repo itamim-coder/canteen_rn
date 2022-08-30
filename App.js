@@ -50,6 +50,8 @@ import store from './redux';
 import {PersistGate} from 'redux-persist/integration/react';
 import {persistStore} from 'redux-persist';
 import Navigation from './source/components/navigation';
+import AuthNav from './source/components/AuthNav';
+import MainNAv from './source/components/MainNAv';
 
 let persistore = persistStore(store);
 
@@ -59,11 +61,27 @@ const Tab = createBottomTabNavigator();
 export default class App extends Component {
   constructor(props) {
     super(props);
-    this.state = {};
+    this.state = {
+      // token: null,
+    };
+    // console.log('from pro', this.props);
   }
 
+  // getUser = async () => {
+  //   const user = await AsyncStorage.getItem('isLoggedIn');
+  //   const parse = JSON.parse(user);
+  //   // const name = parse.data.name;
+
+  //   this.setState({token: parse});
+
+  //   console.log('token', parse);
+  // };
+  // componentDidMount() {
+  //   this.getUser();
+  // }
+
   render() {
-    console.log('token', this.state?.token);
+    // console.log('token', this.state?.token);
 
     return (
       <Provider store={store}>

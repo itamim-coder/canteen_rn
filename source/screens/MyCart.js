@@ -9,26 +9,24 @@ import {
   Text,
   TouchableOpacity,
   View,
+  Alert,
 } from 'react-native';
 import {colors} from '../theme/colors';
 import AntDesign from 'react-native-vector-icons/AntDesign';
 
 import Statusbar from '../components/Statusbar';
 import FlashMessage from 'react-native-flash-message';
-import {showMessage, hideMessage} from 'react-native-flash-message';
+
 import SCREEN from '../theme/Screen';
 import TYPOGRAPHY from '../theme/typography';
 import BUTTONS from '../theme/Buttons';
 import Button from '../components/Button';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import {FOOD_LIST} from '../data/food-list';
+
 import {getStoredCart} from '../../Function/Cart';
 import {connect} from 'react-redux';
 import {addToCart, reset, selectCart} from './../../redux/cartSlice';
 import {deleteFromCart} from './../../redux/cartSlice';
-import {increment} from '../../redux/counterSlice';
-import CounterButton from '../components/CounterButton';
-// import {createConfigItem, parse} from '@babel/core';
 
 export class MyCart extends Component {
   constructor(props) {
@@ -43,55 +41,29 @@ export class MyCart extends Component {
       // quantity: '',
       // count: initialValue || 0,
     };
-    console.log('props', this.props.carts);
   }
-  increment = value => {
-    console.log(value);
-    const count = value + 1;
-    this.setState({quantity: count});
-  };
 
   dltFromCart = id => {
     // this.setState({indicator: true});
 
     this.props.deleteFromCart({id: id});
   };
+  confirmDlt = id => {
+    Alert.alert('Remove item', 'Are you sure you want to remove this item?', [
+      {
+        text: 'Cancel',
+        onPress: () => {},
+      },
+      {
+        text: 'Remove',
+        onPress: () => this.dltFromCart(id),
+      },
+    ]);
+  };
   renderCart = ({item}) => {
     const {quantity} = item;
     console.log('quan', quantity);
 
-    // console.log(this.state.count);
-    // const increment = item => {
-    //   const count = item.quantity + 1;
-    //   const updateCart = {
-    //     id: item.item.id,
-    //     description: item.item.description,
-    //     price: item.item.price,
-    //     picture: item.item.picture,
-    //     quantity: count,
-    //     quantityPrice: item.item.price * count,
-    //   };
-    //   console.log(updateCart);
-    //   // this.props.addToCart({updateCart});
-    // };
-    const onAmountChange = (value, item) => {
-      console.log('val', value);
-    };
-    const decrement = item => {
-      console.log(item.item.quantity);
-
-      if (item.item.quantity > 1) {
-        const count = item.item.quantity - 1;
-        console.log('count ', count);
-        item.item.quantity = count;
-        // this.setState({newQuantity: item.item.quantity});
-        // console.log('val -quan', count);
-      }
-      console.log(item);
-      // console.log(item.item.quantity);
-    };
-    // item.quantity = this.state.newQuantity;
-    // console.log('nq', item);
     return (
       <View>
         {this.state.indicator ? (
@@ -188,7 +160,7 @@ export class MyCart extends Component {
               }}>
               <TouchableOpacity
                 onPress={() => {
-                  this.dltFromCart(item.id);
+                  this.confirmDlt(item.id);
                 }}>
                 <Text style={{color: colors.white}}>X</Text>
               </TouchableOpacity>
@@ -241,7 +213,19 @@ export class MyCart extends Component {
     const clearCart = () => {
       this.props.reset();
     };
-    console.log(this.props.totalAmount);
+    const confirmClearCart = () => {
+      Alert.alert('Clear cart', 'Are you sure you want to clear this Cart?', [
+        {
+          text: 'No',
+          onPress: () => {},
+        },
+        {
+          text: 'Clear',
+          onPress: () => clearCart(),
+        },
+      ]);
+    };
+
     return (
       <SafeAreaView style={cartContainer}>
         <View
@@ -269,22 +253,24 @@ export class MyCart extends Component {
               Cart({this.props.length})
             </Text>
           </View>
-          <TouchableOpacity
-            onPress={() => {
-              clearCart();
-            }}>
-            <View
-              style={{
-                backgroundColor: '#FFD8DA',
-                paddingHorizontal: 5,
-                paddingVertical: 4,
-                borderRadius: 5,
+          {this.props.length !== 0 && (
+            <TouchableOpacity
+              onPress={() => {
+                confirmClearCart();
               }}>
-              <Text style={[TYPOGRAPHY.h6Bold, {color: colors.red}]}>
-                Clear Cart
-              </Text>
-            </View>
-          </TouchableOpacity>
+              <View
+                style={{
+                  backgroundColor: '#FFD8DA',
+                  paddingHorizontal: 5,
+                  paddingVertical: 4,
+                  borderRadius: 5,
+                }}>
+                <Text style={[TYPOGRAPHY.h6Bold, {color: colors.red}]}>
+                  Clear Cart
+                </Text>
+              </View>
+            </TouchableOpacity>
+          )}
         </View>
 
         {/* full screen  */}
@@ -300,42 +286,62 @@ export class MyCart extends Component {
             />
 
             {/* Total calculation */}
-            <View style={{marginTop: 40}}>
-              <View style={calculationCard}>
-                <View>
-                  <Text style={TYPOGRAPHY.h5}>Item Total</Text>
-                  <Text style={TYPOGRAPHY.h5}>Delivery Fee</Text>
-                </View>
+            {(this.props.length !== 0 && (
+              <>
+                <View style={{marginTop: 40}}>
+                  <View style={calculationCard}>
+                    <View>
+                      <Text style={TYPOGRAPHY.h5}>Item Total</Text>
+                      <Text style={TYPOGRAPHY.h5}>Delivery Fee</Text>
+                    </View>
 
-                <View>
-                  <Text style={TYPOGRAPHY.h5}>${this.props.totalAmount}</Text>
+                    <View>
+                      <Text style={TYPOGRAPHY.h5}>
+                        ${this.props.totalAmount}
+                      </Text>
+                      <Text style={TYPOGRAPHY.h5}>$200</Text>
+                    </View>
+                  </View>
+                </View>
+                <View style={[calculationCard, {paddingVertical: 20}]}>
+                  <Text
+                    style={[
+                      TYPOGRAPHY.h5,
+                      {fontWeight: 'bold', color: colors.red},
+                    ]}>
+                    Amount To Pay
+                  </Text>
                   <Text style={TYPOGRAPHY.h5}>$200</Text>
                 </View>
-              </View>
-            </View>
-            <View style={[calculationCard, {paddingVertical: 20}]}>
-              <Text
-                style={[
-                  TYPOGRAPHY.h5,
-                  {fontWeight: 'bold', color: colors.red},
-                ]}>
-                Amount To Pay
-              </Text>
-              <Text style={TYPOGRAPHY.h5}>$200</Text>
-            </View>
+              </>
+            )) || (
+              <>
+                <View
+                  style={{
+                    flex: 1,
+                    justifyContent: 'center',
+                    // textAlign: 'center',
+                    alignItems: 'center',
+                  }}>
+                  <Text style={[TYPOGRAPHY.h3, {color: colors.red}]}>
+                    No Item Found!!!
+                  </Text>
+                </View>
+              </>
+            )}
           </ScrollView>
-          <View>
-            <Button
-              name="checkout button"
-              style={{flex: 1}}
-              // style={{marginTop:10}}
-              navigation={this.props.navigation}
-              type="checkout"
-            />
-          </View>
+          {this.props.length !== 0 && (
+            <View>
+              <Button
+                name="checkout button"
+                style={{flex: 1}}
+                // style={{marginTop:10}}
+                navigation={this.props.navigation}
+                type="checkout"
+              />
+            </View>
+          )}
         </View>
-
-        <FlashMessage position="top" />
       </SafeAreaView>
     );
   }

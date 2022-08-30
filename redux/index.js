@@ -4,7 +4,7 @@ import {
   createReducer,
   getDefaultMiddleware,
 } from '@reduxjs/toolkit';
-import counterReducer from './counterSlice';
+
 import cartReducer from './cartSlice';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import {persistReducer} from 'redux-persist';
@@ -15,11 +15,9 @@ const persistConfig = {
   key: 'root',
   storage: AsyncStorage,
   version: 1,
-  blacklist: ['counter'],
 };
 
 const rootReducer = combineReducers({
-  counter: counterReducer,
   cart: cartReducer,
   auth: authSlice,
 });

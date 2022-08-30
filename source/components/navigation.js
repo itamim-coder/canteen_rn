@@ -33,6 +33,7 @@ import MyCart from '../screens/MyCart';
 import {connect, Provider} from 'react-redux';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import store from '../../redux';
+import AllLatestFoods from '../screens/AllLatestFoods';
 
 const Stack = createNativeStackNavigator();
 const Tab = createBottomTabNavigator();
@@ -154,6 +155,7 @@ export class Navigation extends Component {
           <Stack.Screen name="Verification" component={Verification} />
 
           <Stack.Screen name="TabNavigator" component={TabNavigator} />
+          <Stack.Screen name="AllLatestFoods" component={AllLatestFoods} />
 
           <Stack.Screen name="Topup" component={Topup} />
           <Stack.Screen name="AddtoWallet" component={AddtoWallet} />

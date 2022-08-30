@@ -141,9 +141,9 @@ export default class MyOrder extends Component {
 
     return (
       <SafeAreaView style={{flex: 1}}>
-        <Statusbar />
+        <Statusbar name={"My Orders"}/>
         <View style={[SCREEN.screen]}>
-          <View
+          {/* <View
             style={{
               marginBottom: 15,
               marginTop: 10,
@@ -152,7 +152,7 @@ export default class MyOrder extends Component {
               alignItems: 'center',
             }}>
             <Text style={[TYPOGRAPHY.h3]}>My Orders</Text>
-          </View>
+          </View> */}
           <FlatList
             showsVerticalScrollIndicator={false}
             data={this.state.transactionData}

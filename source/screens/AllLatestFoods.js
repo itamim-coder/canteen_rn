@@ -15,37 +15,34 @@ import {colors} from '../theme/colors';
 import FloatCart from '../components/FloatCart';
 const width = Dimensions.get('screen').width / 2 - 25;
 
-export default class SchoolFood extends Component {
+export default class AllLatestFoods extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      id: this.props.route?.params?.id,
-
-      schoolFoods: [],
+      //   schoolFoods: [],
       //   visible: false,
       //   message: '',
     };
-    console.log(this.props.route.params.id);
   }
 
-  componentDidMount() {
-    this.setState({visible: true});
-    fetch(`https://laqil.com/public/api/product-list?school=${this.state.id}`)
-      .then(res => res.json())
-      .then(res => {
-        console.log(res);
+  //   componentDidMount() {
+  //     this.setState({visible: true});
+  //     fetch('https://laqil.com/public/api/product-list?school=1')
+  //       .then(res => res.json())
+  //       .then(res => {
+  //         console.log(res);
 
-        // this.setState({foods: res});
-        if (res.status == true) {
-          this.setState({schoolFoods: res.data});
-          // return this.state.foods;
-          //   this.setState({visible: false});
-        } else if (res.data == null) {
-          alert(res.message);
-          this.setState({message: res.message});
-        }
-      });
-  }
+  //         // this.setState({foods: res});
+  //         if (res.status == true) {
+  //           this.setState({schoolFoods: res.data});
+  //           // return this.state.foods;
+  //           //   this.setState({visible: false});
+  //         } else if (res.data == null) {
+  //           alert(res.message);
+  //           this.setState({message: res.message});
+  //         }
+  //       });
+  //   }
 
   renderItem = ({item}) => {
     const {description, picture, price} = item;
@@ -64,22 +61,17 @@ export default class SchoolFood extends Component {
           <View
             style={{
               backgroundColor: colors.white,
-           
+              height: 235,
               // backgroundColor: colors.light,
               width,
               marginHorizontal: 2,
               borderRadius: 10,
               marginBottom: 20,
               padding: 15,
-              // marginHorizontal: 35,
-              // padding: 20,
-              // width: '100%',
-
-              // borderRadius: 10,
-              // margin: 5,
-              // marginBottom: 15,
             }}>
-            <Text style={[TYPOGRAPHY.medium, {fontSize: 12}]}>{description}</Text>
+            <Text style={[TYPOGRAPHY.medium, {fontSize: 12}]}>
+              {description}
+            </Text>
             <View
               style={{
                 padding: 5,
@@ -101,9 +93,7 @@ export default class SchoolFood extends Component {
                 alignItems: 'center',
                 justifyContent: 'space-between',
               }}>
-              <Text style={[TYPOGRAPHY.h4Bold, {fontWeight: 'bold'}]}>
-                ${price}.00
-              </Text>
+              <Text style={[TYPOGRAPHY.h4Bold]}>${price}.00</Text>
               <TouchableOpacity
                 style={{
                   backgroundColor: colors.red,
@@ -135,9 +125,11 @@ export default class SchoolFood extends Component {
       // marginBottom:10,
       ...SCREEN.screen,
     };
+    const latest_foods = this.props.route.params.latest_foods;
+    // console.log(latest_food);
     return (
       <SafeAreaView style={{flex: 1}}>
-        <Statusbar name={'Foods'} />
+        <Statusbar name={'Latest Foods'} />
         <View style={popularBox}>
           <FlatList
             showsVerticalScrollIndicator={false}
@@ -148,7 +140,7 @@ export default class SchoolFood extends Component {
               // marginTop: 10,
               paddingBottom: 50,
             }}
-            data={this.state.schoolFoods}
+            data={latest_foods}
             numColumns={2}
             renderItem={item => this.renderItem(item)}
           />

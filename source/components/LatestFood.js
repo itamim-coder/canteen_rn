@@ -2,47 +2,41 @@ import {
   Dimensions,
   FlatList,
   Image,
+  ScrollView,
   Text,
+  TextInput,
   TouchableOpacity,
   View,
 } from 'react-native';
 import React, {Component} from 'react';
-import SCREEN from '../theme/Screen';
-import {SafeAreaView} from 'react-native-safe-area-context';
-import Statusbar from '../components/Statusbar';
 import TYPOGRAPHY from '../theme/typography';
+import {FOOD_LIST} from '../data/food-list';
+import {SafeAreaView} from 'react-native-safe-area-context';
 import {colors} from '../theme/colors';
-import FloatCart from '../components/FloatCart';
+import Button from './Button';
+import {BottomSheet} from 'react-native-btr';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 const width = Dimensions.get('screen').width / 2 - 25;
-
-export default class SchoolFood extends Component {
+export class LatestFood extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      id: this.props.route?.params?.id,
-
-      schoolFoods: [],
-      //   visible: false,
-      //   message: '',
+      visible: false,
+      foods: [],
     };
-    console.log(this.props.route.params.id);
   }
-
   componentDidMount() {
     this.setState({visible: true});
-    fetch(`https://laqil.com/public/api/product-list?school=${this.state.id}`)
+    fetch('https://laqil.com/public/api/product-list?school=1')
       .then(res => res.json())
       .then(res => {
-        console.log(res);
+        // console.log(res.data);
 
         // this.setState({foods: res});
         if (res.status == true) {
-          this.setState({schoolFoods: res.data});
+          this.setState({foods: res.data});
           // return this.state.foods;
-          //   this.setState({visible: false});
-        } else if (res.data == null) {
-          alert(res.message);
-          this.setState({message: res.message});
+          this.setState({visible: false});
         }
       });
   }
@@ -53,38 +47,27 @@ export default class SchoolFood extends Component {
       <SafeAreaView>
         <TouchableOpacity
           onPress={() =>
-            this.props.navigation.navigate('FoodDetails', {
-              id: item.id,
-              picture: item.picture,
-              name: item.description,
-              price: item.price,
-              quantity: 0,
-            })
+            this.props.navigation.navigate('FoodDetails', {id: item.id})
           }>
           <View
             style={{
               backgroundColor: colors.white,
-           
-              // backgroundColor: colors.light,
+
               width,
               marginHorizontal: 2,
               borderRadius: 10,
               marginBottom: 20,
               padding: 15,
-              // marginHorizontal: 35,
-              // padding: 20,
-              // width: '100%',
-
-              // borderRadius: 10,
-              // margin: 5,
-              // marginBottom: 15,
+              // alignItems: 'center',
             }}>
-            <Text style={[TYPOGRAPHY.medium, {fontSize: 12}]}>{description}</Text>
+            <Text style={[TYPOGRAPHY.medium, {fontSize: 12}]}>
+              {description}
+            </Text>
             <View
               style={{
                 padding: 5,
-                alignItems: 'center',
                 // backgroundColor: colors.red
+                alignItems: 'center',
               }}>
               <Image
                 resizeMode="contain"
@@ -101,9 +84,7 @@ export default class SchoolFood extends Component {
                 alignItems: 'center',
                 justifyContent: 'space-between',
               }}>
-              <Text style={[TYPOGRAPHY.h4Bold, {fontWeight: 'bold'}]}>
-                ${price}.00
-              </Text>
+              <Text style={[TYPOGRAPHY.h4Bold]}>${price}.00</Text>
               <TouchableOpacity
                 style={{
                   backgroundColor: colors.red,
@@ -128,33 +109,42 @@ export default class SchoolFood extends Component {
     );
   };
   render() {
-    console.log(this.state.id);
     const popularBox = {
-      //   paddingVertical: 20,
+      paddingVertical: 20,
       // backgroundColor: colors.red,
       // marginBottom:10,
-      ...SCREEN.screen,
     };
     return (
-      <SafeAreaView style={{flex: 1}}>
-        <Statusbar name={'Foods'} />
-        <View style={popularBox}>
-          <FlatList
-            showsVerticalScrollIndicator={false}
-            columnWrapperStyle={{
-              justifyContent: 'space-between',
-            }}
-            contentContainerStyle={{
-              // marginTop: 10,
-              paddingBottom: 50,
-            }}
-            data={this.state.schoolFoods}
-            numColumns={2}
-            renderItem={item => this.renderItem(item)}
-          />
+      <SafeAreaView style={popularBox}>
+        <View style={{justifyContent: 'space-between', flexDirection: 'row'}}>
+          <Text style={[TYPOGRAPHY.h3, {fontWeight: 'bold', marginBottom: 20}]}>
+            Latest Foods
+          </Text>
+          <TouchableOpacity
+            onPress={() =>
+              this.props.navigation.navigate('AllLatestFoods', {
+                latest_foods: this.state.foods,
+              })
+            }>
+            <Text style={[TYPOGRAPHY.h5, {color: colors.red}]}>See More</Text>
+          </TouchableOpacity>
         </View>
-        <FloatCart navigation={this.props.navigation} />
+        <FlatList
+          showsVerticalScrollIndicator={false}
+          columnWrapperStyle={{
+            justifyContent: 'space-between',
+          }}
+          contentContainerStyle={{
+            // marginTop: 10,
+            paddingBottom: 50,
+          }}
+          data={this.state?.foods.slice(0, 6)}
+          numColumns={2}
+          renderItem={item => this.renderItem(item)}
+        />
       </SafeAreaView>
     );
   }
 }
+
+export default LatestFood;

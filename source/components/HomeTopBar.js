@@ -72,7 +72,7 @@ export class HomeTopBar extends Component {
               this.pickerActivity(itemValue);
               // this.setState({selectedValue: itemValue});
             }}>
-            <Picker.Item label="Please select an option..." value="0" />
+            <Picker.Item label="Select a school" value="0" />
             {this.state.schoolList.map(item => (
               // <TouchableOpacity>
               // console.log(item.id),

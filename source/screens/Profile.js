@@ -18,6 +18,8 @@ import Entypo from 'react-native-vector-icons/Entypo';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
+import axios from 'axios';
+
 export default class Profile extends Component {
   constructor(props) {
     super(props);
@@ -25,32 +27,59 @@ export default class Profile extends Component {
       name: '',
       activity: false,
     };
+    console.log('props', this.state);
   }
+  componentDidMount() {
+    this.getProfile();
+  }
+  getProfile = async () => {
+    const user = await AsyncStorage.getItem('userInfo');
+    const parse = JSON.parse(user);
+
+    const token = parse.token;
+    console.log('token', user);
+
+    axios
+      .get('https://laqil.com/public/api/profile', {
+        headers: {Authorization: `Bearer ${token}`},
+      })
+      .then(
+        res => {
+          console.log(res.data);
+          this.setState({name: res.data?.data.name});
+        },
+        err => {
+          console.log(err);
+        },
+      );
+  };
 
   handlelogout = async () => {
     this.setState({activity: true});
     const user = await AsyncStorage.getItem('isLoggedIn');
     console.log(user);
+    AsyncStorage.removeItem('isLoggedIn');
     AsyncStorage.clear();
     // console.log(this.props.navigation.replace('Login'));
     // this.props.navigation.replace('Login');
 
     this.setState({activity: false});
+
     this.props.navigation.navigate('Login');
   };
 
-  getUser = async () => {
-    const user = await AsyncStorage.getItem('isLoggedIn');
-    const parse = JSON.parse(user);
-    // const name = parse.data.name;
+  // getUser = async () => {
+  //   const user = await AsyncStorage.getItem('isLoggedIn');
+  //   const parse = JSON.parse(user);
+  //   // const name = parse.data.name;
 
-    // this.setState({name: name});
+  //   // this.setState({name: name});
 
-    console.log('token', parse);
-  };
-  componentDidMount() {
-    this.getUser();
-  }
+  //   console.log('token', parse);
+  // };
+  // componentDidMount() {
+  //   this.getUser();
+  // }
   render() {
     return (
       <SafeAreaView style={{flex: 1}}>

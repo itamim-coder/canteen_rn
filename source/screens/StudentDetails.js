@@ -1,4 +1,5 @@
 import {
+  Alert,
   Image,
   SafeAreaView,
   ScrollView,
@@ -52,6 +53,18 @@ export default class StudentDetails extends Component {
           console.log(err);
         },
       );
+  };
+  confirmDlt = id => {
+    Alert.alert('Remove Student', 'Are you sure you want to remove?', [
+      {
+        text: 'Cancel',
+        onPress: () => {},
+      },
+      {
+        text: 'Remove',
+        onPress: () => this.handleDlt(id),
+      },
+    ]);
   };
   studentDetails = async () => {
     const user = await AsyncStorage.getItem('userInfo');
@@ -208,7 +221,7 @@ export default class StudentDetails extends Component {
             <Text style={[BUTTONS.btnFont]}>Update</Text>
           </TouchableOpacity>
           <TouchableOpacity
-            onPress={() => this.handleDlt(id)}
+            onPress={() => this.confirmDlt(id)}
             style={[BUTTONS.btnPrimary, {paddingHorizontal: 40}]}>
             <Text style={[BUTTONS.btnFont]}>Delete</Text>
           </TouchableOpacity>
