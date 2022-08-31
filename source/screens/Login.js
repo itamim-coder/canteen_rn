@@ -194,7 +194,7 @@ export class Login extends Component {
             <Text style={{color: colors.bloodRed, fontFamily: Fonts.primary}}>
               {this.state.passerror}
             </Text>
-            <Button type="login" navigation={this.props.navigation} />
+            {/* <Button type="login" navigation={this.props.navigation} /> */}
 
             {this.state.indicator === true ? (
               (console.log(this.state.indicator),
