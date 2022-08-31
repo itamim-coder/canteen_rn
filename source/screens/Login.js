@@ -94,7 +94,7 @@ export class Login extends Component {
 
             console.log('4 login accept');
 
-            this.props.navigation.navigate('TabNavigator');
+            // this.props.navigation.navigate('TabNavigator');
           }
         })
         .catch(function (error) {

@@ -13,9 +13,11 @@ import Statusbar from '../components/Statusbar';
 import TYPOGRAPHY from '../theme/typography';
 import {colors} from '../theme/colors';
 import FloatCart from '../components/FloatCart';
+import {connect} from 'react-redux';
+import {addToCart} from '../../redux/cartSlice';
 const width = Dimensions.get('screen').width / 2 - 25;
 
-export default class SchoolFood extends Component {
+export class SchoolFood extends Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -24,6 +26,7 @@ export default class SchoolFood extends Component {
       schoolFoods: [],
       //   visible: false,
       //   message: '',
+      quantity: 1,
     };
     console.log(this.props.route.params.id);
   }
@@ -46,9 +49,23 @@ export default class SchoolFood extends Component {
         }
       });
   }
+  add = item => {
+    const cartProduct = {
+      id: item.id,
+      description: item.description,
+      price: item.price,
+      picture: item.picture,
+      quantity: this.state.quantity,
+      quantityPrice: item.price * this.state.quantity,
+    };
+    this.props.addToCart({cartProduct});
+  };
 
   renderItem = ({item}) => {
     const {description, picture, price} = item;
+    console.log(this.props.add_item, '===', item.id);
+    const cartItems = this.props.add_item;
+    // this.props.add_item.map(item => console.log('map', item.id));
     return (
       <SafeAreaView>
         <TouchableOpacity
@@ -64,7 +81,7 @@ export default class SchoolFood extends Component {
           <View
             style={{
               backgroundColor: colors.white,
-           
+
               // backgroundColor: colors.light,
               width,
               marginHorizontal: 2,
@@ -79,7 +96,9 @@ export default class SchoolFood extends Component {
               // margin: 5,
               // marginBottom: 15,
             }}>
-            <Text style={[TYPOGRAPHY.medium, {fontSize: 12}]}>{description}</Text>
+            <Text style={[TYPOGRAPHY.medium, {fontSize: 12}]}>
+              {description}
+            </Text>
             <View
               style={{
                 padding: 5,
@@ -104,7 +123,30 @@ export default class SchoolFood extends Component {
               <Text style={[TYPOGRAPHY.h4Bold, {fontWeight: 'bold'}]}>
                 ${price}.00
               </Text>
+              {/* {cartItems.map(cartItem => {
+                console.log('cartitem', cartItem.id);
+                console.log('item', item.id);
+                cartItem.id === item.id ? (
+                  <TouchableOpacity
+                    // onPress={() => this.add(item)}
+                    style={{
+                      backgroundColor: colors.red,
+                      paddingHorizontal: 10,
+                      paddingVertical: 5,
+                      borderRadius: 10,
+                    }}>
+                    <Text
+                      style={{
+                        color: colors.white,
+                        fontWeight: 'bold',
+                        fontSize: 15,
+                      }}>
+                      1
+                    </Text>
+                  </TouchableOpacity>
+                ) : ( */}
               <TouchableOpacity
+                onPress={() => this.add(item)}
                 style={{
                   backgroundColor: colors.red,
                   paddingHorizontal: 10,
@@ -120,6 +162,8 @@ export default class SchoolFood extends Component {
                   +
                 </Text>
               </TouchableOpacity>
+              {/* );
+              })} */}
             </View>
           </View>
         </TouchableOpacity>
@@ -158,3 +202,20 @@ export default class SchoolFood extends Component {
     );
   }
 }
+
+const mapStateToProps = state => {
+  return {
+    carts: state.cart.carts,
+    add_item: state.cart,
+  };
+};
+
+const mapDispatchToProps = dispatch => {
+  // console.log(cartProduct);
+  return {
+    addToCart: data => {
+      dispatch(addToCart(data));
+    },
+  };
+};
+export default connect(mapStateToProps, mapDispatchToProps)(SchoolFood);

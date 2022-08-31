@@ -8,15 +8,13 @@ const Stack = createNativeStackNavigator();
 export default class AuthNav extends Component {
   render() {
     return (
-      <NavigationContainer>
-        <Stack.Navigator screenOptions={{header: () => null}}>
-          <Stack.Screen name="Login" component={Login} />
-          <Stack.Screen name="Signup" component={Signup} />
-          {/* <Stack.Screen name="ResetRequest" component={ResetRequest} />
+      <Stack.Navigator screenOptions={{header: () => null}}>
+        <Stack.Screen name="Login" component={Login} />
+        <Stack.Screen name="Signup" component={Signup} />
+        {/* <Stack.Screen name="ResetRequest" component={ResetRequest} />
           <Stack.Screen name="ConfirmPassword" component={ConfirmPassword} />
           <Stack.Screen name="Verification" component={Verification} /> */}
-        </Stack.Navigator>
-      </NavigationContainer>
+      </Stack.Navigator>
     );
   }
 }

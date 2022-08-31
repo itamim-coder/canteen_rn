@@ -13,6 +13,10 @@ import Feather from 'react-native-vector-icons/Feather';
 import EvilIcons from 'react-native-vector-icons/EvilIcons';
 import AntDesign from 'react-native-vector-icons/AntDesign';
 import Profile from '../screens/Profile';
+import FoodDetails from '../screens/FoodDetails';
+import AllCategory from '../screens/AllCategory';
+import FilterCategory from '../screens/FilterCategory';
+import SchoolFood from '../screens/SchoolFood';
 const Stack = createNativeStackNavigator();
 const Tab = createBottomTabNavigator();
 export default class MainNAv extends Component {
@@ -59,17 +63,20 @@ export default class MainNAv extends Component {
         </Tab.Navigator>
       );
     };
-  
+
     return (
-      <NavigationContainer>
-        <Stack.Navigator screenOptions={{header: () => null}}>
-          <Stack.Screen name="TabNavigator" component={TabNavigator} />
-          <Stack.Screen name="Profile" component={Profile} />
-          {/* <Stack.Screen name="ResetRequest" component={ResetRequest} />
+      <Stack.Navigator screenOptions={{header: () => null}}>
+        <Stack.Screen name="TabNavigator" component={TabNavigator} />
+        <Stack.Screen name="Profile" component={Profile} />
+
+        <Stack.Screen name="FoodDetails" component={FoodDetails} />
+        <Stack.Screen name="AllCategory" component={AllCategory} />
+        <Stack.Screen name="FilterCategory" component={FilterCategory} />
+        <Stack.Screen name="SchoolFood" component={SchoolFood} />
+        {/* <Stack.Screen name="ResetRequest" component={ResetRequest} />
           <Stack.Screen name="ConfirmPassword" component={ConfirmPassword} />
           <Stack.Screen name="Verification" component={Verification} /> */}
-        </Stack.Navigator>
-      </NavigationContainer>
+      </Stack.Navigator>
     );
   }
 }

@@ -52,6 +52,7 @@ import {persistStore} from 'redux-persist';
 import Navigation from './source/components/navigation';
 import AuthNav from './source/components/AuthNav';
 import MainNAv from './source/components/MainNAv';
+import LoginProvider from './source/context/LoginProvider';
 
 let persistore = persistStore(store);
 
@@ -81,12 +82,14 @@ export default class App extends Component {
   // }
 
   render() {
-    // console.log('token', this.state?.token);
+    console.log('app', this.contextType);
 
     return (
       <Provider store={store}>
         <PersistGate loading={null} persistor={persistore}>
           <Navigation />
+
+          {/* {this.state.token !== null ? <MainNAv /> : <AuthNav />} */}
         </PersistGate>
       </Provider>
     );

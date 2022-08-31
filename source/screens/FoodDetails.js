@@ -44,7 +44,6 @@ export class FoodDetails extends Component {
       visible: false,
       cartProducts: [],
       quantity: 1,
-    
     };
     console.log('foodetails', this.state.schoolFoods);
   }
@@ -207,7 +206,7 @@ export class FoodDetails extends Component {
                   source={{uri: picture}}
                   style={{
                     width: '100%',
-                    height: 300,
+                    height: 250,
                     alignItems: 'center',
                     justifyContent: 'center',
                   }}
@@ -300,40 +299,13 @@ export class FoodDetails extends Component {
                     </View>
                   </View>
                 </View>
-                <Text style={TYPOGRAPHY.h4}>About Product</Text>
+                <Text style={TYPOGRAPHY.h4}>Ingredients</Text>
                 <Text style={TYPOGRAPHY.primary}>{ingredients}</Text>
+                <View style={{marginTop: 5}}>
+                  <Text style={TYPOGRAPHY.h4}>Pack Details</Text>
+                  <Text style={TYPOGRAPHY.primary}>{pack_details}</Text>
+                </View>
               </View>
-
-              {/* <View
-                style={[
-                  SCREEN.screen,
-
-                  {
-                    // padding:0,
-                    backgroundColor: colors.grey,
-                    // flex: 0.1,
-                    borderTopLeftRadius: 30,
-                    borderTopRightRadius: 30,
-                    paddingBottom: 10,
-                  },
-                ]}>
-                <Text
-                  style={[
-                    TYPOGRAPHY.h4,
-                    {
-                      // fontSize: 20,
-                      marginBottom: 10,
-                    },
-                  ]}>
-                  Similar Products
-                </Text>
-                <FlatList
-                  horizontal
-                  showsHorizontalScrollIndicator={false}
-                  data={similar_foods}
-                  renderItem={item => this.renderItem(item)}
-                />
-              </View> */}
             </ScrollView>
           </View>
         )}
@@ -375,7 +347,6 @@ export class FoodDetails extends Component {
 const mapStateToProps = state => {
   return {
     carts: state.cart.carts,
-    cart: state.cart,
   };
 };
 
