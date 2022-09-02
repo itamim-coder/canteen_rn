@@ -40,7 +40,7 @@ export class TransactionForm extends Component {
       children: [],
       selectedValue: '',
       cart_products: this.props.carts,
-      schools_id: '1',
+      schools_id: '',
       add_products: [],
     };
   }
@@ -48,7 +48,6 @@ export class TransactionForm extends Component {
   studentlist = async () => {
     const user = await AsyncStorage.getItem('userInfo');
     const parse = JSON.parse(user);
-
     const token = parse.token;
 
     axios
@@ -70,22 +69,23 @@ export class TransactionForm extends Component {
     // selectedValue={this.state.selectedValue}
   };
   products = this.props.carts;
-  componentDidMount() {
+  async componentDidMount() {
     this.studentlist();
-    console.log(
-      'form',
-      this.state.cart_products.map(product => {
-        const add = [product.id, product.quantity];
-        this.state.add_products.push(add);
-      }),
-    );
-    console.log('products', this.state.add_products);
+
+    this.state.cart_products.map(product => {
+      const add = [product.id, product.quantity];
+      this.state.add_products.push(add);
+    }),
+      console.log('products', this.state.add_products);
   }
   payment = async () => {
     const user = await AsyncStorage.getItem('token');
     const parse = JSON.parse(user);
     const token = parse;
     console.log('token', token);
+    const school = await AsyncStorage.getItem('selected_school');
+    const school_id = JSON.parse(school);
+    console.log('school cart', school_id);
     const data = {
       card_no: this.state.card_no,
       card_exp: this.state.card_exp,
@@ -101,7 +101,7 @@ export class TransactionForm extends Component {
       order_type: this.state.order_type,
       payment_type: this.state.payment_type,
       products: this.state.add_products,
-      school_id: this.state.schools_id,
+      school_id: school_id,
     };
 
     console.log(data);
