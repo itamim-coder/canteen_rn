@@ -13,7 +13,7 @@ import {
 } from 'react-native';
 import {colors} from '../theme/colors';
 import AntDesign from 'react-native-vector-icons/AntDesign';
-
+import {RadioButton} from 'react-native-paper';
 import Statusbar from '../components/Statusbar';
 import FlashMessage from 'react-native-flash-message';
 
@@ -27,6 +27,8 @@ import {getStoredCart} from '../../Function/Cart';
 import {connect} from 'react-redux';
 import {addToCart, reset, selectCart} from './../../redux/cartSlice';
 import {deleteFromCart} from './../../redux/cartSlice';
+import TransactionForm from '../components/TransactionForm';
+import axios from 'axios';
 
 export class MyCart extends Component {
   constructor(props) {
@@ -40,8 +42,38 @@ export class MyCart extends Component {
       newQuantity: '',
       // quantity: '',
       // count: initialValue || 0,
+      paymentOption: 'card',
+      userData: {},
     };
   }
+
+  componentDidMount() {
+    this.getProfile();
+  }
+  // componentDidMount() {
+
+  // }
+  getProfile = async () => {
+    const user = await AsyncStorage.getItem('userInfo');
+    const parse = JSON.parse(user);
+
+    const token = parse.token;
+    console.log('token', user);
+
+    axios
+      .get('https://laqil.com/public/api/profile', {
+        headers: {Authorization: `Bearer ${token}`},
+      })
+      .then(
+        res => {
+          console.log(res.data);
+          this.setState({userData: res.data?.data});
+        },
+        err => {
+          console.log(err);
+        },
+      );
+  };
 
   dltFromCart = id => {
     // this.setState({indicator: true});
@@ -63,7 +95,7 @@ export class MyCart extends Component {
   renderCart = ({item}) => {
     const {quantity} = item;
     console.log('quan', quantity);
-
+    console.log(this.state.userData.balance);
     return (
       <View>
         {this.state.indicator ? (
@@ -303,7 +335,7 @@ export class MyCart extends Component {
                     </View>
                   </View>
                 </View>
-                <View style={[calculationCard, {paddingVertical: 20}]}>
+                {/* <View style={[calculationCard, {paddingVertical: 20}]}>
                   <Text
                     style={[
                       TYPOGRAPHY.h5,
@@ -312,7 +344,57 @@ export class MyCart extends Component {
                     Amount To Pay
                   </Text>
                   <Text style={TYPOGRAPHY.h5}>$200</Text>
+                </View> */}
+
+                <View style={{marginVertical: 5}}>
+                  <Text
+                    style={[
+                      TYPOGRAPHY.h5,
+                      {color: colors.black, marginBottom: 5},
+                    ]}>
+                    Payment With
+                  </Text>
+
+                  <RadioButton.Group
+                    value={this.state.paymentOption}
+                    onValueChange={newValue => {
+                      this.setState({paymentOption: newValue});
+                    }}>
+                    <View style={{flexDirection: 'row', alignItems: 'center'}}>
+                      {this.props.totalAmount > this.state.userData.balance ? (
+                        <RadioButton value="wallet" disabled />
+                      ) : (
+                        <RadioButton value="wallet" />
+                      )}
+
+                      <Text style={TYPOGRAPHY.h5}>
+                        Wallet (
+                        {this.state.userData.balance === 0 &&
+                          ((
+                            <Text style={{color: colors.red}}>
+                              ${this.state.userData.balance}
+                            </Text>
+                          ) || <Text>{this.state.userData.balance}</Text>)}
+                        )
+                      </Text>
+                    </View>
+                    <View style={{flexDirection: 'row', alignItems: 'center'}}>
+                      <RadioButton value="card" />
+                      <Text style={TYPOGRAPHY.h5}>Card</Text>
+                    </View>
+                  </RadioButton.Group>
                 </View>
+                {this.state.paymentOption === 'card' && (
+                  <View
+                    style={{
+                      backgroundColor: colors.white,
+                      padding: 10,
+                      marginTop: 5,
+                      borderRadius: 5,
+                    }}>
+                    <TransactionForm type={'Payment'} />
+                  </View>
+                )}
               </>
             )) || (
               <>
@@ -324,21 +406,22 @@ export class MyCart extends Component {
                     alignItems: 'center',
                   }}>
                   <Text style={[TYPOGRAPHY.h3, {color: colors.red}]}>
-                    No Item Found!!!
+                    No item in cart!!!
                   </Text>
                 </View>
               </>
             )}
           </ScrollView>
-          {this.props.length !== 0 && (
+          {this.state.paymentOption === 'wallet' && (
             <View>
-              <Button
-                name="checkout button"
-                style={{flex: 1}}
-                // style={{marginTop:10}}
-                navigation={this.props.navigation}
-                type="checkout"
-              />
+              <TouchableOpacity
+                onPress={() => {
+                  this.deposit();
+                }}
+                // disabled={this.state.disabled}
+                style={[BUTTONS.btnPrimary, {marginBottom: 10}]}>
+                <Text style={BUTTONS.btnFont}>Pay with Wallet</Text>
+              </TouchableOpacity>
             </View>
           )}
         </View>

@@ -71,15 +71,17 @@ export default class Deposit extends Component {
       })
       .then(
         res => {
-          console.log(res);
+          console.log('res', res.data.message);
           if (res.data.status == true) {
             alert(res.data.message);
             this.props.navigation.navigate('Profile');
+          } else {
+            alert(res.data.message);
           }
         },
         err => {
-          alert(err.response.data.message);
-          console.log(err);
+          alert(response.data.message);
+          console.log('error', err);
         },
       );
   };

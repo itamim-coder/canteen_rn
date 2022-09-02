@@ -25,6 +25,7 @@ export default class Transaction extends Component {
       transactionData: [],
     };
   }
+ 
   transactionlist = async () => {
     const user = await AsyncStorage.getItem('userInfo');
     const parse = JSON.parse(user);
@@ -49,10 +50,11 @@ export default class Transaction extends Component {
 
   componentDidMount() {
     this.transactionlist();
+    
   }
 
   renderTransaction = ({item}) => {
-    console.log('item', item);
+    console.log('trans', item);
 
     const {amount, type, created_at, transaction_id} = item;
     return (

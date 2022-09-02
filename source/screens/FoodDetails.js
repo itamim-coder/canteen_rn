@@ -45,7 +45,7 @@ export class FoodDetails extends Component {
       cartProducts: [],
       quantity: 1,
     };
-    console.log('foodetails', this.state.schoolFoods);
+    console.log('foodetails', this.state.foodDetails);
   }
 
   increment = () => {
@@ -162,6 +162,7 @@ export class FoodDetails extends Component {
     };
 
     const add = added => {
+      console.log(added);
       const cartProduct = {
         id: added.id,
         description: added.description,
