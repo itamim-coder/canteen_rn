@@ -48,6 +48,7 @@ export class Navigation extends Component {
     this.state = {
       token: null,
       initialRoute: null,
+      navUnmount: null,
     };
   }
   static contextType = useLogin;
@@ -60,15 +61,9 @@ export class Navigation extends Component {
 
     console.log('token', user);
     console.log('compo', this.state.token);
-    if (this.state.token !== null) {
-      this.setState({initialRoute: 'Login'});
-    } else {
-      this.setState({initialRoute: 'Home'});
-    }
   };
   componentDidMount() {
     this.getUser();
-
   }
 
   render() {
@@ -140,25 +135,20 @@ export class Navigation extends Component {
     //     </NavigationContainer>
     //   );
     // };
-   
+
     return (
       <NavigationContainer>
         {/* {this.state.token ? <MainNAv /> : <AuthNav />} */}
         <Stack.Navigator screenOptions={{header: () => null}}>
-          {/* <Stack.Screen name="Login" component={Login} />
-          <Stack.Screen name="TabNavigator" component={TabNavigator} />
-          <Stack.Screen name="Profile" component={Profile} />
-          <Stack.Screen name="UpdateProfile" component={UpdateProfile} />
-          <Stack.Screen name="ManageChildren" component={ManageChildren} />
-          <Stack.Screen name="MyOrder" component={MyOrder} />
-          <Stack.Screen name="StudentDetails" component={StudentDetails} />
+          {/* {this.state.token === null ? (
+            <Stack.Screen name="Login" component={Login} />
+          ) : (
+            <>
+              <Stack.Screen name="TabNavigator" component={TabNavigator} />
+              <Stack.Screen name="Profile" component={Profile} />
+            </>
+          )} */}
 
-          <Stack.Screen name="Transaction" component={Transaction} />
-          <Stack.Screen name="Deposit" component={Deposit} />
-          <Stack.Screen name="AddStudent" component={AddStudent} /> */}
-       
-          {/* <AuthNav />
-        <MainNAv /> */}
           <Stack.Screen name="Login" component={Login} />
           <Stack.Screen name="Signup" component={Signup} />
           <Stack.Screen name="ResetRequest" component={ResetRequest} />

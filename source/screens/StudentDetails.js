@@ -47,7 +47,7 @@ export default class StudentDetails extends Component {
         res => {
           //   this.setState({children: res.data.data});
           console.log(res);
-          this.props.navigation.navigate('Profile');
+          this.props.navigation.navigate('ManageChildren');
         },
         err => {
           console.log(err);
@@ -213,6 +213,7 @@ export default class StudentDetails extends Component {
           <TouchableOpacity
             onPress={() =>
               this.props.navigation.navigate('AddStudent', {
+                data: this.state.studentDetails,
                 id: id,
                 type: 'Update',
               })

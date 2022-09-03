@@ -23,6 +23,7 @@ import {Picker} from '@react-native-picker/picker';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import axios from 'axios';
 import AntDesign from 'react-native-vector-icons/AntDesign';
+import Statusbar from '../components/Statusbar';
 const width = Dimensions.get('window').width - 40;
 export default class ManageChildren extends Component {
   constructor(props) {
@@ -30,6 +31,7 @@ export default class ManageChildren extends Component {
     this.state = {
       children: [],
       indicator: false,
+      navUnmount: null,
     };
   }
 
@@ -62,6 +64,16 @@ export default class ManageChildren extends Component {
 
   componentDidMount() {
     this.findChildren();
+    const navUnmount = this.props.navigation.addListener('focus', () => {
+      this.findChildren();
+    });
+
+    this.setState({
+      navUnmount: navUnmount,
+    });
+  }
+  componentWillUnmount() {
+    this.state.navUnmount?.();
   }
 
   renderChildren = ({item}) => {
@@ -128,32 +140,7 @@ export default class ManageChildren extends Component {
 
     return (
       <SafeAreaView style={{flex: 1}}>
-        <View
-          style={{
-            flexDirection: 'row',
-            alignItems: 'center',
-            padding: 15,
-            backgroundColor: colors.white,
-          }}>
-          <TouchableOpacity
-            onPress={() => this.props.navigation.navigate('Profile')}>
-            <Image
-              style={image}
-              source={require('../../assets/images/profile.png')}
-            />
-          </TouchableOpacity>
-          <View style={{flex: 2}}>
-            <Text
-              style={[
-                TYPOGRAPHY.h4Bold,
-                {
-                  textAlign: 'center',
-                },
-              ]}>
-              Manage Childrens
-            </Text>
-          </View>
-        </View>
+        <Statusbar name={'Manage Children'} />
         {this.state.indicator === true ? (
           <ActivityIndicator
             color={colors.red}

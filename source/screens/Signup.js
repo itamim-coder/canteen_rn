@@ -39,6 +39,7 @@ export default class Signup extends Component {
       indicator: false,
       disabled: false,
       user_type: 'parent',
+      secureTextEntry: false,
     };
   }
   validate_field = () => {
@@ -117,7 +118,7 @@ export default class Signup extends Component {
           const status = res.data.status;
           console.log(res.data);
           if (status == true) {
-            alert(res.data.message);
+            // alert(res.data.message);
             this.props.navigation.navigate('TabNavigator');
             this.setState({indicator: false});
             this.setState({disabled: false});
@@ -140,6 +141,7 @@ export default class Signup extends Component {
     const container = {
       backgroundColor: colors.white,
       flex: 1,
+      paddingBottom: 30,
     };
     const box = {
       flex: 1,

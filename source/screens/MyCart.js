@@ -186,7 +186,7 @@ export class MyCart extends Component {
               style={{
                 marginBottom: 65,
                 padding: 3,
-                borderRadius: 50,
+                // borderRadius: 50,
                 // borderWidth: 1,
                 backgroundColor: colors.red,
               }}>
@@ -362,7 +362,12 @@ export class MyCart extends Component {
                     }}>
                     <View style={{flexDirection: 'row', alignItems: 'center'}}>
                       {this.props.totalAmount > this.state.userData.balance ? (
-                        <RadioButton value="wallet" disabled />
+                        <TouchableOpacity
+                          onPress={() =>
+                            alert('You Dont Have suffecient credit')
+                          }>
+                          <RadioButton value="wallet" disabled />
+                        </TouchableOpacity>
                       ) : (
                         <RadioButton value="wallet" />
                       )}

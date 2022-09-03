@@ -58,8 +58,8 @@ export default class Profile extends Component {
     this.setState({activity: true});
     const user = await AsyncStorage.getItem('isLoggedIn');
     console.log(user);
-    AsyncStorage.removeItem('isLoggedIn');
-    AsyncStorage.clear();
+    await AsyncStorage.removeItem('isLoggedIn');
+    await AsyncStorage.clear();
     // console.log(this.props.navigation.replace('Login'));
     // this.props.navigation.replace('Login');
 

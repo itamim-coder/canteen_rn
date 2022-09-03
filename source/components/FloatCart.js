@@ -7,7 +7,7 @@ import Ionicons from 'react-native-vector-icons/Ionicons';
 
 export class FloatCart extends Component {
   render() {
-    console.log(this.props.navigation);
+    console.log(this.props.totalQuantity);
     return (
       <SafeAreaView>
         {this.props.length > 0 ? (
@@ -22,12 +22,9 @@ export class FloatCart extends Component {
             }}>
             <View style={{flexDirection: 'row'}}>
               <Text style={[TYPOGRAPHY.h4, {color: colors.white}]}>
-                {this.props.length} Items
+                {this.props.totalQuantity} Items
               </Text>
-              <Text style={[TYPOGRAPHY.h4, {color: colors.red}]}>
-                {' '}
-                |{' '}
-              </Text>
+              <Text style={[TYPOGRAPHY.h4, {color: colors.red}]}> | </Text>
               <Text style={[TYPOGRAPHY.h4, {color: colors.white}]}>
                 ${this.props.totalAmount}
               </Text>
@@ -61,6 +58,7 @@ const mapStateToProps = state => {
   return {
     length: state.cart.length,
     totalAmount: state.cart.reduce((acc, item) => acc + item.quantityPrice, 0),
+    totalQuantity: state.cart.reduce((acc, item) => acc + item.quantity, 0),
   };
 };
 
