@@ -25,6 +25,7 @@ export default class Transaction extends Component {
       transactionData: [],
     };
   }
+ 
   transactionlist = async () => {
     const user = await AsyncStorage.getItem('userInfo');
     const parse = JSON.parse(user);
@@ -49,10 +50,11 @@ export default class Transaction extends Component {
 
   componentDidMount() {
     this.transactionlist();
+    
   }
 
   renderTransaction = ({item}) => {
-    console.log('item', item);
+    console.log('trans', item);
 
     const {amount, type, created_at, transaction_id} = item;
     return (
@@ -79,7 +81,7 @@ export default class Transaction extends Component {
                   style={{
                     flexDirection: 'row',
                     justifyContent: 'space-between',
-                    paddingVertical:8,
+                    paddingVertical: 8,
                   }}>
                   <Text style={[TYPOGRAPHY.h6Bold]}>
                     ID : {item.transaction_id}
@@ -154,7 +156,8 @@ export default class Transaction extends Component {
 
     return (
       <SafeAreaView style={{flex: 1}}>
-        <Statusbar />
+        <Statusbar name="Transaction" />
+
         <View style={[SCREEN.screen]}>
           <View style={{}}>
             <ImageBackground
@@ -198,12 +201,7 @@ export default class Transaction extends Component {
               borderBottomLeftRadius: 10,
 
               borderBottomRightRadius: 10,
-              // shadowOffset: {
-              //   height: 22,
-              //   width: 22,
-              // },
-              // shadowRadius: 15,
-              // shadowOpacity:1,
+
               elevation: 4,
             }}>
             <Text style={addTxt}>+ Add Money</Text>
@@ -218,84 +216,12 @@ export default class Transaction extends Component {
               alignItems: 'center',
             }}>
             <Text style={[TYPOGRAPHY.h3]}>Recent Transaction</Text>
-            {/* <TouchableOpacity
-              onPress={() => this.props.navigation.navigate('Deposit')}
-              style={{
-                backgroundColor: colors.green,
-                paddingVertical: 5,
-                paddingHorizontal: 10,
-                borderRadius: 5,
-              }}>
-              <Text style={[TYPOGRAPHY.medium, {color: colors.white}]}>
-                Deposit
-              </Text>
-            </TouchableOpacity> */}
           </View>
           <FlatList
             showsVerticalScrollIndicator={false}
             data={this.state.transactionData}
             renderItem={item => this.renderTransaction(item)}
           />
-          {/* <View>
-            <View
-              style={{
-                backgroundColor: colors.white,
-                borderRadius: 10,
-                marginBottom: 10,
-              }}>
-              <View style={{padding: 15}}>
-                <View
-                  style={{
-                    flexDirection: 'row',
-                    justifyContent: 'space-between',
-                    alignItems: 'center',
-                  }}>
-                  <Text style={[TYPOGRAPHY.h4Bold]}>ID : 123456</Text>
-                  <AntDesign name="right" size={15} color="black" />
-                </View>
-                <Text style={[TYPOGRAPHY.medium, {color: colors.light}]}>
-                  01 JAN 2000
-                </Text>
-              </View>
-              <View
-                style={{
-                  borderWidth: 0.7,
-                  borderStyle: 'dashed',
-                  borderColor: colors.light,
-                }}
-              />
-              <View
-                style={{
-                  flexDirection: 'row',
-                  justifyContent: 'space-between',
-                  alignItems: 'center',
-                  //   paddingTop: 10,
-                  padding: 15,
-                }}>
-                <View style={{flexDirection: 'row', alignItems: 'center'}}>
-                  <Octicons name="dot-fill" size={20} color="red" />
-                  <Text
-                    style={[
-                      TYPOGRAPHY.h5,
-                      {paddingLeft: 10, color: colors.light},
-                    ]}>
-                    $ {amount}
-                  </Text>
-                </View>
-                <View
-                  style={{
-                    backgroundColor: colors.lightgreen,
-                    paddingHorizontal: 20,
-                    paddingVertical: 2,
-                    borderRadius: 5,
-                  }}>
-                  <Text style={[TYPOGRAPHY.h5, {color: colors.green}]}>
-                    Debit
-                  </Text>
-                </View>
-              </View>
-            </View>
-          </View> */}
         </View>
       </SafeAreaView>
     );

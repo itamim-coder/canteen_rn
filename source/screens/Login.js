@@ -2,6 +2,7 @@ import React, {Component, useContext, useState} from 'react';
 import {
   ActivityIndicator,
   SafeAreaView,
+  ScrollView,
   StyleSheet,
   Text,
   TextInput,
@@ -58,19 +59,22 @@ export class Login extends Component {
     }
     return true;
   };
-
   making_api_call = () => {
+    console.log('1');
     if (this.validate_field()) {
       const data = {email: this.state.email, password: this.state.password};
-
+      console.log('2');
       this.setState({indicator: true});
-      let flag = 1;
-      this.setState({flag: 1});
       this.setState({disabled: true});
+      setTimeout(() => {
+        this.setState({indicator: false});
+        this.setState({disabled: false});
+      }, 1500);
+
       axios
         .post('https://laqil.com/public/api/login', data)
         .then(res => {
-          console.log('response start');
+          console.log('3');
           let userInfo = res.data;
           console.log(userInfo);
           this.setState({userInfo: userInfo});
@@ -79,28 +83,24 @@ export class Login extends Component {
           AsyncStorage.setItem('token', JSON.stringify(res.data.token));
           const status = res.data.data.status;
           console.log(res.data.token);
-          this.setState({indicator: false});
-          this.setState({disabled: false});
+
           if (status == 1) {
             AsyncStorage.setItem('isLoggedIn', '1');
 
-            alert(res.data.message);
+            // alert(res.data.message);
             // this.setState({indicator: false});
             // this.setState({disabled: false});
             // console.log(this.props.navigation.navigate('TabNavigator'));
-            let flag = 0;
-            this.setState({flag: 0});
+
+            console.log('4 login accept');
+
             this.props.navigation.navigate('TabNavigator');
           }
         })
         .catch(function (error) {
+          console.log('5 error');
           if (error.response) {
             alert(error.response.data.message);
-            // this.setState({indicator: false});
-            // this.setState({disabled: false});
-            let flag = 0;
-            this.setState({flag: 0});
-            console.log(flag);
           }
         });
     }
@@ -194,20 +194,32 @@ export class Login extends Component {
             <Text style={{color: colors.bloodRed, fontFamily: Fonts.primary}}>
               {this.state.passerror}
             </Text>
-            {/* <Button type="login" navigation={this.props.navigation} /> */}
+            <Button type="login" navigation={this.props.navigation} />
 
-            <TouchableOpacity
-              onPress={() => {
-                this.making_api_call();
-              }}
-              disabled={this.state.disabled}
-              style={BUTTONS.btnPrimary}>
-              {this.state.indicator === true ? (
-                <ActivityIndicator color={colors.white} />
-              ) : (
-                <Text style={BUTTONS.btnFont}>Login</Text>
-              )}
-            </TouchableOpacity>
+            {this.state.indicator === true ? (
+              (console.log(this.state.indicator),
+              (
+                <View>
+                  <TouchableOpacity
+                    disabled={this.state.disabled}
+                    style={BUTTONS.btnPrimary}>
+                    <ActivityIndicator color={colors.white} />
+                  </TouchableOpacity>
+                </View>
+              ))
+            ) : (
+              <View>
+                <TouchableOpacity
+                  onPress={() => {
+                    this.making_api_call();
+                  }}
+                  disabled={this.state.disabled}
+                  style={BUTTONS.btnPrimary}>
+                  <Text style={BUTTONS.btnFont}>Login</Text>
+                  {/* <ActivityIndicator color={colors.white} /> */}
+                </TouchableOpacity>
+              </View>
+            )}
 
             <View style={loginBottom}>
               <TouchableOpacity

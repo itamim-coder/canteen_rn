@@ -20,6 +20,7 @@ import BUTTONS from '../theme/Buttons';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import axios from 'axios';
 import {launchCamera, launchImageLibrary} from 'react-native-image-picker';
+import {ActivityIndicator} from 'react-native-paper';
 export default class UpdateProfile extends Component {
   constructor(props) {
     super(props);
@@ -40,8 +41,10 @@ export default class UpdateProfile extends Component {
       prev: '',
       response: null,
       fetch_email: '',
+      disabled: false,
+      indicator: false,
     };
-    console.log('item', this.state.userData);
+    console.log('item', this.state.notify_low_balance);
   }
   componentDidMount() {
     this.getProfile();
@@ -73,13 +76,17 @@ export default class UpdateProfile extends Component {
 
   updateProfile = async ({email}) => {
     this.setState({email: email});
-
-    console.log(this.state.phone);
     const user = await AsyncStorage.getItem('userInfo');
     const parse = JSON.parse(user);
-
     const token = parse.token;
     console.log(token);
+    this.setState({indicator: true});
+    this.setState({disabled: true});
+    setTimeout(() => {
+      this.setState({indicator: false});
+      this.setState({disabled: false});
+    }, 1500);
+
     const data = {
       name: (this.state.name && this.state.name) || this.state.userData.name,
       phone:
@@ -90,12 +97,15 @@ export default class UpdateProfile extends Component {
       status: this.state.status,
       // display_name: this.state.display_name,
 
-      // notify_low_balance: this.status.notify_low_balance,
+      notify_low_balance:
+        (this.state.notify_low_balance && this.state.notify_low_balance) ||
+        this.state.userData.notify_low_balance,
       // notify_promotions: this.state.notify_promotions,
       // notify_orders: this.state.notify_orders,
       // low_balance_point: this.state.low_balance_point,
       // response: null,
-      notes: this.state.notes,
+      notes:
+        (this.state.notes && this.state.notes) || this.state.userData.notes,
     };
 
     console.log(data);
@@ -108,7 +118,7 @@ export default class UpdateProfile extends Component {
           console.log(res);
           if (res.data.status == true) {
             alert(res.data.message);
-            this.props.navigation.navigate('Profile');
+            this.props.navigation.navigate('Home');
           }
         },
         err => {
@@ -291,8 +301,8 @@ export default class UpdateProfile extends Component {
                     console.log('item', this.state.notify_low_balance);
                     this.setState({notify_low_balance: itemValue});
                   }}>
-                  <Picker.Item label="NO" value="0" />
-                  <Picker.Item label="YES" value="1" />
+                  <Picker.Item label="YES" value={1} />
+                  <Picker.Item label="NO" value={0} />
                 </Picker>
               </View>
               <View style={{flex: 1, margin: 3}}>
@@ -325,8 +335,8 @@ export default class UpdateProfile extends Component {
                   onValueChange={(itemValue, itemIndex) => {
                     this.setState({notify_promotions: itemValue});
                   }}>
-                  <Picker.Item label="NO" value="0" />
-                  <Picker.Item label="YES" value="1" />
+                  <Picker.Item label="YES" value={1} />
+                  <Picker.Item label="NO" value={0} />
                 </Picker>
               </View>
               <View style={{flex: 1, margin: 3}}>
@@ -334,13 +344,14 @@ export default class UpdateProfile extends Component {
                   Notify Orders
                 </Text>
                 <Picker
+                  // defaultValue={this.state.userData.notify_orders}
                   selectedValue={this.state.selectedValue}
                   style={{height: 50, width: 150}}
                   onValueChange={(itemValue, itemIndex) => {
                     this.setState({selectedValue: itemValue});
                   }}>
-                  <Picker.Item label="NO" value="0" />
-                  <Picker.Item label="YES" value="1" />
+                  <Picker.Item label="YES" value={1} />
+                  <Picker.Item label="NO" value={0} />
                 </Picker>
               </View>
             </View>
@@ -352,6 +363,11 @@ export default class UpdateProfile extends Component {
             <KeyboardAvoidingView style={INPUT.inputContainer}>
               <TextInput
                 defaultValue={this.state.userData.notes}
+                onChangeText={value => {
+                  this.setState({
+                    notes: value,
+                  });
+                }}
                 multiline={true}
                 numberOfLines={3}
                 // editable={false}
@@ -361,11 +377,26 @@ export default class UpdateProfile extends Component {
             </KeyboardAvoidingView>
           </View>
         </ScrollView>
-        <TouchableOpacity
-          onPress={() => this.updateProfile({email, phone, name, notes})}
-          style={BUTTONS.btnPrimary}>
-          <Text style={BUTTONS.btnFont}>Save</Text>
-        </TouchableOpacity>
+        {this.state.indicator === true ? (
+          (console.log(this.state.indicator),
+          (
+            <View>
+              <TouchableOpacity
+                disabled={this.state.disabled}
+                style={BUTTONS.btnPrimary}>
+                <ActivityIndicator color={colors.white} />
+              </TouchableOpacity>
+            </View>
+          ))
+        ) : (
+          <View>
+            <TouchableOpacity
+              onPress={() => this.updateProfile({email, phone, name, notes})}
+              style={BUTTONS.btnPrimary}>
+              <Text style={BUTTONS.btnFont}>Save</Text>
+            </TouchableOpacity>
+          </View>
+        )}
       </SafeAreaView>
     );
   }

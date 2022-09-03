@@ -17,6 +17,7 @@ import Button from '../components/Button';
 import {Fonts} from '../theme/Fonts';
 import BUTTONS from '../theme/Buttons';
 import axios from 'axios';
+import Statusbar from '../components/Statusbar';
 
 export default class ResetRequest extends Component {
   constructor(props) {
@@ -68,42 +69,46 @@ export default class ResetRequest extends Component {
 
   render() {
     return (
-      <SafeAreaView style={[SCREEN.screen, {backgroundColor: colors.white}]}>
-        <View>
-          <Text style={[TYPOGRAPHY.h2]}>Reset Password</Text>
-          <Text style={[TYPOGRAPHY.primary, {color: colors.ash}]}>
-            Enter your email verification code will be sent on given email
-          </Text>
-          <View style={styles.otpBox}>
-            <Text style={[TYPOGRAPHY.h5, {color: colors.ash, marginBottom: 5}]}>
-              Enter your email
+      <SafeAreaView style={{flex: 1}}>
+        <Statusbar />
+        <View style={[SCREEN.screen, {backgroundColor: colors.white}]}>
+          <View>
+            <Text style={[TYPOGRAPHY.h2]}>Reset Password</Text>
+            <Text style={[TYPOGRAPHY.primary, {color: colors.ash}]}>
+              Enter your email verification code will be sent on given email
             </Text>
-            <View style={INPUT.inputContainer}>
-              <TextInput
-                value={this.state.email}
-                onChangeText={value => {
-                  this.setState({email: value, emailerror: ''});
+            <View style={styles.otpBox}>
+              <Text
+                style={[TYPOGRAPHY.h5, {color: colors.ash, marginBottom: 5}]}>
+                Enter your email
+              </Text>
+              <View style={INPUT.inputContainer}>
+                <TextInput
+                  value={this.state.email}
+                  onChangeText={value => {
+                    this.setState({email: value, emailerror: ''});
+                  }}
+                  placeholder="Email"
+                  placeholderTextColor={'grey'}
+                  style={INPUT.input}
+                />
+              </View>
+              <Text style={{color: colors.bloodRed, fontFamily: Fonts.primary}}>
+                {this.state.emailerror}
+              </Text>
+              <TouchableOpacity
+                onPress={() => {
+                  this.reset_api_call();
                 }}
-                placeholder="Email"
-                placeholderTextColor={'grey'}
-                style={INPUT.input}
-              />
+                disabled={this.state.disabled}
+                style={BUTTONS.btnPrimary}>
+                {this.state.indicator ? (
+                  <ActivityIndicator color={colors.white} />
+                ) : (
+                  <Text style={BUTTONS.btnFont}>Submit</Text>
+                )}
+              </TouchableOpacity>
             </View>
-            <Text style={{color: colors.bloodRed, fontFamily: Fonts.primary}}>
-              {this.state.emailerror}
-            </Text>
-            <TouchableOpacity
-              onPress={() => {
-                this.reset_api_call();
-              }}
-              disabled={this.state.disabled}
-              style={BUTTONS.btnPrimary}>
-              {this.state.indicator ? (
-                <ActivityIndicator color={colors.white} />
-              ) : (
-                <Text style={BUTTONS.btnFont}>Submit</Text>
-              )}
-            </TouchableOpacity>
           </View>
         </View>
       </SafeAreaView>

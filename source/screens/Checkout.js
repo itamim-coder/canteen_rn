@@ -140,6 +140,7 @@ export default class Checkout extends Component {
                 style={[TYPOGRAPHY.h5, {color: colors.ash, marginBottom: 5}]}>
                 Choose Currency
               </Text>
+
               <RadioButton.Group
                 value={this.state.checked}
                 onValueChange={newValue => {

@@ -20,7 +20,7 @@ import {Picker} from '@react-native-picker/picker';
 import {colors} from '../theme/colors';
 import {Fonts} from '../theme/Fonts';
 import {launchImageLibrary} from 'react-native-image-picker';
-import {TouchableRipple} from 'react-native-paper';
+import {ActivityIndicator, TouchableRipple} from 'react-native-paper';
 import {multiline} from 'deprecated-react-native-prop-types/DeprecatedTextInputPropTypes';
 const width = Dimensions.get('screen').width;
 export default class AddStudent extends Component {
@@ -60,6 +60,8 @@ export default class AddStudent extends Component {
       type: this.props.route.params.type,
       response: null,
       upload_picture: null,
+      disabled: false,
+      indicator: false,
     };
     console.log(this.props.route.params);
   }
@@ -70,6 +72,12 @@ export default class AddStudent extends Component {
 
     const token = parse.token;
     console.log(token);
+    this.setState({indicator: true});
+    this.setState({disabled: true});
+    setTimeout(() => {
+      this.setState({indicator: false});
+      this.setState({disabled: false});
+    }, 1500);
     const data = {
       name: this.state.name,
       phone: this.state.phone,
@@ -122,6 +130,12 @@ export default class AddStudent extends Component {
 
     const token = parse.token;
     console.log(token);
+    this.setState({indicator: true});
+    this.setState({disabled: true});
+    setTimeout(() => {
+      this.setState({indicator: false});
+      this.setState({disabled: false});
+    }, 1500);
     const data = {
       name: this.state.name,
       phone: this.state.phone,
@@ -591,7 +605,11 @@ export default class AddStudent extends Component {
                 }}
                 disabled={this.state.disabled}
                 style={BUTTONS.btnPrimary}>
-                <Text style={BUTTONS.btnFont}>Confirm Student</Text>
+                {this.state.indicator === true ? (
+                  <ActivityIndicator color={colors.white} />
+                ) : (
+                  <Text style={BUTTONS.btnFont}>Confirm Student</Text>
+                )}
               </TouchableOpacity>
             ) : (
               <TouchableOpacity
@@ -600,7 +618,11 @@ export default class AddStudent extends Component {
                 }}
                 disabled={this.state.disabled}
                 style={BUTTONS.btnPrimary}>
-                <Text style={BUTTONS.btnFont}>Update Student</Text>
+                {this.state.indicator === true ? (
+                  <ActivityIndicator color={colors.white} />
+                ) : (
+                  <Text style={BUTTONS.btnFont}>Update Student</Text>
+                )}
               </TouchableOpacity>
             )}
           </View>

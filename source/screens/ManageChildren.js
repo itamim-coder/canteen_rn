@@ -10,6 +10,7 @@ import {
   Pressable,
   TextInput,
   Dimensions,
+  ActivityIndicator,
 } from 'react-native';
 import React, {Component} from 'react';
 import {SafeAreaView} from 'react-native-safe-area-context';
@@ -28,6 +29,7 @@ export default class ManageChildren extends Component {
     super(props);
     this.state = {
       children: [],
+      indicator: false,
     };
   }
 
@@ -37,6 +39,11 @@ export default class ManageChildren extends Component {
 
     const token = parse.token;
     console.log('token', token);
+    this.setState({indicator: true});
+
+    setTimeout(() => {
+      this.setState({indicator: false});
+    }, 1500);
 
     axios
       .get('https://laqil.com/public/api/student-list', {
@@ -138,39 +145,50 @@ export default class ManageChildren extends Component {
           <View style={{flex: 2}}>
             <Text
               style={[
-                TYPOGRAPHY.h3,
+                TYPOGRAPHY.h4Bold,
                 {
                   textAlign: 'center',
                 },
-              ]}
-            />
-          </View>
-        </View>
-        <View style={{justifyContent: 'space-between', flex: 1}}>
-          <View>
-            <FlatList
-              data={this.state.children}
-              renderItem={item => this.renderChildren(item)}
-            />
-          </View>
-        </View>
-        <View style={{alignItems: 'center'}}>
-          <TouchableOpacity
-            style={[
-              BUTTONS.btnPrimary,
-              {width: width, marginBottom: 10, flexDirection: 'row'},
-            ]}
-            onPress={() =>
-              this.props.navigation.navigate('AddStudent', {
-                type: 'Add',
-              })
-            }>
-            <AntDesign name="adduser" size={24} color="white" />
-            <Text style={[BUTTONS.btnFont, {textAlign: 'center'}]}>
-              Add Student{' '}
+              ]}>
+              Manage Childrens
             </Text>
-          </TouchableOpacity>
+          </View>
         </View>
+        {this.state.indicator === true ? (
+          <ActivityIndicator
+            color={colors.red}
+            size={'large'}
+            style={{alignItems: 'center', justifyContent: 'center', flex: 1}}
+          />
+        ) : (
+          <>
+            <View style={{justifyContent: 'space-between', flex: 1}}>
+              <View>
+                <FlatList
+                  data={this.state.children}
+                  renderItem={item => this.renderChildren(item)}
+                />
+              </View>
+            </View>
+            <View style={{alignItems: 'center'}}>
+              <TouchableOpacity
+                style={[
+                  BUTTONS.btnPrimary,
+                  {width: width, marginBottom: 10, flexDirection: 'row'},
+                ]}
+                onPress={() =>
+                  this.props.navigation.navigate('AddStudent', {
+                    type: 'Add',
+                  })
+                }>
+                <AntDesign name="adduser" size={24} color="white" />
+                <Text style={[BUTTONS.btnFont, {textAlign: 'center'}]}>
+                  Add Student{' '}
+                </Text>
+              </TouchableOpacity>
+            </View>
+          </>
+        )}
       </SafeAreaView>
     );
   }

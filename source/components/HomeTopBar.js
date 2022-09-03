@@ -8,7 +8,8 @@ export class HomeTopBar extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      selectedValue: '',
+      selectedValue: '0',
+      selectedSchool: '',
       schoolList: [],
       // selectedId: '',
     };
@@ -24,9 +25,14 @@ export class HomeTopBar extends Component {
       });
   }
   pickerActivity = async id => {
-    this.setState({selectedValue: id});
-
     if (id != 0) {
+      AsyncStorage.setItem('selected_school', JSON.stringify(id));
+      const school = await AsyncStorage.getItem('selected_school');
+      const parse = JSON.parse(school);
+      // this.setState({selectedValue: parse});
+      this.setState({selectedSchool: parse});
+      console.log('school', parse);
+
       this.props.navigation.navigate('SchoolFood', {id: id});
     }
 
@@ -62,22 +68,18 @@ export class HomeTopBar extends Component {
             width: width / 2,
           }}>
           <Picker
-            selectedValue={this.state.selectedValue}
+            selectedValue={this.state.selectedSchool}
             style={{height: 30, width: 200}}
-            // onValueChange={(modeValue, modeIndex) => this.setState({mode: modeValue})}>
-            // {this.state.dataSource.map((item, key)=>(
-            //         <Picker.Item label={item} value={item} key={key} />)
-            //         )}
             onValueChange={(itemValue, itemIndex, id) => {
               this.pickerActivity(itemValue);
-              // this.setState({selectedValue: itemValue});
+              this.setState({selectedValue: 0});
             }}>
-            <Picker.Item label="Please select an option..." value="0" />
+            <Picker.Item label="Select a school" value="0" />
             {this.state.schoolList.map(item => (
               // <TouchableOpacity>
               // console.log(item.id),
+
               <Picker.Item label={item.name} value={item.id} />
-              // </TouchableOpacity>
             ))}
           </Picker>
         </View>

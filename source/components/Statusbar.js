@@ -29,7 +29,7 @@ const Statusbar = ({name, type, length}) => {
         <View style={{flex: 2}}>
           <Text
             style={[
-              TYPOGRAPHY.h3,
+              TYPOGRAPHY.h4Bold,
               {
                 textAlign: 'center',
               },
@@ -59,7 +59,7 @@ const Statusbar = ({name, type, length}) => {
         <View style={{flex: 2}}>
           <Text
             style={[
-              TYPOGRAPHY.h3,
+              TYPOGRAPHY.h4Bold,
               {
                 textAlign: 'center',
               },

@@ -33,6 +33,11 @@ import MyCart from '../screens/MyCart';
 import {connect, Provider} from 'react-redux';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import store from '../../redux';
+import AllLatestFoods from '../screens/AllLatestFoods';
+
+import AuthNav from './AuthNav';
+import MainNAv from './MainNAv';
+import LoginContext, {LoginProvider, useLogin} from '../context/LoginProvider';
 
 const Stack = createNativeStackNavigator();
 const Tab = createBottomTabNavigator();
@@ -41,21 +46,29 @@ export class Navigation extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      token: '',
+      token: null,
+      initialRoute: null,
     };
   }
-
+  static contextType = useLogin;
   getUser = async () => {
     const user = await AsyncStorage.getItem('isLoggedIn');
     const parse = JSON.parse(user);
     // const name = parse.data.name;
 
-    this.setState({token: parse});
+    this.setState({token: user});
 
-    console.log('token', parse);
+    console.log('token', user);
+    console.log('compo', this.state.token);
+    if (this.state.token !== null) {
+      this.setState({initialRoute: 'Login'});
+    } else {
+      this.setState({initialRoute: 'Home'});
+    }
   };
   componentDidMount() {
     this.getUser();
+
   }
 
   render() {
@@ -127,26 +140,25 @@ export class Navigation extends Component {
     //     </NavigationContainer>
     //   );
     // };
-    console.log('state', this.state.token);
+   
     return (
       <NavigationContainer>
+        {/* {this.state.token ? <MainNAv /> : <AuthNav />} */}
         <Stack.Navigator screenOptions={{header: () => null}}>
-          {/* {this.state?.token === null ? (
-            <Stack.Screen name="Login" component={Login} />
-          ) : (
-            <>
-              <Stack.Screen name="TabNavigator" component={TabNavigator} />
-              <Stack.Screen name="Profile" component={Profile} />
-              <Stack.Screen name="UpdateProfile" component={UpdateProfile} />
-              <Stack.Screen name="ManageChildren" component={ManageChildren} />
-              <Stack.Screen name="MyOrder" component={MyOrder} />
-              <Stack.Screen name="StudentDetails" component={StudentDetails} />
+          {/* <Stack.Screen name="Login" component={Login} />
+          <Stack.Screen name="TabNavigator" component={TabNavigator} />
+          <Stack.Screen name="Profile" component={Profile} />
+          <Stack.Screen name="UpdateProfile" component={UpdateProfile} />
+          <Stack.Screen name="ManageChildren" component={ManageChildren} />
+          <Stack.Screen name="MyOrder" component={MyOrder} />
+          <Stack.Screen name="StudentDetails" component={StudentDetails} />
 
-              <Stack.Screen name="Transaction" component={Transaction} />
-              <Stack.Screen name="Deposit" component={Deposit} />
-              <Stack.Screen name="AddStudent" component={AddStudent} />
-            </>
-          )} */}
+          <Stack.Screen name="Transaction" component={Transaction} />
+          <Stack.Screen name="Deposit" component={Deposit} />
+          <Stack.Screen name="AddStudent" component={AddStudent} /> */}
+       
+          {/* <AuthNav />
+        <MainNAv /> */}
           <Stack.Screen name="Login" component={Login} />
           <Stack.Screen name="Signup" component={Signup} />
           <Stack.Screen name="ResetRequest" component={ResetRequest} />
@@ -154,6 +166,7 @@ export class Navigation extends Component {
           <Stack.Screen name="Verification" component={Verification} />
 
           <Stack.Screen name="TabNavigator" component={TabNavigator} />
+          <Stack.Screen name="AllLatestFoods" component={AllLatestFoods} />
 
           <Stack.Screen name="Topup" component={Topup} />
           <Stack.Screen name="AddtoWallet" component={AddtoWallet} />

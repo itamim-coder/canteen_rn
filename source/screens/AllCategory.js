@@ -41,9 +41,9 @@ export default class AllCategory extends Component {
     console.log(category);
     return (
       <SafeAreaView style={{flex: 1}}>
-        <Statusbar />
+        <Statusbar name={'All Categories'} />
         <View style={SCREEN.screen}>
-          <Text style={TYPOGRAPHY.h3}>Categories</Text>
+          {/* <Text style={TYPOGRAPHY.h3}>Categories</Text> */}
           <FlatList
             //   horizontal
             showsVerticalScrollIndicator={false}

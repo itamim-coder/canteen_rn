@@ -1,6 +1,7 @@
 /* eslint-disable react-native/no-inline-styles */
 import {
   ActivityIndicator,
+  Dimensions,
   FlatList,
   Image,
   SafeAreaView,
@@ -22,7 +23,8 @@ import Search from '../components/Search';
 import Popular from '../components/Popular';
 import HomeTopBar from '../components/HomeTopBar';
 import FloatCart from '../components/FloatCart';
-
+import LatestFood from '../components/LatestFood';
+const width = Dimensions.get('screen').width / 2 - 20;
 export class Home extends Component {
   // render Category item
   constructor(props) {
@@ -53,10 +55,10 @@ export class Home extends Component {
       flexDirection: 'row',
       alignItems: 'center',
       backgroundColor: colors.white,
-      marginRight: 10,
-      paddingRight: 15,
+
       padding: 5,
-      // paddingVertical: 10,
+      width: width,
+
       borderRadius: 10,
       marginTop: 10,
     };
@@ -68,7 +70,7 @@ export class Home extends Component {
           }
           style={categoryCard}>
           <Image
-            resizeMode="cover"
+            resizeMode="contain"
             style={{width: 60, height: 60, borderRadius: 10}}
             source={{uri: `${item.photo}`}}
           />
@@ -118,7 +120,10 @@ export class Home extends Component {
               <ActivityIndicator color={colors.red} />
             ) : (
               <FlatList
-                horizontal
+                numColumns={2}
+                columnWrapperStyle={{
+                  justifyContent: 'space-between',
+                }}
                 data={this.state?.category.slice(0, 6)}
                 keyExtractor={item => item.id}
                 showsHorizontalScrollIndicator={false}
@@ -127,7 +132,7 @@ export class Home extends Component {
             )}
 
             {/* Popular Section  */}
-            <Popular />
+            <LatestFood navigation={this.props.navigation} />
           </ScrollView>
         </View>
         <FloatCart navigation={this.props.navigation} />

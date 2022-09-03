@@ -45,7 +45,7 @@ export class FoodDetails extends Component {
       cartProducts: [],
       quantity: 1,
     };
-    console.log('foodetails', this.state.quantity);
+    console.log('foodetails', this.state.foodDetails);
   }
 
   increment = () => {
@@ -75,70 +75,78 @@ export class FoodDetails extends Component {
       });
   }
 
-  renderItem = ({item}) => {
-    const sliderCard = {
-      backgroundColor: colors.white,
-      marginRight: 10,
-      // marginTop: 40,
-      borderRadius: 10,
-      padding: 10,
-    };
-    const foodName = {
-      ...TYPOGRAPHY.h6,
-      // padding: 10,
-    };
-    const priceText = {
-      ...TYPOGRAPHY.h5,
-      // padding: 10,
-    };
-    const {name, image, price} = item;
-    return (
-      <View>
-        <TouchableOpacity
-          style={sliderCard}
-          onPress={() =>
-            this.props.navigation.navigate('FoodDetails', {food: item})
-          }>
-          <Text style={foodName}>{name}</Text>
-          <View
-            style={{
-              flexDirection: 'column',
-              justifyContent: 'space-between',
-              padding: 20,
-            }}>
-            <Image
-              resizeMode="cover"
-              style={{width: 100, height: 80}}
-              source={image}
-            />
-          </View>
-          <Text style={[TYPOGRAPHY.h6, {color: colors.green}]}>Customize</Text>
-          <View
-            style={{
-              flexDirection: 'row',
-              alignItems: 'center',
-              justifyContent: 'space-between',
-            }}>
-            <Text style={[TYPOGRAPHY.h3, {fontWeight: 'bold'}]}>
-              ${price}.00
-            </Text>
-            <TouchableOpacity
-              style={{
-                backgroundColor: colors.red,
-                paddingHorizontal: 10,
-                paddingVertical: 5,
-                borderRadius: 10,
-              }}>
-              <Text
-                style={{color: colors.white, fontWeight: 'bold', fontSize: 15}}>
-                +
-              </Text>
-            </TouchableOpacity>
-          </View>
-        </TouchableOpacity>
-      </View>
-    );
-  };
+  // renderItem = ({item}) => {
+  //   const sliderCard = {
+  //     backgroundColor: colors.white,
+  //     marginRight: 10,
+  //     // marginTop: 40,
+  //     borderRadius: 10,
+  //     padding: 10,
+  //   };
+  //   const foodName = {
+  //     ...TYPOGRAPHY.h6,
+  //     // padding: 10,
+  //   };
+  //   const priceText = {
+  //     ...TYPOGRAPHY.h5,
+  //     // padding: 10,
+  //   };
+  //   const {description, picture, price} = item;
+  //   console.log(item.picture);
+  //   return (
+  //     <View>
+  //       <TouchableOpacity
+  //         style={sliderCard}
+  //         onPress={() =>
+  //           this.props.navigation.navigate('FoodDetails', {
+  //             id: item.id,
+  //             picture: item.picture,
+  //             name: item.description,
+  //             price: item.price,
+  //             quantity: 0,
+  //             similar_foods: this.state.schoolFoods,
+  //           })
+  //         }>
+  //         <Text style={foodName}>{description}</Text>
+  //         <View
+  //           style={{
+  //             flexDirection: 'column',
+  //             justifyContent: 'space-between',
+  //             padding: 20,
+  //           }}>
+  //           <Image
+  //             resizeMode="cover"
+  //             style={{width: 100, height: 80}}
+  //             source={{uri: `${item.picture}`}}
+  //           />
+  //         </View>
+  //         <Text style={[TYPOGRAPHY.h6, {color: colors.green}]}>Customize</Text>
+  //         <View
+  //           style={{
+  //             flexDirection: 'row',
+  //             alignItems: 'center',
+  //             justifyContent: 'space-between',
+  //           }}>
+  //           <Text style={[TYPOGRAPHY.h3, {fontWeight: 'bold'}]}>
+  //             ${price}.00
+  //           </Text>
+  //           <TouchableOpacity
+  //             style={{
+  //               backgroundColor: colors.red,
+  //               paddingHorizontal: 10,
+  //               paddingVertical: 5,
+  //               borderRadius: 10,
+  //             }}>
+  //             <Text
+  //               style={{color: colors.white, fontWeight: 'bold', fontSize: 15}}>
+  //               +
+  //             </Text>
+  //           </TouchableOpacity>
+  //         </View>
+  //       </TouchableOpacity>
+  //     </View>
+  //   );
+  // };
   render() {
     const detailsContainer = {flex: 1, backgroundColor: colors.white};
     const detailsScreen = {
@@ -154,6 +162,7 @@ export class FoodDetails extends Component {
     };
 
     const add = added => {
+      console.log(added);
       const cartProduct = {
         id: added.id,
         description: added.description,
@@ -164,7 +173,8 @@ export class FoodDetails extends Component {
       };
       this.props.addToCart({cartProduct});
     };
-    const food = this.props.route.params.food;
+    const similar_foods = this.props.route.params.similar_foods;
+    console.log('school', similar_foods);
 
     const {ingredients, pack_details, price, picture, description, id} =
       this.state?.foodDetails;
@@ -197,7 +207,7 @@ export class FoodDetails extends Component {
                   source={{uri: picture}}
                   style={{
                     width: '100%',
-                    height: 300,
+                    height: 250,
                     alignItems: 'center',
                     justifyContent: 'center',
                   }}
@@ -290,72 +300,45 @@ export class FoodDetails extends Component {
                     </View>
                   </View>
                 </View>
-                <Text style={TYPOGRAPHY.h4}>About Product</Text>
+                <Text style={TYPOGRAPHY.h4}>Ingredients</Text>
                 <Text style={TYPOGRAPHY.primary}>{ingredients}</Text>
-              </View>
-
-              <View
-                style={[
-                  SCREEN.screen,
-
-                  {
-                    // padding:0,
-                    backgroundColor: colors.grey,
-                    // flex: 0.1,
-                    borderTopLeftRadius: 30,
-                    borderTopRightRadius: 30,
-                    paddingBottom: 10,
-                  },
-                ]}>
-                <Text
-                  style={[
-                    TYPOGRAPHY.h4,
-                    {
-                      // fontSize: 20,
-                      marginBottom: 10,
-                    },
-                  ]}>
-                  Similar Products
-                </Text>
-                <FlatList
-                  horizontal
-                  showsHorizontalScrollIndicator={false}
-                  // data={this.state.foods}
-                  renderItem={item => this.renderItem(item)}
-                />
+                <View style={{marginTop: 5}}>
+                  <Text style={TYPOGRAPHY.h4}>Pack Details</Text>
+                  <Text style={TYPOGRAPHY.primary}>{pack_details}</Text>
+                </View>
               </View>
             </ScrollView>
           </View>
         )}
 
         {/* <ScrollView
-    style={[
-      SCREEN.screen,
-      {
-        backgroundColor: colors.grey,
-        // flex: 0.1,
-        borderTopLeftRadius: 30,
-        borderTopRightRadius: 30,
-        paddingBottom: 0,
-      },
-    ]}>
-    <Text
-      style={[
-        TYPOGRAPHY.primary,
-        {
-          fontSize: 20,
-          marginBottom: 10,
-        },
-      ]}>
-      Similar Products
-    </Text>
-    <FlatList
-      horizontal
-      showsHorizontalScrollIndicator={false}
-      data={FOOD_LIST}
-      renderItem={item => this.renderItem(item)}
-    />
-  </ScrollView> */}
+          style={[
+            SCREEN.screen,
+            {
+              backgroundColor: colors.grey,
+              // flex: 0.1,
+              borderTopLeftRadius: 30,
+              borderTopRightRadius: 30,
+              paddingBottom: 0,
+            },
+          ]}>
+          <Text
+            style={[
+              TYPOGRAPHY.primary,
+              {
+                fontSize: 20,
+                marginBottom: 10,
+              },
+            ]}>
+            Similar Products
+          </Text>
+          <FlatList
+            horizontal
+            showsHorizontalScrollIndicator={false}
+            data={similar_foods}
+            renderItem={item => this.renderItem(item)}
+          />
+        </ScrollView> */}
 
         <FloatCart navigation={this.props.navigation} />
       </SafeAreaView>
@@ -365,7 +348,6 @@ export class FoodDetails extends Component {
 const mapStateToProps = state => {
   return {
     carts: state.cart.carts,
-    cart: state.cart,
   };
 };
 
