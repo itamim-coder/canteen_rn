@@ -25,7 +25,7 @@ export default class Transaction extends Component {
       transactionData: [],
     };
   }
- 
+
   transactionlist = async () => {
     const user = await AsyncStorage.getItem('userInfo');
     const parse = JSON.parse(user);
@@ -50,7 +50,6 @@ export default class Transaction extends Component {
 
   componentDidMount() {
     this.transactionlist();
-    
   }
 
   renderTransaction = ({item}) => {
@@ -104,10 +103,6 @@ export default class Transaction extends Component {
                       -${item.amount}
                     </Text>
                   )}
-                  {/*
-                  <Text style={[TYPOGRAPHY.medium, {color: colors.light}]}>
-                    Promocode applied
-                  </Text> */}
                 </View>
               </View>
               <View />
@@ -118,13 +113,6 @@ export default class Transaction extends Component {
     );
   };
   render() {
-    // console.log(this.state.transactionData);
-    // const addMoneyBox: {
-    //   padding: 20,
-    //   backgroundColor: 'white',
-    //   borderBottomLeftRadius: 10,
-    //   borderBottomRightRadius: 10,
-    // };
     const bgimg = {
       justifyContent: 'center',
       height: 200,

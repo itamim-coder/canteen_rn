@@ -24,6 +24,7 @@ export class LatestFood extends Component {
       visible: false,
       foods: [],
     };
+    console.log("sss",this.props);
   }
   componentDidMount() {
     this.setState({visible: true});

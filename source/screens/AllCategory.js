@@ -23,7 +23,10 @@ export default class AllCategory extends Component {
     return (
       <TouchableOpacity
         onPress={() =>
-          this.props.navigation.navigate('FilterCategory', {id: item.id})
+          this.props.navigation.navigate('FilterCategory', {
+            id: item.id,
+            category_name: item.name,
+          })
         }
         style={categoryCard}>
         <Image

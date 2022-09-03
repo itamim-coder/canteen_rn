@@ -43,6 +43,10 @@ export class Login extends Component {
     };
   }
 
+  // componentDidUpdate() {
+  //   this.state.email = '';
+  //   this.state.password = '';
+  // }
   validate_field = () => {
     const {email, password} = this.state;
 

@@ -52,7 +52,6 @@ export default class AddStudent extends Component {
       health_conditions: 'good',
       active: 'active',
       addData: [],
-
       selectedValue: 'male',
       selectedSchool: '',
       schoolList: [],
@@ -116,7 +115,7 @@ export default class AddStudent extends Component {
           console.log(res.data);
           if (res.data.status == true) {
             alert(res.data.message);
-            this.props.navigation.navigate('Profile');
+            this.props.navigation.navigate('ManageChildren');
           }
         },
         err => {

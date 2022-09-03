@@ -181,7 +181,7 @@ export class SchoolFood extends Component {
     };
     return (
       <SafeAreaView style={{flex: 1}}>
-        <Statusbar name={'Foods'} />
+        {/* <Statusbar name={'Foods'} /> */}
         <View style={popularBox}>
           <FlatList
             showsVerticalScrollIndicator={false}

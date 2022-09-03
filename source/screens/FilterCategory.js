@@ -20,10 +20,11 @@ export default class FilterCategory extends Component {
     super(props);
     this.state = {
       id: this.props.route?.params?.id,
-      filterFoods: [],
+      filterFoods: null,
       visible: false,
       message: '',
     };
+    console.log(this.props.route.params.category_name);
   }
 
   componentDidMount() {
@@ -31,7 +32,7 @@ export default class FilterCategory extends Component {
     fetch(`https://laqil.com/public/api/product-list?cat=${this.state.id}`)
       .then(res => res.json())
       .then(res => {
-        console.log(res.message);
+        console.log('message', res.message);
 
         // this.setState({foods: res});
         if (res.status == true) {
@@ -39,7 +40,7 @@ export default class FilterCategory extends Component {
           // return this.state.foods;
           this.setState({visible: false});
         } else if (res.data == null) {
-          alert(res.message);
+          console.log('message', res.message);
           this.setState({message: res.message});
         }
       });
@@ -118,7 +119,7 @@ export default class FilterCategory extends Component {
     );
   };
   render() {
-    console.log(this.state.id);
+    // console.log(this.state.id);
     const popularBox = {
       //   paddingVertical: 20,
       // backgroundColor: colors.red,
@@ -127,25 +128,37 @@ export default class FilterCategory extends Component {
     };
     return (
       <SafeAreaView style={{flex: 1}}>
-        <Statusbar />
-        <View style={popularBox}>
-          <Text
-            style={[TYPOGRAPHY.h3, {fontWeight: 'bold', marginBottom: 20}]}
-          />
-          <FlatList
-            showsVerticalScrollIndicator={false}
-            columnWrapperStyle={{
-              justifyContent: 'space-between',
-            }}
-            contentContainerStyle={{
-              // marginTop: 10,
-              paddingBottom: 50,
-            }}
-            data={this.state.filterFoods}
-            numColumns={2}
-            renderItem={item => this.renderItem(item)}
-          />
-        </View>
+        <Statusbar name={this.props.route.params.category_name} />
+        {this.state.filterFoods !== null ? (
+          <View style={popularBox}>
+            <Text
+              style={[TYPOGRAPHY.h3, {fontWeight: 'bold', marginBottom: 20}]}
+            />
+            <FlatList
+              showsVerticalScrollIndicator={false}
+              columnWrapperStyle={{
+                justifyContent: 'space-between',
+              }}
+              contentContainerStyle={{
+                // marginTop: 10,
+                paddingBottom: 50,
+              }}
+              data={this.state.filterFoods}
+              numColumns={2}
+              renderItem={item => this.renderItem(item)}
+            />
+          </View>
+        ) : (
+          <View>
+            <Text
+              style={[
+                TYPOGRAPHY.h4Bold,
+                {textAlign: 'center', color: colors.red},
+              ]}>
+              Product List Empty
+            </Text>
+          </View>
+        )}
       </SafeAreaView>
     );
   }
