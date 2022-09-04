@@ -44,7 +44,7 @@ export class Home extends Component {
       selectedSchool: '' || 0,
       schoolList: [],
       foods: [],
-      navUnmount: null,
+      // navUnmount: null,
       id: '',
       isModalVisible: false,
       checked: null,

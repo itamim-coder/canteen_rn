@@ -38,7 +38,7 @@ import AllLatestFoods from '../screens/AllLatestFoods';
 import AuthNav from './AuthNav';
 import MainNAv from './MainNAv';
 import LoginContext, {LoginProvider, useLogin} from '../context/LoginProvider';
-import UpdateStudent from '../screens/updateStudent';
+import UpdateStudent from '../screens/UpdateStudent';
 
 const Stack = createNativeStackNavigator();
 const Tab = createBottomTabNavigator();
