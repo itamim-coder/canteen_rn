@@ -61,70 +61,131 @@ export default class UpdateStudent extends Component {
       upload_picture: null,
       disabled: false,
       indicator: false,
+      studentData: this.props.route.params.data,
+      password_error: '',
+      password_confirmation_error: '',
     };
-    console.log(this.props.route.params);
+    console.log(this.state.studentData);
   }
+  validate_field = () => {
+    const {password_confirmation, password} = this.state;
+
+    if (password_confirmation == '' && password == '') {
+      this.setState({password_error: 'Please enter your password'});
+      this.setState({
+        password_confirmation_error: 'Please enter your confirm password',
+      });
+      alert('Please enter your password');
+      return false;
+    } else if (password == '') {
+      this.setState({password_error: 'Please enter your password'});
+      alert('Please enter your password');
+      return false;
+    } else if (password_confirmation == '') {
+      this.setState({
+        password_confirmation_error: 'Please enter your confirm password',
+      });
+      alert('Please enter your confirm password');
+      return false;
+    }
+    return true;
+  };
 
   updateStudent = async () => {
-    const user = await AsyncStorage.getItem('userInfo');
-    const parse = JSON.parse(user);
+    if (this.validate_field()) {
+      const user = await AsyncStorage.getItem('userInfo');
+      const parse = JSON.parse(user);
 
-    const token = parse.token;
-    console.log(token);
-    this.setState({indicator: true});
-    this.setState({disabled: true});
-    setTimeout(() => {
-      this.setState({indicator: false});
-      this.setState({disabled: false});
-    }, 1500);
-    const data = {
-      name: this.state.name,
-      phone: this.state.phone,
-      gender: this.state.gender,
-      email: this.state.email,
-      password: this.state.password,
-      password_confirmation: this.state.password_confirmation,
-      parent_id: this.state.parent_id,
-      school_id: this.state.selectedSchool,
-      code: this.state.code,
-      class: this.state.selectedClass,
-      teacher: this.state.teacher,
-      daily_spending_limit: this.state.daily_spending_limit,
-      homeroom: this.state.homeroom,
-      dad_cell: this.state.dad_cell,
-      dad_email: this.state.dad_email,
-      dad_work_email: this.state.dad_work_email,
-      dad_work_phone: this.state.dad_work_phone,
-      mom_cell: this.state.mom_cell,
-      mom_work_phone: this.state.mom_work_phone,
-      mom_email: this.state.mom_email,
-      mom_work_email: this.state.mom_work_email,
-      notes: this.state.notes,
-      health_conditions: this.state.health_conditions,
-      active: this.state.active,
-    };
+      const token = parse.token;
+      console.log(token);
+      this.setState({indicator: true});
+      this.setState({disabled: true});
+      setTimeout(() => {
+        this.setState({indicator: false});
+        this.setState({disabled: false});
+      }, 1500);
+      const data = {
+        name:
+          (this.state.name && this.state.name) || this.state.studentData.name,
+        phone:
+          (this.state.phone && this.state.phone) ||
+          this.state.studentData.phone,
+        gender:
+          (this.state.gender && this.state.gender) ||
+          this.state.studentData.gender,
+        email:
+          (this.state.email && this.state.email) ||
+          this.state.studentData.email,
+        password: this.state.password,
+        password_confirmation: this.state.password_confirmation,
+        parent_id: this.state.parent_id,
+        school_id:
+          (this.state.selectedSchool && this.state.selectedSchool) ||
+          this.state.studentData.selectedSchool,
+        code: this.state.code,
+        class: this.state.selectedClass,
+        teacher:
+          (this.state.teacher && this.state.teacher) || this.state.teacher,
+        daily_spending_limit:
+          (this.state.daily_spending_limit &&
+            this.state.daily_spending_limit) ||
+          this.state.studentData.daily_spending_limit,
+        homeroom:
+          (this.state.homeroom && this.state.homeroom) ||
+          this.state.studentData.homeroom,
+        dad_cell:
+          (this.state.dad_cell && this.state.dad_cell) ||
+          this.state.studentData.dad_cell,
+        dad_email:
+          (this.state.dad_email && this.state.dad_email) ||
+          this.state.studentData.dad_email,
+        dad_work_email:
+          (this.state.dad_work_email && this.state.dad_work_email) ||
+          this.state.studentData.dad_work_email,
+        dad_work_phone:
+          (this.state.dad_work_phone && this.state.dad_work_phone) ||
+          this.state.studentData.dad_work_phone,
+        mom_cell:
+          (this.state.mom_cell && this.state.mom_cell) ||
+          this.state.studentData.mom_cell,
+        mom_work_phone:
+          (this.state.mom_work_phone && this.state.mom_work_phone) ||
+          this.state.mom_work_phone,
+        mom_email:
+          (this.state.mom_email && this.state.mom_email) ||
+          this.state.studentData.mom_email,
+        mom_work_email:
+          (this.state.mom_work_email && this.state.mom_work_email) ||
+          this.state.studentData.mom_work_phone,
+        notes:
+          (this.state.notes && this.state.notes) ||
+          this.state.studentData.notes,
+        health_conditions: this.state.health_conditions,
+        active: this.state.active,
+      };
 
-    console.log(data);
-    axios
-      .post(
-        `https://laqil.com/public/api/student-update/${this.state.id}`,
-        data,
-        {
-          headers: {Authorization: `Bearer ${token}`},
-        },
-      )
-      .then(
-        res => {
-          console.log(res.data);
-          if (res.data.status == true) {
-            alert(res.data.message);
-            this.props.navigation.navigate('Profile');
-          }
-        },
-        err => {
-          alert(err.response.data.message);
-        },
-      );
+      console.log(data);
+      axios
+        .post(
+          `https://laqil.com/public/api/student-update/${this.state.id}`,
+          data,
+          {
+            headers: {Authorization: `Bearer ${token}`},
+          },
+        )
+        .then(
+          res => {
+            console.log(res);
+            if (res.data.status == true) {
+              alert(res.data.message);
+              this.props.navigation.navigate('ManageChildren');
+            }
+          },
+          err => {
+            alert(err.response.data.message);
+          },
+        );
+    }
   };
   componentDidMount() {
     fetch('https://laqil.com/public/api/school-list')
@@ -164,6 +225,33 @@ export default class UpdateStudent extends Component {
   };
 
   render() {
+    const {
+      name,
+      phone,
+      gender,
+      email,
+      password,
+      password_confirmation,
+      parent_id,
+      school_id,
+      code,
+      // class,
+      teacher,
+      daily_spending_limit,
+      homeroom,
+      dad_cell,
+      dad_email,
+      dad_work_email,
+      dad_work_phone,
+      mom_cell,
+      mom_work_phone,
+      mom_email,
+      mom_work_email,
+      notes,
+      health_conditions,
+      active,
+    } = this.state.studentData;
+    console.log(name);
     return (
       <SafeAreaView style={{flex: 1, backgroundColor: colors.white}}>
         <Statusbar />
@@ -221,10 +309,10 @@ export default class UpdateStudent extends Component {
             <View
               style={[INPUT.inputContainer, {marginTop: 0, marginBottom: 35}]}>
               <TextInput
-                value={this.state.name}
                 onChangeText={value => {
                   this.setState({name: value});
                 }}
+                defaultValue={name}
                 placeholder="Full Name"
                 placeholderTextColor={'grey'}
                 style={[INPUT.input, TYPOGRAPHY.h5]}
@@ -234,7 +322,7 @@ export default class UpdateStudent extends Component {
             <View
               style={[INPUT.inputContainer, {marginTop: 0, marginBottom: 35}]}>
               <TextInput
-                value={this.state.phone}
+                defaultValue={phone}
                 onChangeText={value => {
                   this.setState({phone: value, emailerror: ''});
                 }}
@@ -248,7 +336,7 @@ export default class UpdateStudent extends Component {
             <View
               style={[INPUT.inputContainer, {marginTop: 0, marginBottom: 35}]}>
               <TextInput
-                value={this.state.email}
+                defaultValue={email}
                 onChangeText={value => {
                   this.setState({email: value});
                 }}
@@ -270,30 +358,38 @@ export default class UpdateStudent extends Component {
               </Picker>
             </View>
             <Text style={[TYPOGRAPHY.h5]}>Password</Text>
-            <View
-              style={[INPUT.inputContainer, {marginTop: 0, marginBottom: 35}]}>
-              <TextInput
-                value={this.state.password}
-                onChangeText={value => {
-                  this.setState({password: value});
-                }}
-                placeholder="Password"
-                placeholderTextColor={'grey'}
-                style={[INPUT.input, TYPOGRAPHY.h5]}
-              />
+            <View style={{marginTop: 0, marginBottom: 35}}>
+              <View style={[INPUT.inputContainer]}>
+                <TextInput
+                  value={this.state.password}
+                  onChangeText={value => {
+                    this.setState({password: value});
+                  }}
+                  placeholder="Password"
+                  placeholderTextColor={'grey'}
+                  style={[INPUT.input, TYPOGRAPHY.h5]}
+                />
+              </View>
+              <Text style={{color: colors.bloodRed, fontFamily: Fonts.primary}}>
+                {this.state.password_error}
+              </Text>
             </View>
             <Text style={[TYPOGRAPHY.h5]}>Password Confirmation</Text>
-            <View
-              style={[INPUT.inputContainer, {marginTop: 0, marginBottom: 35}]}>
-              <TextInput
-                value={this.state.password_confirmation}
-                onChangeText={value => {
-                  this.setState({password_confirmation: value});
-                }}
-                placeholder="Password Confirmation"
-                placeholderTextColor={'grey'}
-                style={[INPUT.input, TYPOGRAPHY.h5]}
-              />
+            <View style={[{marginTop: 0, marginBottom: 35}]}>
+              <View style={[INPUT.inputContainer]}>
+                <TextInput
+                  value={this.state.password_confirmation}
+                  onChangeText={value => {
+                    this.setState({password_confirmation: value});
+                  }}
+                  placeholder="Password Confirmation"
+                  placeholderTextColor={'grey'}
+                  style={[INPUT.input, TYPOGRAPHY.h5]}
+                />
+              </View>
+              <Text style={{color: colors.bloodRed, fontFamily: Fonts.primary}}>
+                {this.state.password_confirmation_error}
+              </Text>
             </View>
             {/* <View style={INPUT.inputContainer}>
                   <TextInput
@@ -353,7 +449,7 @@ export default class UpdateStudent extends Component {
             <View
               style={[INPUT.inputContainer, {marginTop: 0, marginBottom: 35}]}>
               <TextInput
-                value={this.state.teacher}
+                defaultValue={teacher}
                 onChangeText={value => {
                   this.setState({teacher: value});
                 }}
@@ -366,7 +462,8 @@ export default class UpdateStudent extends Component {
             <View
               style={[INPUT.inputContainer, {marginTop: 0, marginBottom: 35}]}>
               <TextInput
-                value={this.state.daily_spending_limit}
+                defaultValue={daily_spending_limit}
+                // value={this.state.daily_spending_limit}
                 onChangeText={value => {
                   this.setState({daily_spending_limit: value});
                 }}
@@ -379,7 +476,7 @@ export default class UpdateStudent extends Component {
             <View
               style={[INPUT.inputContainer, {marginTop: 0, marginBottom: 35}]}>
               <TextInput
-                value={this.state.homeroom}
+                defaultValue={homeroom}
                 onChangeText={value => {
                   this.setState({homeroom: value});
                 }}
@@ -392,7 +489,7 @@ export default class UpdateStudent extends Component {
             <View
               style={[INPUT.inputContainer, {marginTop: 0, marginBottom: 35}]}>
               <TextInput
-                value={this.state.dad_cell}
+                defaultValue={dad_cell}
                 onChangeText={value => {
                   this.setState({dad_cell: value});
                 }}
@@ -405,7 +502,7 @@ export default class UpdateStudent extends Component {
             <View
               style={[INPUT.inputContainer, {marginTop: 0, marginBottom: 35}]}>
               <TextInput
-                value={this.state.dad_work_phone}
+                defaultValue={dad_work_phone}
                 onChangeText={value => {
                   this.setState({dad_work_phone: value});
                 }}
@@ -418,7 +515,7 @@ export default class UpdateStudent extends Component {
             <View
               style={[INPUT.inputContainer, {marginTop: 0, marginBottom: 35}]}>
               <TextInput
-                value={this.state.dad_email}
+                defaultValue={dad_email}
                 onChangeText={value => {
                   this.setState({dad_email: value});
                 }}
@@ -431,7 +528,7 @@ export default class UpdateStudent extends Component {
             <View
               style={[INPUT.inputContainer, {marginTop: 0, marginBottom: 35}]}>
               <TextInput
-                value={this.state.dad_work_email}
+                defaultValue={dad_work_email}
                 onChangeText={value => {
                   this.setState({dad_work_email: value});
                 }}
@@ -444,7 +541,7 @@ export default class UpdateStudent extends Component {
             <View
               style={[INPUT.inputContainer, {marginTop: 0, marginBottom: 35}]}>
               <TextInput
-                value={this.state.mom_cell}
+                defaultValue={mom_cell}
                 onChangeText={value => {
                   this.setState({mom_cell: value});
                 }}
@@ -457,7 +554,7 @@ export default class UpdateStudent extends Component {
             <View
               style={[INPUT.inputContainer, {marginTop: 0, marginBottom: 35}]}>
               <TextInput
-                value={this.state.mom_work_phone}
+                defaultValue={mom_work_phone}
                 onChangeText={value => {
                   this.setState({mom_work_phone: value});
                 }}
@@ -470,7 +567,7 @@ export default class UpdateStudent extends Component {
             <View
               style={[INPUT.inputContainer, {marginTop: 0, marginBottom: 35}]}>
               <TextInput
-                value={this.state.mom_email}
+                defaultValue={mom_email}
                 onChangeText={value => {
                   this.setState({mom_email: value});
                 }}
@@ -483,7 +580,7 @@ export default class UpdateStudent extends Component {
             <View
               style={[INPUT.inputContainer, {marginTop: 0, marginBottom: 35}]}>
               <TextInput
-                value={this.state.mom_work_email}
+                defaultValue={mom_work_email}
                 // onFocus={this.setState({error: ''})}
                 onChangeText={value => {
                   this.setState({mom_work_email: value});
@@ -498,7 +595,7 @@ export default class UpdateStudent extends Component {
             <View
               style={[INPUT.inputContainer, {marginTop: 0, marginBottom: 35}]}>
               <TextInput
-                value={this.state.notes}
+                defaultValue={notes}
                 // onFocus={this.setState({error: ''})}
                 onChangeText={value => {
                   this.setState({notes: value});
@@ -524,7 +621,7 @@ export default class UpdateStudent extends Component {
               </View>
               <View>
                 <View style={{flex: 1}}>
-                  <Text style={[TYPOGRAPHY.h5]}>Health Condition</Text>
+                  <Text style={[TYPOGRAPHY.h5]}>Status</Text>
                   <Picker
                     selectedValue={this.state.active}
                     style={{height: 50, width: width / 2 - 20}}

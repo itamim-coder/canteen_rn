@@ -19,6 +19,7 @@ import DatePicker from 'react-native-date-picker';
 import {colors} from '../theme/colors';
 import {Picker} from '@react-native-picker/picker';
 import {connect} from 'react-redux';
+import {reset} from '../../redux/cartSlice';
 
 export class TransactionForm extends Component {
   constructor(props) {
@@ -63,6 +64,9 @@ export class TransactionForm extends Component {
           console.log(err);
         },
       );
+  };
+  clearCart = () => {
+    this.props.reset();
   };
   pickerActivity = async id => {
     this.setState({selectedValue: id});
@@ -113,8 +117,10 @@ export class TransactionForm extends Component {
         res => {
           console.log(res);
           if (res.data.status == true) {
+            this.clearCart();
+
             alert(res.data.message);
-            // this.props.navigation.navigate('Profile');
+            // this.props.navigation.navigate('TabNabigator');
           } else {
             // alert(res.data.message);
           }
@@ -332,4 +338,12 @@ const mapStateToProps = state => {
     totalAmount: state.cart.reduce((acc, item) => acc + item.quantityPrice, 0),
   };
 };
-export default connect(mapStateToProps)(TransactionForm);
+const mapDispatchToProps = dispatch => {
+  // console.log(cartProduct);
+  return {
+    reset: () => {
+      dispatch(reset());
+    },
+  };
+};
+export default connect(mapStateToProps, mapDispatchToProps)(TransactionForm);

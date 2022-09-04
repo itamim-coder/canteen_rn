@@ -245,7 +245,7 @@ export class Home extends Component {
                   </TouchableOpacity>
                 ) : ( */}
               <TouchableOpacity
-                onPress={() => this.add(item)}
+                // onPress={() => this.add(item)}
                 style={{
                   backgroundColor: colors.red,
                   paddingHorizontal: 10,
