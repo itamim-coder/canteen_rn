@@ -212,10 +212,10 @@ export default class StudentDetails extends Component {
           }}>
           <TouchableOpacity
             onPress={() =>
-              this.props.navigation.navigate('AddStudent', {
+              this.props.navigation.navigate('UpdateStudent', {
                 data: this.state.studentDetails,
                 id: id,
-                type: 'Update',
+                // type: 'Update',
               })
             }
             style={[BUTTONS.btnPrimary, {paddingHorizontal: 40}]}>

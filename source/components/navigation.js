@@ -38,6 +38,7 @@ import AllLatestFoods from '../screens/AllLatestFoods';
 import AuthNav from './AuthNav';
 import MainNAv from './MainNAv';
 import LoginContext, {LoginProvider, useLogin} from '../context/LoginProvider';
+import UpdateStudent from '../screens/UpdateStudent';
 
 const Stack = createNativeStackNavigator();
 const Tab = createBottomTabNavigator();
@@ -169,6 +170,7 @@ export class Navigation extends Component {
           <Stack.Screen name="Transaction" component={Transaction} />
           <Stack.Screen name="Deposit" component={Deposit} />
           <Stack.Screen name="AddStudent" component={AddStudent} />
+          <Stack.Screen name="UpdateStudent" component={UpdateStudent} />
 
           <Stack.Screen name="FoodDetails" component={FoodDetails} />
           <Stack.Screen name="AllCategory" component={AllCategory} />

@@ -27,7 +27,7 @@ import LatestFood from '../components/LatestFood';
 import SchoolFood from './SchoolFood';
 import {Picker} from '@react-native-picker/picker';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-
+import AntDesign from 'react-native-vector-icons/AntDesign';
 const width = Dimensions.get('screen').width / 2 - 20;
 const width2 = Dimensions.get('screen').width;
 import Modal from 'react-native-modal';
@@ -44,14 +44,16 @@ export class Home extends Component {
       selectedSchool: '' || 0,
       schoolList: [],
       foods: [],
-      navUnmount: null,
+      // navUnmount: null,
       id: '',
       isModalVisible: false,
+      checked: null,
     };
     console.log('foods', this.state.foods);
   }
   toggleModal = () => {
     this.setState({isModalVisible: !this.state.isModalVisible});
+    this.setState({checked: this.state.checked});
   };
   category = () => {
     this.setState({visible: true});
@@ -91,6 +93,7 @@ export class Home extends Component {
   pickerActivity = async id => {
     this.setState({latest_visible: true});
     this.setState({id: id});
+    this.setState({checked: id});
     console.log(`https://laqil.com/public/api/product-list?school=${id}`);
     if (id != 0) {
       await AsyncStorage.setItem('selected_school', JSON.stringify(id));
@@ -306,7 +309,7 @@ export class Home extends Component {
                 source={require('../../assets/images/profile.png')}
               />
             </TouchableOpacity>
-            <View
+            {/* <View
               style={{
                 flexDirection: 'row',
                 alignItems: 'center',
@@ -327,20 +330,35 @@ export class Home extends Component {
                   <Picker.Item label={item.name} value={item.id} />
                 ))}
               </Picker>
-            </View>
-            {/* <View>
+            </View> */}
+            <View>
               <TouchableOpacity
                 onPress={() => {
                   this.toggleModal();
                 }}>
-                <Text>Select A School</Text>
+                {this.state.checked == null ? (
+                  <View style={{flexDirection: 'row'}}>
+                    <Text style={[TYPOGRAPHY.h5]}>Select A School</Text>
+                    <AntDesign name="caretdown" size={16} color="black" />
+                  </View>
+                ) : (
+                  this.state.schoolList.map(
+                    item =>
+                      item.id === this.state.checked && (
+                        <View style={{flexDirection: 'row'}}>
+                          <Text style={[TYPOGRAPHY.h6]}>{item.name}</Text>
+                          <AntDesign name="caretdown" size={16} color="black" />
+                        </View>
+                      ),
+                  )
+                )}
               </TouchableOpacity>
             </View>
             <Modal isVisible={this.state.isModalVisible}>
               <View
                 style={{flex: 0.2, backgroundColor: colors.white, padding: 20}}>
                 <View>
-                  <Text style={[TYPOGRAPHY.medium, {fontSize: 20}]}>
+                  <Text style={[TYPOGRAPHY.primary, {fontSize: 20}]}>
                     Select A School
                   </Text>
                 </View>
@@ -354,6 +372,7 @@ export class Home extends Component {
                       value={this.state.checked}
                       onValueChange={newValue => {
                         this.setState({checked: newValue});
+                        this.pickerActivity(newValue);
                       }}>
                       <View
                         style={{flexDirection: 'row', alignItems: 'center'}}>
@@ -375,42 +394,51 @@ export class Home extends Component {
                   backgroundColor: colors.red,
                   flexDirection: 'row',
                   justifyContent: 'space-evenly',
-                  // paddingHorizontal: 20,
-                  // paddingVertical: 10,
                 }}>
                 <TouchableOpacity
-                  onPress={() => {
-                    this.toggleModal();
-                  }}>
-                  <View
-                    style={{
-                      flex: 1,
-                      // paddingRight: width - 30,
-                      borderRightWidth: 1,
-                      borderRightColor: colors.white,
-                    }}>
+                  onPress={() => this.toggleModal()}
+                  style={{backgroundColor: colors.red, flex: 1}}>
+                  <View>
                     <Text
                       style={[
                         TYPOGRAPHY.h4,
-                        {color: colors.white, textAlign: 'center'},
+                        {
+                          textAlign: 'center',
+                          fontSize: 16,
+                          color: colors.white,
+                          paddingVertical: 10,
+                        },
                       ]}>
-                      Close
+                      CANCEL
                     </Text>
                   </View>
                 </TouchableOpacity>
+                <View
+                  style={{
+                    borderRightWidth: 1,
+                    borderRightColor: colors.white,
+                  }}
+                />
                 <TouchableOpacity
-                //  style={{paddingRight: width}}
-                >
-                  <Text
-                    style={[
-                      TYPOGRAPHY.h4,
-                      {color: colors.white, textAlign: 'center'},
-                    ]}>
-                    Ok
-                  </Text>
+                  onPress={() => this.toggleModal()}
+                  style={{backgroundColor: colors.red, flex: 1}}>
+                  <View>
+                    <Text
+                      style={[
+                        TYPOGRAPHY.h4,
+                        {
+                          textAlign: 'center',
+                          fontSize: 16,
+                          color: colors.white,
+                          paddingVertical: 10,
+                        },
+                      ]}>
+                      OK
+                    </Text>
+                  </View>
                 </TouchableOpacity>
               </View>
-            </Modal> */}
+            </Modal>
             <TouchableOpacity
               onPress={() => this.props.navigation.navigate('Transaction')}>
               <Image
