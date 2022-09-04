@@ -39,7 +39,8 @@ export default class Signup extends Component {
       indicator: false,
       disabled: false,
       user_type: 'parent',
-      secureTextEntry: false,
+      secureTextEntry1: true,
+      secureTextEntry2: true,
     };
   }
   validate_field = () => {
@@ -233,11 +234,11 @@ export default class Signup extends Component {
                   placeholder="Password"
                   placeholderTextColor={'grey'}
                   style={[INPUT.input]}
-                  secureTextEntry={this.state.secureTextEntry}
+                  secureTextEntry={this.state.secureTextEntry1}
                 />
-                {this.state.secureTextEntry === true ? (
+                {this.state.secureTextEntry1 === true ? (
                   <TouchableOpacity
-                    onPress={() => this.setState({secureTextEntry: false})}>
+                    onPress={() => this.setState({secureTextEntry1: false})}>
                     <Ionicons
                       name="eye-off"
                       size={24}
@@ -247,7 +248,7 @@ export default class Signup extends Component {
                   </TouchableOpacity>
                 ) : (
                   <TouchableOpacity
-                    onPress={() => this.setState({secureTextEntry: true})}>
+                    onPress={() => this.setState({secureTextEntry1: true})}>
                     <Ionicons
                       name="eye"
                       size={24}
@@ -288,11 +289,11 @@ export default class Signup extends Component {
                   placeholder="Retype Password"
                   placeholderTextColor={'grey'}
                   style={[INPUT.input]}
-                  secureTextEntry={this.state.secureTextEntry}
+                  secureTextEntry={this.state.secureTextEntry2}
                 />
-                {this.state.secureTextEntry === true ? (
+                {this.state.secureTextEntry2 === true ? (
                   <TouchableOpacity
-                    onPress={() => this.setState({secureTextEntry: false})}>
+                    onPress={() => this.setState({secureTextEntry2: false})}>
                     <Ionicons
                       name="eye-off"
                       size={24}
@@ -302,7 +303,7 @@ export default class Signup extends Component {
                   </TouchableOpacity>
                 ) : (
                   <TouchableOpacity
-                    onPress={() => this.setState({secureTextEntry: true})}>
+                    onPress={() => this.setState({secureTextEntry2: true})}>
                     <Ionicons
                       name="eye"
                       size={24}
@@ -312,21 +313,7 @@ export default class Signup extends Component {
                   </TouchableOpacity>
                 )}
               </View>
-              {/* <View style={INPUT.inputContainer}>
-                <TextInput
-                  value={this.state.password_confirmation}
-                  onChangeText={value => {
-                    this.setState({
-                      password_confirmation: value,
-                      password_confirmation_error: '',
-                    });
-                  }}
-                  placeholder="Retype Password"
-                  placeholderTextColor={'grey'}
-                  style={INPUT.input}
-                  secureTextEntry
-                />
-              </View> */}
+          
               <Text style={{color: colors.bloodRed, fontFamily: Fonts.primary}}>
                 {this.state.password_confirmation_error}
               </Text>
