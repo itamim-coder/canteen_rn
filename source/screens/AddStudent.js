@@ -584,7 +584,7 @@ export default class AddStudent extends Component {
               </View>
               <View>
                 <View style={{flex: 1}}>
-                  <Text style={[TYPOGRAPHY.h5]}>Health Condition</Text>
+                  <Text style={[TYPOGRAPHY.h5]}>Status</Text>
                   <Picker
                     selectedValue={this.state.active}
                     style={{height: 50, width: width / 2 - 20}}
