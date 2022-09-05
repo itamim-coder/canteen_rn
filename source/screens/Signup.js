@@ -142,11 +142,12 @@ export default class Signup extends Component {
     const container = {
       backgroundColor: colors.white,
       flex: 1,
-      paddingBottom: 30,
+    
     };
     const box = {
       flex: 1,
       justifyContent: 'center',
+      paddingBottom: 100,
     };
     return (
       <SafeAreaView style={{flex: 1}}>
