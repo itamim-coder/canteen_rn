@@ -52,8 +52,8 @@ export class Home extends Component {
     console.log('foods', this.state.foods);
   }
   toggleModal = () => {
+    this.setState({checked: this.state.id});
     this.setState({isModalVisible: !this.state.isModalVisible});
-    this.setState({checked: this.state.checked});
   };
   category = () => {
     this.setState({visible: true});
@@ -91,6 +91,9 @@ export class Home extends Component {
   }
 
   pickerActivity = async id => {
+    // this.setState({checked: this.state.checked});
+    // this.toggleModal();
+    this.setState({isModalVisible: false});
     this.setState({latest_visible: true});
     this.setState({id: id});
     this.setState({checked: id});
@@ -344,7 +347,7 @@ export class Home extends Component {
                 ) : (
                   this.state.schoolList.map(
                     item =>
-                      item.id === this.state.checked && (
+                      item.id === this.state.id && (
                         <View style={{flexDirection: 'row'}}>
                           <Text style={[TYPOGRAPHY.h6]}>{item.name}</Text>
                           <AntDesign name="caretdown" size={16} color="black" />
@@ -356,9 +359,15 @@ export class Home extends Component {
             </View>
             <Modal isVisible={this.state.isModalVisible}>
               <View
-                style={{flex: 0.2, backgroundColor: colors.white, padding: 20}}>
+                style={{
+                  flex: 0.2,
+                  backgroundColor: colors.white,
+                  padding: 20,
+                  borderTopStartRadius: 10,
+                  borderTopEndRadius: 10,
+                }}>
                 <View>
-                  <Text style={[TYPOGRAPHY.primary, {fontSize: 20}]}>
+                  <Text style={[TYPOGRAPHY.medium, {fontSize: 20}]}>
                     Select A School
                   </Text>
                 </View>
@@ -369,10 +378,10 @@ export class Home extends Component {
                     // console.log(item.id),
 
                     <RadioButton.Group
+                      color={colors.red}
                       value={this.state.checked}
                       onValueChange={newValue => {
                         this.setState({checked: newValue});
-                        this.pickerActivity(newValue);
                       }}>
                       <View
                         style={{flexDirection: 'row', alignItems: 'center'}}>
@@ -394,10 +403,17 @@ export class Home extends Component {
                   backgroundColor: colors.red,
                   flexDirection: 'row',
                   justifyContent: 'space-evenly',
+                  borderBottomStartRadius: 10,
+                  borderBottomEndRadius: 10,
                 }}>
                 <TouchableOpacity
                   onPress={() => this.toggleModal()}
-                  style={{backgroundColor: colors.red, flex: 1}}>
+                  style={{
+                    backgroundColor: colors.red,
+                    flex: 1,
+                    borderBottomStartRadius: 10,
+                    // borderBottomEndRadius: 10,
+                  }}>
                   <View>
                     <Text
                       style={[
@@ -415,13 +431,18 @@ export class Home extends Component {
                 </TouchableOpacity>
                 <View
                   style={{
-                    borderRightWidth: 1,
+                    borderRightWidth: 1.5,
                     borderRightColor: colors.white,
                   }}
                 />
                 <TouchableOpacity
-                  onPress={() => this.toggleModal()}
-                  style={{backgroundColor: colors.red, flex: 1}}>
+                  onPress={() => this.pickerActivity(this.state.checked)}
+                  style={{
+                    backgroundColor: colors.red,
+                    flex: 1,
+                    // borderBottomStartRadius: 10,
+                    borderBottomEndRadius: 10,
+                  }}>
                   <View>
                     <Text
                       style={[

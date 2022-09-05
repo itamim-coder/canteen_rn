@@ -20,9 +20,11 @@ import {Picker} from '@react-native-picker/picker';
 import {colors} from '../theme/colors';
 import {Fonts} from '../theme/Fonts';
 import {launchImageLibrary} from 'react-native-image-picker';
-import {ActivityIndicator, TouchableRipple} from 'react-native-paper';
+import AntDesign from 'react-native-vector-icons/AntDesign';
+import {ActivityIndicator, RadioButton} from 'react-native-paper';
 import {multiline} from 'deprecated-react-native-prop-types/DeprecatedTextInputPropTypes';
 const width = Dimensions.get('screen').width;
+import Modal from 'react-native-modal';
 export default class AddStudent extends Component {
   constructor(props) {
     super(props);
@@ -36,7 +38,7 @@ export default class AddStudent extends Component {
       parent_id: '',
       school_id: '',
       code: '',
-      selectedClass: '1',
+      class: '1',
       teacher: '',
       daily_spending_limit: '',
       homeroom: '',
@@ -49,8 +51,8 @@ export default class AddStudent extends Component {
       mom_email: '',
       mom_work_email: '',
       notes: '',
-      health_conditions: 'good',
-      active: 'active',
+      health_conditions: null,
+      active: null,
       addData: [],
       selectedValue: 'male',
       selectedSchool: '',
@@ -61,9 +63,48 @@ export default class AddStudent extends Component {
       upload_picture: null,
       disabled: false,
       indicator: false,
+      isGenderVisible: false,
+      isClassVisible: false,
+      isHealthVisible: false,
+      isStatusVisible: false,
+      isModalVisible: false,
+      checked: null,
+      // id: '',
     };
     console.log(this.props.route.params);
   }
+  toggleModal = () => {
+    // this.setState({checked: this.state.id});
+    this.setState({isModalVisible: !this.state.isModalVisible});
+  };
+  toggleGender = () => {
+    this.setState({isGenderVisible: !this.state.isGenderVisible});
+  };
+  genderActivity = value => {
+    this.setState({isGenderVisible: !this.state.isGenderVisible});
+    this.setState({gender: value});
+  };
+  toggleClass = () => {
+    this.setState({isClassVisible: !this.state.isClassVisible});
+  };
+  classActivity = value => {
+    this.setState({isClassVisible: !this.state.isClassVisible});
+    this.setState({class: value});
+  };
+  toggleHealth = () => {
+    this.setState({isHealthVisible: !this.state.isHealthVisible});
+  };
+  healthActivity = value => {
+    this.setState({isHealthVisible: !this.state.isHealthVisible});
+    this.setState({health_conditions: value});
+  };
+  toggleStatus = () => {
+    this.setState({isStatusVisible: !this.state.isStatusVisible});
+  };
+  statusActivity = value => {
+    this.setState({isStatusVisible: !this.state.isStatusVisible});
+    this.setState({active: value});
+  };
 
   addChild = async () => {
     const user = await AsyncStorage.getItem('userInfo');
@@ -85,9 +126,9 @@ export default class AddStudent extends Component {
       password: this.state.password,
       password_confirmation: this.state.password_confirmation,
       parent_id: this.state.parent_id,
-      school_id: this.state.selectedSchool,
+      school_id: this.state.checked,
       code: this.state.code,
-      class: this.state.selectedClass,
+      class: this.state.class,
       teacher: this.state.teacher,
       daily_spending_limit: this.state.daily_spending_limit,
       homeroom: this.state.homeroom,
@@ -123,68 +164,71 @@ export default class AddStudent extends Component {
         },
       );
   };
-  updateStudent = async () => {
-    const user = await AsyncStorage.getItem('userInfo');
-    const parse = JSON.parse(user);
+  // updateStudent = async () => {
+  //   const user = await AsyncStorage.getItem('userInfo');
+  //   const parse = JSON.parse(user);
 
-    const token = parse.token;
-    console.log(token);
-    this.setState({indicator: true});
-    this.setState({disabled: true});
-    setTimeout(() => {
-      this.setState({indicator: false});
-      this.setState({disabled: false});
-    }, 1500);
-    const data = {
-      name: this.state.name,
-      phone: this.state.phone,
-      gender: this.state.gender,
-      email: this.state.email,
-      password: this.state.password,
-      password_confirmation: this.state.password_confirmation,
-      parent_id: this.state.parent_id,
-      school_id: this.state.selectedSchool,
-      code: this.state.code,
-      class: this.state.selectedClass,
-      teacher: this.state.teacher,
-      daily_spending_limit: this.state.daily_spending_limit,
-      homeroom: this.state.homeroom,
-      dad_cell: this.state.dad_cell,
-      dad_email: this.state.dad_email,
-      dad_work_email: this.state.dad_work_email,
-      dad_work_phone: this.state.dad_work_phone,
-      mom_cell: this.state.mom_cell,
-      mom_work_phone: this.state.mom_work_phone,
-      mom_email: this.state.mom_email,
-      mom_work_email: this.state.mom_work_email,
-      notes: this.state.notes,
-      health_conditions: this.state.health_conditions,
-      active: this.state.active,
-    };
+  //   const token = parse.token;
+  //   console.log(token);
+  //   this.setState({indicator: true});
+  //   this.setState({disabled: true});
+  //   setTimeout(() => {
+  //     this.setState({indicator: false});
+  //     this.setState({disabled: false});
+  //   }, 1500);
+  //   const data = {
+  //     name: this.state.name,
+  //     phone: this.state.phone,
+  //     gender: this.state.gender,
+  //     email: this.state.email,
+  //     password: this.state.password,
+  //     password_confirmation: this.state.password_confirmation,
+  //     parent_id: this.state.parent_id,
+  //     school_id: this.state.selectedSchool,
+  //     code: this.state.code,
+  //     class: this.state.selectedClass,
+  //     teacher: this.state.teacher,
+  //     daily_spending_limit: this.state.daily_spending_limit,
+  //     homeroom: this.state.homeroom,
+  //     dad_cell: this.state.dad_cell,
+  //     dad_email: this.state.dad_email,
+  //     dad_work_email: this.state.dad_work_email,
+  //     dad_work_phone: this.state.dad_work_phone,
+  //     mom_cell: this.state.mom_cell,
+  //     mom_work_phone: this.state.mom_work_phone,
+  //     mom_email: this.state.mom_email,
+  //     mom_work_email: this.state.mom_work_email,
+  //     notes: this.state.notes,
+  //     health_conditions: this.state.health_conditions,
+  //     active: this.state.active,
+  //   };
 
-    console.log(data);
-    axios
-      .post(
-        `https://laqil.com/public/api/student-update/${this.state.id}`,
-        data,
-        {
-          headers: {Authorization: `Bearer ${token}`},
-        },
-      )
-      .then(
-        res => {
-          console.log(res.data);
-          if (res.data.status == true) {
-            alert(res.data.message);
-            this.props.navigation.navigate('Profile');
-          }
-        },
-        err => {
-          alert(err.response.data.message);
-        },
-      );
-  };
+  //   console.log(data);
+  //   axios
+  //     .post(
+  //       `https://laqil.com/public/api/student-update/${this.state.id}`,
+  //       data,
+  //       {
+  //         headers: {Authorization: `Bearer ${token}`},
+  //       },
+  //     )
+  //     .then(
+  //       res => {
+  //         console.log(res.data);
+  //         if (res.data.status == true) {
+  //           alert(res.data.message);
+  //           this.props.navigation.navigate('Profile');
+  //         }
+  //       },
+  //       err => {
+  //         alert(err.response.data.message);
+  //       },
+  //     );
+  // };
   componentDidMount() {
+    this.setState({gender: null});
+    this.setState({class: null});
+    this.setState({school: null});
     fetch('https://laqil.com/public/api/school-list')
       .then(res => res.json())
       .then(res => {
@@ -224,7 +268,7 @@ export default class AddStudent extends Component {
   render() {
     return (
       <SafeAreaView style={{flex: 1, backgroundColor: colors.white}}>
-        <Statusbar />
+        <Statusbar name={'Add Student'} />
         <ScrollView>
           <View style={{padding: 20}}>
             <View
@@ -284,7 +328,7 @@ export default class AddStudent extends Component {
                   this.setState({name: value});
                 }}
                 placeholder="Full Name"
-                placeholderTextColor={'grey'}
+                placeholderTextColor={colors.darkGrey}
                 style={[INPUT.input, TYPOGRAPHY.h5]}
               />
             </View>
@@ -297,7 +341,7 @@ export default class AddStudent extends Component {
                   this.setState({phone: value, emailerror: ''});
                 }}
                 placeholder="Student Phone"
-                placeholderTextColor={'grey'}
+                placeholderTextColor={colors.darkGrey}
                 style={[INPUT.input, TYPOGRAPHY.h5]}
                 keyboardType={'numeric'}
               />
@@ -311,11 +355,11 @@ export default class AddStudent extends Component {
                   this.setState({email: value});
                 }}
                 placeholder="Student Email"
-                placeholderTextColor={'grey'}
+                placeholderTextColor={colors.darkGrey}
                 style={[INPUT.input, TYPOGRAPHY.h5]}
               />
             </View>
-            <View style={{flex: 1, marginTop: 0, marginBottom: 35}}>
+            {/* <View style={{flex: 1, marginTop: 0, marginBottom: 35}}>
               <Text style={[TYPOGRAPHY.h5]}>Gender</Text>
               <Picker
                 selectedValue={this.state.gender}
@@ -326,7 +370,166 @@ export default class AddStudent extends Component {
                 <Picker.Item label="Male" value="male" />
                 <Picker.Item label="Female" value="female" />
               </Picker>
+            </View> */}
+
+            {/* --------------Gender---------------- */}
+
+            <View style={{marginBottom: 35}}>
+              <Text style={[TYPOGRAPHY.h5]}>Select Gender</Text>
+              <TouchableOpacity
+                onPress={() => {
+                  this.toggleGender();
+                }}>
+                {this.state.gender == null ? (
+                  <View
+                    style={[
+                      {
+                        flexDirection: 'row',
+                        justifyContent: 'space-between',
+                        borderWidth: 2,
+                        borderColor: colors.gray,
+                        borderRadius: 5,
+                        paddingHorizontal: 15,
+                        paddingVertical: 10,
+                      },
+                    ]}>
+                    <Text style={[TYPOGRAPHY.h5, {color: colors.darkGrey}]}>
+                      Gender
+                    </Text>
+                    <AntDesign name="caretdown" size={16} color="gray" />
+                  </View>
+                ) : (
+                  <View
+                    style={[
+                      {
+                        flexDirection: 'row',
+                        justifyContent: 'space-between',
+                        borderWidth: 2,
+                        borderColor: colors.gray,
+                        borderRadius: 5,
+                        paddingHorizontal: 15,
+                        paddingVertical: 10,
+                      },
+                    ]}>
+                    <Text style={[TYPOGRAPHY.h5]}>
+                      {this.state.gender.toUpperCase()}
+                    </Text>
+                    <AntDesign name="caretdown" size={16} color="black" />
+                  </View>
+                )}
+              </TouchableOpacity>
             </View>
+
+            <Modal isVisible={this.state.isGenderVisible}>
+              <View
+                style={{
+                  flex: 0.2,
+                  backgroundColor: colors.white,
+                  padding: 20,
+                  borderTopStartRadius: 10,
+                  borderTopEndRadius: 10,
+                }}>
+                <View>
+                  <Text style={[TYPOGRAPHY.medium, {fontSize: 20}]}>
+                    Select Gender
+                  </Text>
+                </View>
+
+                <ScrollView>
+                  <RadioButton.Group
+                    color={colors.red}
+                    value={this.state.gender}
+                    onValueChange={newValue => {
+                      this.setState({gender: newValue});
+                    }}>
+                    <View style={{flexDirection: 'row', alignItems: 'center'}}>
+                      <RadioButton value={'male'} />
+                      <Text
+                        style={[
+                          TYPOGRAPHY.primary,
+                          {fontSize: 18, paddingRight: 15},
+                        ]}>
+                        Male
+                      </Text>
+                    </View>
+                    <View style={{flexDirection: 'row', alignItems: 'center'}}>
+                      <RadioButton value={'female'} />
+                      <Text
+                        style={[
+                          TYPOGRAPHY.primary,
+                          {fontSize: 18, paddingRight: 15},
+                        ]}>
+                        Female
+                      </Text>
+                    </View>
+                  </RadioButton.Group>
+                </ScrollView>
+              </View>
+              <View
+                style={{
+                  backgroundColor: colors.red,
+                  flexDirection: 'row',
+                  justifyContent: 'space-evenly',
+                  borderBottomStartRadius: 10,
+                  borderBottomEndRadius: 10,
+                }}>
+                <TouchableOpacity
+                  onPress={() => this.toggleGender()}
+                  style={{
+                    backgroundColor: colors.red,
+                    flex: 1,
+                    borderBottomStartRadius: 10,
+                    // borderBottomEndRadius: 10,
+                  }}>
+                  <View>
+                    <Text
+                      style={[
+                        TYPOGRAPHY.h4,
+                        {
+                          textAlign: 'center',
+                          fontSize: 16,
+                          color: colors.white,
+                          paddingVertical: 10,
+                        },
+                      ]}>
+                      CANCEL
+                    </Text>
+                  </View>
+                </TouchableOpacity>
+                <View
+                  style={{
+                    borderRightWidth: 1.5,
+                    borderRightColor: colors.white,
+                  }}
+                />
+                <TouchableOpacity
+                  onPress={() => this.genderActivity(this.state.gender)}
+                  style={{
+                    backgroundColor: colors.red,
+                    flex: 1,
+                    // borderBottomStartRadius: 10,
+                    borderBottomEndRadius: 10,
+                  }}>
+                  <View>
+                    <Text
+                      style={[
+                        TYPOGRAPHY.h4,
+                        {
+                          textAlign: 'center',
+                          fontSize: 16,
+                          color: colors.white,
+                          paddingVertical: 10,
+                        },
+                      ]}>
+                      OK
+                    </Text>
+                  </View>
+                </TouchableOpacity>
+              </View>
+            </Modal>
+
+            {/* -------------Gender End-------------- */}
+
             <Text style={[TYPOGRAPHY.h5]}>Password</Text>
             <View
               style={[INPUT.inputContainer, {marginTop: 0, marginBottom: 35}]}>
@@ -336,10 +539,11 @@ export default class AddStudent extends Component {
                   this.setState({password: value});
                 }}
                 placeholder="Password"
-                placeholderTextColor={'grey'}
+                placeholderTextColor={colors.darkGrey}
                 style={[INPUT.input, TYPOGRAPHY.h5]}
               />
             </View>
+
             <Text style={[TYPOGRAPHY.h5]}>Password Confirmation</Text>
             <View
               style={[INPUT.inputContainer, {marginTop: 0, marginBottom: 35}]}>
@@ -349,11 +553,10 @@ export default class AddStudent extends Component {
                   this.setState({password_confirmation: value});
                 }}
                 placeholder="Password Confirmation"
-                placeholderTextColor={'grey'}
+                placeholderTextColor={colors.darkGrey}
                 style={[INPUT.input, TYPOGRAPHY.h5]}
               />
             </View>
-
             {/* <View style={INPUT.inputContainer}>
               <TextInput
                 value={this.state.parent_id}
@@ -378,10 +581,12 @@ export default class AddStudent extends Component {
                 style={INPUT.input}
               />
             </View> */}
-            <View style={{flexDirection: 'row'}}>
-              <View style={{flex: 1, marginBottom: 35}}>
-                <Text style={[TYPOGRAPHY.h5]}>Class</Text>
-                <Picker
+
+            {/* -----------Class---------- */}
+
+            <View style={{flex: 1, marginBottom: 35}}>
+              <Text style={[TYPOGRAPHY.h5]}>Select Class</Text>
+              {/* <Picker
                   selectedValue={this.state.selectedClass}
                   style={{height: 50, width: width / 2 - 20}}
                   onValueChange={(itemValue, itemIndex) => {
@@ -389,25 +594,326 @@ export default class AddStudent extends Component {
                   }}>
                   <Picker.Item label="1" value="1" />
                   <Picker.Item label="2" value="2" />
-                </Picker>
-              </View>
-              <View style={{flex: 1, marginBottom: 35}}>
-                <Text style={[TYPOGRAPHY.h5]}>Select School</Text>
-                <View style={{flexDirection: 'row', alignItems: 'center'}}>
-                  <Picker
-                    selectedValue={this.state.selectedSchool}
-                    style={{height: 50, width: width / 2 - 20}}
-                    onValueChange={(itemValue, itemIndex, id) => {
-                      this.setState({selectedSchool: itemValue});
+                </Picker> */}
+
+              <TouchableOpacity
+                onPress={() => {
+                  this.toggleClass();
+                }}>
+                {this.state.class == null ? (
+                  <View
+                    style={[
+                      {
+                        flexDirection: 'row',
+                        justifyContent: 'space-between',
+                        borderWidth: 2,
+                        borderColor: colors.gray,
+                        borderRadius: 5,
+                        paddingHorizontal: 15,
+                        paddingVertical: 10,
+                      },
+                    ]}>
+                    <Text style={[TYPOGRAPHY.h5, {color: colors.darkGrey}]}>
+                      Select Class
+                    </Text>
+                    <AntDesign name="caretdown" size={15} color="gray" />
+                  </View>
+                ) : (
+                  <View
+                    style={[
+                      {
+                        flexDirection: 'row',
+                        justifyContent: 'space-between',
+                        borderWidth: 2,
+                        borderColor: colors.gray,
+                        borderRadius: 5,
+                        paddingHorizontal: 15,
+                        paddingVertical: 10,
+                      },
+                    ]}>
+                    <Text style={[TYPOGRAPHY.h5]}>
+                      Class {this.state.class}
+                    </Text>
+                    <AntDesign name="caretdown" size={16} color="black" />
+                  </View>
+                )}
+              </TouchableOpacity>
+            </View>
+
+            <Modal isVisible={this.state.isClassVisible}>
+              <View
+                style={{
+                  flex: 0.2,
+                  backgroundColor: colors.white,
+                  padding: 20,
+                  borderTopStartRadius: 10,
+                  borderTopEndRadius: 10,
+                }}>
+                <View>
+                  <Text style={[TYPOGRAPHY.medium, {fontSize: 20}]}>
+                    Select Class
+                  </Text>
+                </View>
+
+                <ScrollView>
+                  <RadioButton.Group
+                    color={colors.red}
+                    value={this.state.class}
+                    onValueChange={newValue => {
+                      this.setState({class: newValue});
                     }}>
-                    <Picker.Item label="Please select an option..." value="0" />
-                    {this.state.schoolList.map(item => (
-                      <Picker.Item label={item.name} value={item.id} />
-                    ))}
-                  </Picker>
+                    <View style={{flexDirection: 'row', alignItems: 'center'}}>
+                      <RadioButton value={'1'} />
+                      <Text
+                        style={[
+                          TYPOGRAPHY.primary,
+                          {fontSize: 18, paddingRight: 15},
+                        ]}>
+                        One
+                      </Text>
+                    </View>
+                    <View style={{flexDirection: 'row', alignItems: 'center'}}>
+                      <RadioButton value={'2'} />
+                      <Text
+                        style={[
+                          TYPOGRAPHY.primary,
+                          {fontSize: 18, paddingRight: 15},
+                        ]}>
+                        Two
+                      </Text>
+                    </View>
+                  </RadioButton.Group>
+                </ScrollView>
+              </View>
+              <View
+                style={{
+                  backgroundColor: colors.red,
+                  flexDirection: 'row',
+                  justifyContent: 'space-evenly',
+                  borderBottomStartRadius: 10,
+                  borderBottomEndRadius: 10,
+                }}>
+                <TouchableOpacity
+                  onPress={() => this.toggleClass()}
+                  style={{
+                    backgroundColor: colors.red,
+                    flex: 1,
+                    borderBottomStartRadius: 10,
+                    // borderBottomEndRadius: 10,
+                  }}>
+                  <View>
+                    <Text
+                      style={[
+                        TYPOGRAPHY.h4,
+                        {
+                          textAlign: 'center',
+                          fontSize: 16,
+                          color: colors.white,
+                          paddingVertical: 10,
+                        },
+                      ]}>
+                      CANCEL
+                    </Text>
+                  </View>
+                </TouchableOpacity>
+                <View
+                  style={{
+                    borderRightWidth: 1.5,
+                    borderRightColor: colors.white,
+                  }}
+                />
+                <TouchableOpacity
+                  onPress={() => this.classActivity(this.state.class)}
+                  style={{
+                    backgroundColor: colors.red,
+                    flex: 1,
+                    // borderBottomStartRadius: 10,
+                    borderBottomEndRadius: 10,
+                  }}>
+                  <View>
+                    <Text
+                      style={[
+                        TYPOGRAPHY.h4,
+                        {
+                          textAlign: 'center',
+                          fontSize: 16,
+                          color: colors.white,
+                          paddingVertical: 10,
+                        },
+                      ]}>
+                      OK
+                    </Text>
+                  </View>
+                </TouchableOpacity>
+              </View>
+            </Modal>
+            {/* --------------------class end -------------- */}
+
+            {/* ----------School Start------------ */}
+            <View style={{flex: 1, marginBottom: 35}}>
+              <Text style={[TYPOGRAPHY.h5]}>Select School</Text>
+              {/* <Picker
+                  selectedValue={this.state.selectedClass}
+                  style={{height: 50, width: width / 2 - 20}}
+                  onValueChange={(itemValue, itemIndex) => {
+                    this.setState({selectedClass: itemValue});
+                  }}>
+                  <Picker.Item label="1" value="1" />
+                  <Picker.Item label="2" value="2" />
+                </Picker> */}
+
+              <TouchableOpacity
+                onPress={() => {
+                  this.toggleModal();
+                }}>
+                {this.state.checked == null ? (
+                  <View
+                    style={[
+                      {
+                        flexDirection: 'row',
+                        justifyContent: 'space-between',
+                        borderWidth: 2,
+                        borderColor: colors.gray,
+                        borderRadius: 5,
+                        paddingHorizontal: 15,
+                        paddingVertical: 10,
+                      },
+                    ]}>
+                    <Text style={[TYPOGRAPHY.h5, {color: colors.darkGrey}]}>
+                      Select School
+                    </Text>
+                    <AntDesign name="caretdown" size={16} color="gray" />
+                  </View>
+                ) : (
+                  this.state.schoolList.map(
+                    item =>
+                      item.id === this.state.checked && (
+                        <View
+                          style={[
+                            {
+                              flexDirection: 'row',
+                              justifyContent: 'space-between',
+                              borderWidth: 2,
+                              borderColor: colors.gray,
+                              borderRadius: 5,
+                              paddingHorizontal: 15,
+                              paddingVertical: 10,
+                              alignItems: 'center',
+                            },
+                          ]}>
+                          <Text style={[TYPOGRAPHY.h5]}>{item.name}</Text>
+                          <AntDesign name="caretdown" size={16} color="black" />
+                        </View>
+                      ),
+                  )
+                )}
+              </TouchableOpacity>
+            </View>
+
+            <Modal isVisible={this.state.isModalVisible}>
+              <View
+                style={{
+                  flex: 0.2,
+                  backgroundColor: colors.white,
+                  padding: 20,
+                  borderTopStartRadius: 10,
+                  borderTopEndRadius: 10,
+                }}>
+                <View>
+                  <Text style={[TYPOGRAPHY.medium, {fontSize: 20}]}>
+                    Select A School
+                  </Text>
+                </View>
+
+                <View>
+                  {this.state.schoolList.map(item => (
+                    // <TouchableOpacity>
+                    // console.log(item.id),
+
+                    <RadioButton.Group
+                      color={colors.red}
+                      value={this.state.checked}
+                      onValueChange={newValue => {
+                        this.setState({checked: newValue});
+                      }}>
+                      <View
+                        style={{flexDirection: 'row', alignItems: 'center'}}>
+                        <RadioButton value={item.id} />
+                        <Text
+                          style={[
+                            TYPOGRAPHY.primary,
+                            {fontSize: 18, paddingRight: 15},
+                          ]}>
+                          {item.name}
+                        </Text>
+                      </View>
+                    </RadioButton.Group>
+                  ))}
                 </View>
               </View>
-            </View>
+              <View
+                style={{
+                  backgroundColor: colors.red,
+                  flexDirection: 'row',
+                  justifyContent: 'space-evenly',
+                  borderBottomStartRadius: 10,
+                  borderBottomEndRadius: 10,
+                }}>
+                <TouchableOpacity
+                  onPress={() => this.toggleModal()}
+                  style={{
+                    backgroundColor: colors.red,
+                    flex: 1,
+                    borderBottomStartRadius: 10,
+                    // borderBottomEndRadius: 10,
+                  }}>
+                  <View>
+                    <Text
+                      style={[
+                        TYPOGRAPHY.h4,
+                        {
+                          textAlign: 'center',
+                          fontSize: 16,
+                          color: colors.white,
+                          paddingVertical: 10,
+                        },
+                      ]}>
+                      CANCEL
+                    </Text>
+                  </View>
+                </TouchableOpacity>
+                <View
+                  style={{
+                    borderRightWidth: 1.5,
+                    borderRightColor: colors.white,
+                  }}
+                />
+                <TouchableOpacity
+                  onPress={() => this.toggleModal()}
+                  style={{
+                    backgroundColor: colors.red,
+                    flex: 1,
+                    // borderBottomStartRadius: 10,
+                    borderBottomEndRadius: 10,
+                  }}>
+                  <View>
+                    <Text
+                      style={[
+                        TYPOGRAPHY.h4,
+                        {
+                          textAlign: 'center',
+                          fontSize: 16,
+                          color: colors.white,
+                          paddingVertical: 10,
+                        },
+                      ]}>
+                      OK
+                    </Text>
+                  </View>
+                </TouchableOpacity>
+              </View>
+            </Modal>
+            {/* ----------School End------------ */}
 
             <Text style={[TYPOGRAPHY.h5]}>Teacher</Text>
             <View
@@ -418,7 +924,7 @@ export default class AddStudent extends Component {
                   this.setState({teacher: value});
                 }}
                 placeholder="Teacher"
-                placeholderTextColor={'grey'}
+                placeholderTextColor={colors.darkGrey}
                 style={[INPUT.input, TYPOGRAPHY.h5]}
               />
             </View>
@@ -431,7 +937,7 @@ export default class AddStudent extends Component {
                   this.setState({daily_spending_limit: value});
                 }}
                 placeholder="Daily Spending Limit"
-                placeholderTextColor={'grey'}
+                placeholderTextColor={colors.darkGrey}
                 style={[INPUT.input, TYPOGRAPHY.h5]}
               />
             </View>
@@ -444,7 +950,7 @@ export default class AddStudent extends Component {
                   this.setState({homeroom: value});
                 }}
                 placeholder="Home Room"
-                placeholderTextColor={'grey'}
+                placeholderTextColor={colors.darkGrey}
                 style={[INPUT.input, TYPOGRAPHY.h5]}
               />
             </View>
@@ -457,7 +963,7 @@ export default class AddStudent extends Component {
                   this.setState({dad_cell: value});
                 }}
                 placeholder="Dad Cell"
-                placeholderTextColor={'grey'}
+                placeholderTextColor={colors.darkGrey}
                 style={[INPUT.input, TYPOGRAPHY.h5]}
               />
             </View>
@@ -470,7 +976,7 @@ export default class AddStudent extends Component {
                   this.setState({dad_work_phone: value});
                 }}
                 placeholder="Dad Work Phone"
-                placeholderTextColor={'grey'}
+                placeholderTextColor={colors.darkGrey}
                 style={[INPUT.input, TYPOGRAPHY.h5]}
               />
             </View>
@@ -483,7 +989,7 @@ export default class AddStudent extends Component {
                   this.setState({dad_email: value});
                 }}
                 placeholder="Dad Email"
-                placeholderTextColor={'grey'}
+                placeholderTextColor={colors.darkGrey}
                 style={[INPUT.input, TYPOGRAPHY.h5]}
               />
             </View>
@@ -496,7 +1002,7 @@ export default class AddStudent extends Component {
                   this.setState({dad_work_email: value});
                 }}
                 placeholder="Dad Work Email"
-                placeholderTextColor={'grey'}
+                placeholderTextColor={colors.darkGrey}
                 style={[INPUT.input, TYPOGRAPHY.h5]}
               />
             </View>
@@ -509,7 +1015,7 @@ export default class AddStudent extends Component {
                   this.setState({mom_cell: value});
                 }}
                 placeholder="Mom Cell"
-                placeholderTextColor={'grey'}
+                placeholderTextColor={colors.darkGrey}
                 style={[INPUT.input, TYPOGRAPHY.h5]}
               />
             </View>
@@ -522,7 +1028,7 @@ export default class AddStudent extends Component {
                   this.setState({mom_work_phone: value});
                 }}
                 placeholder="Mom Work Phone"
-                placeholderTextColor={'grey'}
+                placeholderTextColor={colors.darkGrey}
                 style={[INPUT.input, TYPOGRAPHY.h5]}
               />
             </View>
@@ -535,7 +1041,7 @@ export default class AddStudent extends Component {
                   this.setState({mom_email: value});
                 }}
                 placeholder="Mom Email"
-                placeholderTextColor={'grey'}
+                placeholderTextColor={colors.darkGrey}
                 style={[INPUT.input, TYPOGRAPHY.h5]}
               />
             </View>
@@ -550,7 +1056,7 @@ export default class AddStudent extends Component {
                 }}
                 // onChangeText={text => setEmail(text)}
                 placeholder="Mom Work Email"
-                placeholderTextColor={'grey'}
+                placeholderTextColor={colors.darkGrey}
                 style={[INPUT.input, TYPOGRAPHY.h5]}
               />
             </View>
@@ -565,65 +1071,339 @@ export default class AddStudent extends Component {
                 }}
                 // onChangeText={text => setEmail(text)}
                 placeholder="Notes"
-                placeholderTextColor={'grey'}
+                placeholderTextColor={colors.darkGrey}
                 style={[INPUT.input, TYPOGRAPHY.h5]}
               />
             </View>
-            <View style={{flexDirection: 'row'}}>
-              <View style={{flex: 1}}>
-                <Text style={[TYPOGRAPHY.h5]}>Health Condition</Text>
-                <Picker
-                  selectedValue={this.state.health_conditions}
-                  style={{height: 50, width: width / 2 - 20}}
-                  onValueChange={(itemValue, itemIndex) => {
-                    this.setState({health_conditions: itemValue});
-                  }}>
-                  <Picker.Item label="Good" value="good" />
-                  <Picker.Item label="Bad" value="bad" />
-                </Picker>
-              </View>
-              <View>
-                <View style={{flex: 1}}>
-                  <Text style={[TYPOGRAPHY.h5]}>Status</Text>
-                  <Picker
-                    selectedValue={this.state.active}
-                    style={{height: 50, width: width / 2 - 20}}
-                    onValueChange={(itemValue, itemIndex) => {
-                      this.setState({active: itemValue});
-                    }}>
-                    <Picker.Item label="Active" value="active" />
-                    <Picker.Item label="Deactivate" value="deactivate" />
-                  </Picker>
-                </View>
-              </View>
+
+            {/* -----------Health Condition---------- */}
+
+            <View style={{flex: 1, marginBottom: 35}}>
+              <Text style={[TYPOGRAPHY.h5]}>Health Condition</Text>
+
+              <TouchableOpacity
+                onPress={() => {
+                  this.toggleHealth();
+                }}>
+                {this.state.health_conditions == null ? (
+                  <View
+                    style={[
+                      {
+                        flexDirection: 'row',
+                        justifyContent: 'space-between',
+                        borderWidth: 2,
+                        borderColor: colors.gray,
+                        borderRadius: 5,
+                        paddingHorizontal: 15,
+                        paddingVertical: 10,
+                      },
+                    ]}>
+                    <Text style={[TYPOGRAPHY.h5, {color: colors.darkGrey}]}>
+                      Select Health Condition
+                    </Text>
+                    <AntDesign name="caretdown" size={15} color="gray" />
+                  </View>
+                ) : (
+                  <View
+                    style={[
+                      {
+                        flexDirection: 'row',
+                        justifyContent: 'space-between',
+                        borderWidth: 2,
+                        borderColor: colors.gray,
+                        borderRadius: 5,
+                        paddingHorizontal: 15,
+                        paddingVertical: 10,
+                      },
+                    ]}>
+                    <Text style={[TYPOGRAPHY.h5]}>
+                      {this.state.health_conditions.toUpperCase()}
+                    </Text>
+                    <AntDesign name="caretdown" size={16} color="black" />
+                  </View>
+                )}
+              </TouchableOpacity>
             </View>
-            {this.state.type == 'Add' ? (
+
+            <Modal isVisible={this.state.isHealthVisible}>
+              <View
+                style={{
+                  flex: 0.2,
+                  backgroundColor: colors.white,
+                  padding: 20,
+                  borderTopStartRadius: 10,
+                  borderTopEndRadius: 10,
+                }}>
+                <View>
+                  <Text style={[TYPOGRAPHY.medium, {fontSize: 20}]}>
+                    Select Condition
+                  </Text>
+                </View>
+
+                <ScrollView>
+                  <RadioButton.Group
+                    value={this.state.health_conditions}
+                    onValueChange={newValue => {
+                      this.setState({health_conditions: newValue});
+                    }}>
+                    <View style={{flexDirection: 'row', alignItems: 'center'}}>
+                      <RadioButton color={colors.red} value={'good'} />
+                      <Text
+                        style={[
+                          TYPOGRAPHY.primary,
+                          {fontSize: 18, paddingRight: 15},
+                        ]}>
+                        Good
+                      </Text>
+                    </View>
+                    <View style={{flexDirection: 'row', alignItems: 'center'}}>
+                      <RadioButton color={colors.red} value={'bad'} />
+                      <Text
+                        style={[
+                          TYPOGRAPHY.primary,
+                          {fontSize: 18, paddingRight: 15},
+                        ]}>
+                        Bad
+                      </Text>
+                    </View>
+                  </RadioButton.Group>
+                </ScrollView>
+              </View>
+              <View
+                style={{
+                  backgroundColor: colors.red,
+                  flexDirection: 'row',
+                  justifyContent: 'space-evenly',
+                  borderBottomStartRadius: 10,
+                  borderBottomEndRadius: 10,
+                }}>
+                <TouchableOpacity
+                  onPress={() => this.toggleHealth()}
+                  style={{
+                    backgroundColor: colors.red,
+                    flex: 1,
+                    borderBottomStartRadius: 10,
+                    // borderBottomEndRadius: 10,
+                  }}>
+                  <View>
+                    <Text
+                      style={[
+                        TYPOGRAPHY.h4,
+                        {
+                          textAlign: 'center',
+                          fontSize: 16,
+                          color: colors.white,
+                          paddingVertical: 10,
+                        },
+                      ]}>
+                      CANCEL
+                    </Text>
+                  </View>
+                </TouchableOpacity>
+                <View
+                  style={{
+                    borderRightWidth: 1.5,
+                    borderRightColor: colors.white,
+                  }}
+                />
+                <TouchableOpacity
+                  onPress={() =>
+                    this.healthActivity(this.state.health_conditions)
+                  }
+                  style={{
+                    backgroundColor: colors.red,
+                    flex: 1,
+                    // borderBottomStartRadius: 10,
+                    borderBottomEndRadius: 10,
+                  }}>
+                  <View>
+                    <Text
+                      style={[
+                        TYPOGRAPHY.h4,
+                        {
+                          textAlign: 'center',
+                          fontSize: 16,
+                          color: colors.white,
+                          paddingVertical: 10,
+                        },
+                      ]}>
+                      OK
+                    </Text>
+                  </View>
+                </TouchableOpacity>
+              </View>
+            </Modal>
+            {/* --------------------Health end -------------- */}
+
+            {/* -----------Active Status---------- */}
+
+            <View style={{flex: 1, marginBottom: 35}}>
+              <Text style={[TYPOGRAPHY.h5]}>Status</Text>
+
               <TouchableOpacity
                 onPress={() => {
-                  this.addChild();
-                }}
-                disabled={this.state.disabled}
-                style={BUTTONS.btnPrimary}>
-                {this.state.indicator === true ? (
-                  <ActivityIndicator color={colors.white} />
+                  this.toggleStatus();
+                }}>
+                {this.state.active == null ? (
+                  <View
+                    style={[
+                      {
+                        flexDirection: 'row',
+                        justifyContent: 'space-between',
+                        borderWidth: 2,
+                        borderColor: colors.gray,
+                        borderRadius: 5,
+                        paddingHorizontal: 15,
+                        paddingVertical: 10,
+                      },
+                    ]}>
+                    <Text style={[TYPOGRAPHY.h5, {color: colors.darkGrey}]}>
+                      Select Status
+                    </Text>
+                    <AntDesign name="caretdown" size={15} color="gray" />
+                  </View>
                 ) : (
-                  <Text style={BUTTONS.btnFont}>Confirm Student</Text>
+                  <View
+                    style={[
+                      {
+                        flexDirection: 'row',
+                        justifyContent: 'space-between',
+                        borderWidth: 2,
+                        borderColor: colors.gray,
+                        borderRadius: 5,
+                        paddingHorizontal: 15,
+                        paddingVertical: 10,
+                      },
+                    ]}>
+                    <Text style={[TYPOGRAPHY.h5]}>
+                      {this.state.active.toUpperCase()}
+                    </Text>
+                    <AntDesign name="caretdown" size={16} color="black" />
+                  </View>
                 )}
               </TouchableOpacity>
-            ) : (
-              <TouchableOpacity
-                onPress={() => {
-                  this.updateStudent();
-                }}
-                disabled={this.state.disabled}
-                style={BUTTONS.btnPrimary}>
-                {this.state.indicator === true ? (
-                  <ActivityIndicator color={colors.white} />
-                ) : (
-                  <Text style={BUTTONS.btnFont}>Update Student</Text>
-                )}
-              </TouchableOpacity>
-            )}
+            </View>
+
+            <Modal isVisible={this.state.isStatusVisible}>
+              <View
+                style={{
+                  flex: 0.2,
+                  backgroundColor: colors.white,
+                  padding: 20,
+                  borderTopStartRadius: 10,
+                  borderTopEndRadius: 10,
+                }}>
+                <View>
+                  <Text style={[TYPOGRAPHY.medium, {fontSize: 20}]}>
+                    Select Status
+                  </Text>
+                </View>
+
+                <ScrollView>
+                  <RadioButton.Group
+                    value={this.state.active}
+                    onValueChange={newValue => {
+                      this.setState({active: newValue});
+                    }}>
+                    <View style={{flexDirection: 'row', alignItems: 'center'}}>
+                      <RadioButton color={colors.red} value={'active'} />
+                      <Text
+                        style={[
+                          TYPOGRAPHY.primary,
+                          {fontSize: 18, paddingRight: 15},
+                        ]}>
+                        Active
+                      </Text>
+                    </View>
+                    <View style={{flexDirection: 'row', alignItems: 'center'}}>
+                      <RadioButton color={colors.red} value={'deactivate'} />
+                      <Text
+                        style={[
+                          TYPOGRAPHY.primary,
+                          {fontSize: 18, paddingRight: 15},
+                        ]}>
+                        Deactivate
+                      </Text>
+                    </View>
+                  </RadioButton.Group>
+                </ScrollView>
+              </View>
+              <View
+                style={{
+                  backgroundColor: colors.red,
+                  flexDirection: 'row',
+                  justifyContent: 'space-evenly',
+                  borderBottomStartRadius: 10,
+                  borderBottomEndRadius: 10,
+                }}>
+                <TouchableOpacity
+                  onPress={() => this.toggleStatus()}
+                  style={{
+                    backgroundColor: colors.red,
+                    flex: 1,
+                    borderBottomStartRadius: 10,
+                    // borderBottomEndRadius: 10,
+                  }}>
+                  <View>
+                    <Text
+                      style={[
+                        TYPOGRAPHY.h4,
+                        {
+                          textAlign: 'center',
+                          fontSize: 16,
+                          color: colors.white,
+                          paddingVertical: 10,
+                        },
+                      ]}>
+                      CANCEL
+                    </Text>
+                  </View>
+                </TouchableOpacity>
+                <View
+                  style={{
+                    borderRightWidth: 1.5,
+                    borderRightColor: colors.white,
+                  }}
+                />
+                <TouchableOpacity
+                  onPress={() => this.statusActivity(this.state.active)}
+                  style={{
+                    backgroundColor: colors.red,
+                    flex: 1,
+                    // borderBottomStartRadius: 10,
+                    borderBottomEndRadius: 10,
+                  }}>
+                  <View>
+                    <Text
+                      style={[
+                        TYPOGRAPHY.h4,
+                        {
+                          textAlign: 'center',
+                          fontSize: 16,
+                          color: colors.white,
+                          paddingVertical: 10,
+                        },
+                      ]}>
+                      OK
+                    </Text>
+                  </View>
+                </TouchableOpacity>
+              </View>
+            </Modal>
+            {/* --------------------Status end -------------- */}
+
+            <TouchableOpacity
+              onPress={() => {
+                this.addChild();
+              }}
+              disabled={this.state.disabled}
+              style={BUTTONS.btnPrimary}>
+              {this.state.indicator === true ? (
+                <ActivityIndicator color={colors.white} />
+              ) : (
+                <Text style={BUTTONS.btnFont}>Add Student</Text>
+              )}
+            </TouchableOpacity>
           </View>
         </ScrollView>
       </SafeAreaView>

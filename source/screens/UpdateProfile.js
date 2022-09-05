@@ -20,8 +20,11 @@ import BUTTONS from '../theme/Buttons';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import axios from 'axios';
 import {launchCamera, launchImageLibrary} from 'react-native-image-picker';
-import {ActivityIndicator} from 'react-native-paper';
+
 import Statusbar from '../components/Statusbar';
+import AntDesign from 'react-native-vector-icons/AntDesign';
+import Modal from 'react-native-modal';
+import {ActivityIndicator, RadioButton} from 'react-native-paper';
 export default class UpdateProfile extends Component {
   constructor(props) {
     super(props);
@@ -32,9 +35,9 @@ export default class UpdateProfile extends Component {
       email: '',
       display_name: '',
       userData: {},
-      notify_low_balance: 0,
-      notify_promotions: 0,
-      notify_orders: 0,
+      notify_low_balance: null,
+      notify_promotions: null,
+      notify_orders: null,
       low_balance_point: '',
       notes: '',
       is_locked: '1',
@@ -44,6 +47,9 @@ export default class UpdateProfile extends Component {
       fetch_email: '',
       disabled: false,
       indicator: false,
+      isBalanceVisible: false,
+      isPromotionVisible: false,
+      isOrderVisible: false,
     };
     console.log('bala', this.state.notify_low_balance);
     console.log('promo', this.state.notify_promotions);
@@ -52,12 +58,36 @@ export default class UpdateProfile extends Component {
   componentDidMount() {
     this.getProfile();
   }
+  toggleLowbalance = () => {
+    this.setState({isBalanceVisible: !this.state.isBalanceVisible});
+  };
+  lowBalanceActivity = value => {
+    this.setState({isBalanceVisible: !this.state.isBalanceVisible});
+    this.setState({notify_low_balance: value});
+  };
+  togglePromotion = () => {
+    this.setState({isPromotionVisible: !this.state.isPromotionVisible});
+  };
+  promotionActivity = value => {
+    this.setState({isPromotionVisible: !this.state.isPromotionVisible});
+    this.setState({notify_promotions: value});
+  };
+  toggleOrder = () => {
+    this.setState({isOrderVisible: !this.state.isOrderVisible});
+  };
+  orderActivity = value => {
+    this.setState({isOrderVisible: !this.state.isOrderVisible});
+    this.setState({notify_orders: value});
+  };
   getProfile = async () => {
     const user = await AsyncStorage.getItem('userInfo');
     const parse = JSON.parse(user);
 
     const token = parse.token;
     console.log('token', user);
+    // this.setState({notify_low_balance: null});
+    // this.setState({notify_orders: null});
+    // this.setState({notify_promotions: null});
 
     axios
       .get('https://laqil.com/public/api/profile', {
@@ -251,12 +281,16 @@ export default class UpdateProfile extends Component {
                   <View style={INPUT.inputContainer}>
                     <TextInput
                       // onChangeText={text => setName(text)}
-                      defaultValue={this.state.userData.balance}
+                      defaultValue={
+                        (this.state.userData.balance &&
+                          this.state.userData.balance) ||
+                        '$0'
+                      }
                       placeholderTextColor={'gray'}
                       editable={false}
                       style={[
                         INPUT.input,
-                        {color: colors.gray, backgroundColor: colors.gray},
+                        {color: colors.black, backgroundColor: colors.gray},
                       ]}
                     />
                   </View>
@@ -294,7 +328,7 @@ export default class UpdateProfile extends Component {
                 />
               </View>
 
-              <View style={{flexDirection: 'row'}}>
+              {/* <View style={{flexDirection: 'row'}}>
                 <View style={{flex: 1, margin: 3}}>
                   <Text style={[TYPOGRAPHY.medium, styles.inputTitle]}>
                     Notify Low Balance
@@ -312,29 +346,508 @@ export default class UpdateProfile extends Component {
                     <Picker.Item label="YES" value={1} />
                   </Picker>
                 </View>
-                <View style={{flex: 1, margin: 3}}>
-                  <Text style={[TYPOGRAPHY.medium, styles.inputTitle]}>
-                    Low Balance Point
-                  </Text>
-                  <View style={INPUT.inputContainer}>
-                    <TextInput
-                      onChangeText={value => {
-                        this.setState({low_balance_point: value});
-                      }}
-                      // onChangeText={text => setName(text)}
-                      // defaultValue="3820"
-                      // defaultValue={this.state.userData.low_balance_point}
-                      defaultValue={this.state.low_balance_point}
-                      placeholderTextColor={'grey'}
-                      // editable={false}
-                      style={[INPUT.input, {color: colors.black}]}
-                      keyboardType="numeric"
-                    />
-                  </View>
-                </View>
+              </View> */}
+              {/* -----------Low Balance---------- */}
+
+              <View style={{flex: 1, marginTop: 20}}>
+                <Text style={[TYPOGRAPHY.h5]}>Notify Low Balance</Text>
+
+                <TouchableOpacity
+                  onPress={() => {
+                    this.toggleLowbalance();
+                  }}>
+                  {this.state.notify_low_balance == null ? (
+                    <View
+                      style={[
+                        {
+                          flexDirection: 'row',
+                          justifyContent: 'space-between',
+                          borderWidth: 2,
+                          borderColor: colors.gray,
+                          borderRadius: 5,
+                          paddingHorizontal: 15,
+                          paddingVertical: 10,
+                        },
+                      ]}>
+                      <Text style={[TYPOGRAPHY.h5, {color: colors.darkGrey}]}>
+                        Select
+                      </Text>
+                      <AntDesign name="caretdown" size={15} color="gray" />
+                    </View>
+                  ) : (
+                    <View
+                      style={[
+                        {
+                          flexDirection: 'row',
+                          justifyContent: 'space-between',
+                          borderWidth: 2,
+                          borderColor: colors.gray,
+                          borderRadius: 5,
+                          paddingHorizontal: 15,
+                          paddingVertical: 10,
+                        },
+                      ]}>
+                      <Text style={[TYPOGRAPHY.h5]}>
+                        {this.state.notify_low_balance}
+                      </Text>
+                      <AntDesign name="caretdown" size={16} color="black" />
+                    </View>
+                  )}
+                </TouchableOpacity>
               </View>
 
-              <View style={{flexDirection: 'row'}}>
+              <Modal isVisible={this.state.isBalanceVisible}>
+                <View
+                  style={{
+                    flex: 0.2,
+                    backgroundColor: colors.white,
+                    padding: 20,
+                    borderTopStartRadius: 10,
+                    borderTopEndRadius: 10,
+                  }}>
+                  <View>
+                    <Text style={[TYPOGRAPHY.medium, {fontSize: 20}]}>
+                      Select
+                    </Text>
+                  </View>
+
+                  <ScrollView>
+                    <RadioButton.Group
+                      value={this.state.notify_low_balance}
+                      onValueChange={newValue => {
+                        this.setState({notify_low_balance: newValue});
+                      }}>
+                      <View
+                        style={{flexDirection: 'row', alignItems: 'center'}}>
+                        <RadioButton color={colors.red} value={'0'} />
+                        <Text
+                          style={[
+                            TYPOGRAPHY.primary,
+                            {fontSize: 18, paddingRight: 15},
+                          ]}>
+                          No
+                        </Text>
+                      </View>
+                      <View
+                        style={{flexDirection: 'row', alignItems: 'center'}}>
+                        <RadioButton color={colors.red} value={'1'} />
+                        <Text
+                          style={[
+                            TYPOGRAPHY.primary,
+                            {fontSize: 18, paddingRight: 15},
+                          ]}>
+                          Yes
+                        </Text>
+                      </View>
+                    </RadioButton.Group>
+                  </ScrollView>
+                </View>
+                <View
+                  style={{
+                    backgroundColor: colors.red,
+                    flexDirection: 'row',
+                    justifyContent: 'space-evenly',
+                    borderBottomStartRadius: 10,
+                    borderBottomEndRadius: 10,
+                  }}>
+                  <TouchableOpacity
+                    onPress={() => this.toggleLowbalance()}
+                    style={{
+                      backgroundColor: colors.red,
+                      flex: 1,
+                      borderBottomStartRadius: 10,
+                      // borderBottomEndRadius: 10,
+                    }}>
+                    <View>
+                      <Text
+                        style={[
+                          TYPOGRAPHY.h4,
+                          {
+                            textAlign: 'center',
+                            fontSize: 16,
+                            color: colors.white,
+                            paddingVertical: 10,
+                          },
+                        ]}>
+                        CANCEL
+                      </Text>
+                    </View>
+                  </TouchableOpacity>
+                  <View
+                    style={{
+                      borderRightWidth: 1.5,
+                      borderRightColor: colors.white,
+                    }}
+                  />
+                  <TouchableOpacity
+                    onPress={() =>
+                      this.toggleLowbalance(this.state.notify_low_balance)
+                    }
+                    style={{
+                      backgroundColor: colors.red,
+                      flex: 1,
+                      // borderBottomStartRadius: 10,
+                      borderBottomEndRadius: 10,
+                    }}>
+                    <View>
+                      <Text
+                        style={[
+                          TYPOGRAPHY.h4,
+                          {
+                            textAlign: 'center',
+                            fontSize: 16,
+                            color: colors.white,
+                            paddingVertical: 10,
+                          },
+                        ]}>
+                        OK
+                      </Text>
+                    </View>
+                  </TouchableOpacity>
+                </View>
+              </Modal>
+              {/* --------------------Status end -------------- */}
+              <View style={{flex: 1}}>
+                <Text style={[TYPOGRAPHY.medium, styles.inputTitle]}>
+                  Low Balance Point
+                </Text>
+                <View style={INPUT.inputContainer}>
+                  <TextInput
+                    onChangeText={value => {
+                      this.setState({low_balance_point: value});
+                    }}
+                    // onChangeText={text => setName(text)}
+                    // defaultValue="3820"
+                    // defaultValue={this.state.userData.low_balance_point}
+                    defaultValue={
+                      (this.state.low_balance_point &&
+                        this.state.low_balance_point) ||
+                      '0'
+                    }
+                    placeholderTextColor={'grey'}
+                    // editable={false}
+                    style={[INPUT.input, {color: colors.black}]}
+                    keyboardType="numeric"
+                  />
+                </View>
+              </View>
+              {/* -----------Active Status---------- */}
+
+              <View style={{flex: 1, marginTop: 20}}>
+                <Text style={[TYPOGRAPHY.h5]}>Notify Promotions</Text>
+
+                <TouchableOpacity
+                  onPress={() => {
+                    this.togglePromotion();
+                  }}>
+                  {this.state.notify_promotions == null ? (
+                    <View
+                      style={[
+                        {
+                          flexDirection: 'row',
+                          justifyContent: 'space-between',
+                          borderWidth: 2,
+                          borderColor: colors.gray,
+                          borderRadius: 5,
+                          paddingHorizontal: 15,
+                          paddingVertical: 10,
+                        },
+                      ]}>
+                      <Text style={[TYPOGRAPHY.h5, {color: colors.darkGrey}]}>
+                        Select
+                      </Text>
+                      <AntDesign name="caretdown" size={15} color="gray" />
+                    </View>
+                  ) : (
+                    <View
+                      style={[
+                        {
+                          flexDirection: 'row',
+                          justifyContent: 'space-between',
+                          borderWidth: 2,
+                          borderColor: colors.gray,
+                          borderRadius: 5,
+                          paddingHorizontal: 15,
+                          paddingVertical: 10,
+                        },
+                      ]}>
+                      <Text style={[TYPOGRAPHY.h5]}>
+                        {this.state.notify_promotions}
+                      </Text>
+                      <AntDesign name="caretdown" size={16} color="black" />
+                    </View>
+                  )}
+                </TouchableOpacity>
+              </View>
+
+              <Modal isVisible={this.state.isPromotionVisible}>
+                <View
+                  style={{
+                    flex: 0.2,
+                    backgroundColor: colors.white,
+                    padding: 20,
+                    borderTopStartRadius: 10,
+                    borderTopEndRadius: 10,
+                  }}>
+                  <View>
+                    <Text style={[TYPOGRAPHY.medium, {fontSize: 20}]}>
+                      Select
+                    </Text>
+                  </View>
+
+                  <ScrollView>
+                    <RadioButton.Group
+                      value={this.state.notify_promotions}
+                      onValueChange={newValue => {
+                        this.setState({notify_promotions: newValue});
+                      }}>
+                      <View
+                        style={{flexDirection: 'row', alignItems: 'center'}}>
+                        <RadioButton color={colors.red} value={0} />
+                        <Text
+                          style={[
+                            TYPOGRAPHY.primary,
+                            {fontSize: 18, paddingRight: 15},
+                          ]}>
+                          No
+                        </Text>
+                      </View>
+                      <View
+                        style={{flexDirection: 'row', alignItems: 'center'}}>
+                        <RadioButton color={colors.red} value={1} />
+                        <Text
+                          style={[
+                            TYPOGRAPHY.primary,
+                            {fontSize: 18, paddingRight: 15},
+                          ]}>
+                          Yes
+                        </Text>
+                      </View>
+                    </RadioButton.Group>
+                  </ScrollView>
+                </View>
+                <View
+                  style={{
+                    backgroundColor: colors.red,
+                    flexDirection: 'row',
+                    justifyContent: 'space-evenly',
+                    borderBottomStartRadius: 10,
+                    borderBottomEndRadius: 10,
+                  }}>
+                  <TouchableOpacity
+                    onPress={() => this.togglePromotion()}
+                    style={{
+                      backgroundColor: colors.red,
+                      flex: 1,
+                      borderBottomStartRadius: 10,
+                      // borderBottomEndRadius: 10,
+                    }}>
+                    <View>
+                      <Text
+                        style={[
+                          TYPOGRAPHY.h4,
+                          {
+                            textAlign: 'center',
+                            fontSize: 16,
+                            color: colors.white,
+                            paddingVertical: 10,
+                          },
+                        ]}>
+                        CANCEL
+                      </Text>
+                    </View>
+                  </TouchableOpacity>
+                  <View
+                    style={{
+                      borderRightWidth: 1.5,
+                      borderRightColor: colors.white,
+                    }}
+                  />
+                  <TouchableOpacity
+                    onPress={() => this.promotionActivity()}
+                    style={{
+                      backgroundColor: colors.red,
+                      flex: 1,
+                      // borderBottomStartRadius: 10,
+                      borderBottomEndRadius: 10,
+                    }}>
+                    <View>
+                      <Text
+                        style={[
+                          TYPOGRAPHY.h4,
+                          {
+                            textAlign: 'center',
+                            fontSize: 16,
+                            color: colors.white,
+                            paddingVertical: 10,
+                          },
+                        ]}>
+                        OK
+                      </Text>
+                    </View>
+                  </TouchableOpacity>
+                </View>
+              </Modal>
+              {/* --------------------Status end -------------- */}
+              {/* -----------Active Status---------- */}
+
+              <View style={{flex: 1, marginTop: 20}}>
+                <Text style={[TYPOGRAPHY.h5]}>Notify Order</Text>
+
+                <TouchableOpacity
+                  onPress={() => {
+                    this.toggleOrder();
+                  }}>
+                  {this.state.notify_orders == null ? (
+                    <View
+                      style={[
+                        {
+                          flexDirection: 'row',
+                          justifyContent: 'space-between',
+                          borderWidth: 2,
+                          borderColor: colors.gray,
+                          borderRadius: 5,
+                          paddingHorizontal: 15,
+                          paddingVertical: 10,
+                        },
+                      ]}>
+                      <Text style={[TYPOGRAPHY.h5, {color: colors.darkGrey}]}>
+                        Select 
+                      </Text>
+                      <AntDesign name="caretdown" size={15} color="gray" />
+                    </View>
+                  ) : (
+                    <View
+                      style={[
+                        {
+                          flexDirection: 'row',
+                          justifyContent: 'space-between',
+                          borderWidth: 2,
+                          borderColor: colors.gray,
+                          borderRadius: 5,
+                          paddingHorizontal: 15,
+                          paddingVertical: 10,
+                        },
+                      ]}>
+                      <Text style={[TYPOGRAPHY.h5]}>
+                        {this.state.notify_orders}
+                      </Text>
+                      <AntDesign name="caretdown" size={16} color="black" />
+                    </View>
+                  )}
+                </TouchableOpacity>
+              </View>
+
+              <Modal isVisible={this.state.isOrderVisible}>
+                <View
+                  style={{
+                    flex: 0.2,
+                    backgroundColor: colors.white,
+                    padding: 20,
+                    borderTopStartRadius: 10,
+                    borderTopEndRadius: 10,
+                  }}>
+                  <View>
+                    <Text style={[TYPOGRAPHY.medium, {fontSize: 20}]}>
+                      Select
+                    </Text>
+                  </View>
+
+                  <ScrollView>
+                    <RadioButton.Group
+                      value={this.state.notify_orders}
+                      onValueChange={newValue => {
+                        this.setState({notify_orders: newValue});
+                      }}>
+                      <View
+                        style={{flexDirection: 'row', alignItems: 'center'}}>
+                        <RadioButton color={colors.red} value={0} />
+                        <Text
+                          style={[
+                            TYPOGRAPHY.primary,
+                            {fontSize: 18, paddingRight: 15},
+                          ]}>
+                          No
+                        </Text>
+                      </View>
+                      <View
+                        style={{flexDirection: 'row', alignItems: 'center'}}>
+                        <RadioButton color={colors.red} value={1} />
+                        <Text
+                          style={[
+                            TYPOGRAPHY.primary,
+                            {fontSize: 18, paddingRight: 15},
+                          ]}>
+                          Yes
+                        </Text>
+                      </View>
+                    </RadioButton.Group>
+                  </ScrollView>
+                </View>
+                <View
+                  style={{
+                    backgroundColor: colors.red,
+                    flexDirection: 'row',
+                    justifyContent: 'space-evenly',
+                    borderBottomStartRadius: 10,
+                    borderBottomEndRadius: 10,
+                  }}>
+                  <TouchableOpacity
+                    onPress={() => this.toggleOrder()}
+                    style={{
+                      backgroundColor: colors.red,
+                      flex: 1,
+                      borderBottomStartRadius: 10,
+                      // borderBottomEndRadius: 10,
+                    }}>
+                    <View>
+                      <Text
+                        style={[
+                          TYPOGRAPHY.h4,
+                          {
+                            textAlign: 'center',
+                            fontSize: 16,
+                            color: colors.white,
+                            paddingVertical: 10,
+                          },
+                        ]}>
+                        CANCEL
+                      </Text>
+                    </View>
+                  </TouchableOpacity>
+                  <View
+                    style={{
+                      borderRightWidth: 1.5,
+                      borderRightColor: colors.white,
+                    }}
+                  />
+                  <TouchableOpacity
+                    onPress={() => this.orderActivity(this.state.notify_orders)}
+                    style={{
+                      backgroundColor: colors.red,
+                      flex: 1,
+                      // borderBottomStartRadius: 10,
+                      borderBottomEndRadius: 10,
+                    }}>
+                    <View>
+                      <Text
+                        style={[
+                          TYPOGRAPHY.h4,
+                          {
+                            textAlign: 'center',
+                            fontSize: 16,
+                            color: colors.white,
+                            paddingVertical: 10,
+                          },
+                        ]}>
+                        OK
+                      </Text>
+                    </View>
+                  </TouchableOpacity>
+                </View>
+              </Modal>
+              {/* --------------------Status end -------------- */}
+              {/* <View style={{flexDirection: 'row'}}>
                 <View style={{flex: 1, margin: 3}}>
                   <Text style={[TYPOGRAPHY.medium, styles.inputTitle]}>
                     Notify Promotions
@@ -365,7 +878,7 @@ export default class UpdateProfile extends Component {
                     <Picker.Item label="YES" value={1} />
                   </Picker>
                 </View>
-              </View>
+              </View> */}
               <View style={{paddingBottom: 50}}>
                 <Text style={[TYPOGRAPHY.medium, styles.inputTitle]}>
                   Order Notes
