@@ -230,6 +230,9 @@ export default class UpdateStudent extends Component {
     }
   };
   componentDidMount() {
+    this.setState({gender: this.state.studentData.gender});
+    this.setState({class: this.state.studentData.class});
+    // this.setState({checked: this.state.studentData.school});
     fetch('https://laqil.com/public/api/school-list')
       .then(res => res.json())
       .then(res => {
@@ -279,6 +282,7 @@ export default class UpdateStudent extends Component {
       code,
       // class,
       teacher,
+      school,
       daily_spending_limit,
       homeroom,
       dad_cell,
@@ -385,6 +389,7 @@ export default class UpdateStudent extends Component {
                 placeholder="Student Email"
                 placeholderTextColor={'grey'}
                 style={[INPUT.input, TYPOGRAPHY.h5]}
+                autoCapitalize="none"
               />
             </View>
             {/* --------------Gender---------------- */}
@@ -555,6 +560,7 @@ export default class UpdateStudent extends Component {
                   placeholder="Password"
                   placeholderTextColor={'grey'}
                   style={[INPUT.input, TYPOGRAPHY.h5]}
+                  secureTextEntry
                 />
               </View>
               <Text style={{color: colors.bloodRed, fontFamily: Fonts.primary}}>
@@ -572,6 +578,7 @@ export default class UpdateStudent extends Component {
                   placeholder="Password Confirmation"
                   placeholderTextColor={'grey'}
                   style={[INPUT.input, TYPOGRAPHY.h5]}
+                  secureTextEntry
                 />
               </View>
               <Text style={{color: colors.bloodRed, fontFamily: Fonts.primary}}>
@@ -800,7 +807,7 @@ export default class UpdateStudent extends Component {
                       },
                     ]}>
                     <Text style={[TYPOGRAPHY.h5, {color: colors.darkGrey}]}>
-                      Select School
+                      Select School {school}
                     </Text>
                     <AntDesign name="caretdown" size={16} color="gray" />
                   </View>

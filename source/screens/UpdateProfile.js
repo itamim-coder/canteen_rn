@@ -102,7 +102,6 @@ export default class UpdateProfile extends Component {
           this.setState({low_balance_point: res.data.data.low_balance_point});
           this.setState({notify_orders: res.data.data.notify_orders});
           this.setState({notify_promotions: res.data.data.notify_promotions});
-          console.log(this.state.notify_low_balance);
         },
         err => {
           console.log(err);
@@ -319,6 +318,7 @@ export default class UpdateProfile extends Component {
                   // onChangeText={text => setPhone(text)}
                   placeholder="Enter Email Address"
                   defaultValue={this.state.userData.email}
+                  autoCapitalize="none"
                   editable={false}
                   placeholderTextColor={'grey'}
                   style={[
@@ -388,7 +388,15 @@ export default class UpdateProfile extends Component {
                         },
                       ]}>
                       <Text style={[TYPOGRAPHY.h5]}>
-                        {this.state.notify_low_balance}
+                        {this.state.notify_low_balance == 1 ? (
+                          <>
+                            <Text>Yes</Text>
+                          </>
+                        ) : (
+                          <>
+                            <Text>No</Text>
+                          </>
+                        )}
                       </Text>
                       <AntDesign name="caretdown" size={16} color="black" />
                     </View>
@@ -414,12 +422,12 @@ export default class UpdateProfile extends Component {
                   <ScrollView>
                     <RadioButton.Group
                       value={this.state.notify_low_balance}
-                      onValueChange={newValue => {
-                        this.setState({notify_low_balance: newValue});
+                      onValueChange={value => {
+                        this.setState({notify_low_balance: value});
                       }}>
                       <View
                         style={{flexDirection: 'row', alignItems: 'center'}}>
-                        <RadioButton color={colors.red} value={'0'} />
+                        <RadioButton color={colors.red} value={0} />
                         <Text
                           style={[
                             TYPOGRAPHY.primary,
@@ -430,7 +438,7 @@ export default class UpdateProfile extends Component {
                       </View>
                       <View
                         style={{flexDirection: 'row', alignItems: 'center'}}>
-                        <RadioButton color={colors.red} value={'1'} />
+                        <RadioButton color={colors.red} value={1} />
                         <Text
                           style={[
                             TYPOGRAPHY.primary,
@@ -481,7 +489,7 @@ export default class UpdateProfile extends Component {
                   />
                   <TouchableOpacity
                     onPress={() =>
-                      this.toggleLowbalance(this.state.notify_low_balance)
+                      this.lowBalanceActivity(this.state.notify_low_balance)
                     }
                     style={{
                       backgroundColor: colors.red,
@@ -519,14 +527,13 @@ export default class UpdateProfile extends Component {
                     // onChangeText={text => setName(text)}
                     // defaultValue="3820"
                     // defaultValue={this.state.userData.low_balance_point}
-                    defaultValue={
-                      (this.state.low_balance_point &&
-                        this.state.low_balance_point) ||
-                      '0'
-                    }
-                    placeholderTextColor={'grey'}
+                    defaultValue={this.state.low_balance_point}
+                    // placeholderTextColor={'black'}
                     // editable={false}
-                    style={[INPUT.input, {color: colors.black}]}
+                    style={[
+                      INPUT.input,
+                      {color: colors.black, backgroundColor: colors.white},
+                    ]}
                     keyboardType="numeric"
                   />
                 </View>
@@ -572,7 +579,15 @@ export default class UpdateProfile extends Component {
                         },
                       ]}>
                       <Text style={[TYPOGRAPHY.h5]}>
-                        {this.state.notify_promotions}
+                        {this.state.notify_promotions == 1 ? (
+                          <>
+                            <Text>Yes</Text>
+                          </>
+                        ) : (
+                          <>
+                            <Text>No</Text>
+                          </>
+                        )}
                       </Text>
                       <AntDesign name="caretdown" size={16} color="black" />
                     </View>
@@ -664,7 +679,9 @@ export default class UpdateProfile extends Component {
                     }}
                   />
                   <TouchableOpacity
-                    onPress={() => this.promotionActivity()}
+                    onPress={() =>
+                      this.promotionActivity(this.state.notify_promotions)
+                    }
                     style={{
                       backgroundColor: colors.red,
                       flex: 1,
@@ -689,7 +706,7 @@ export default class UpdateProfile extends Component {
                 </View>
               </Modal>
               {/* --------------------Status end -------------- */}
-              {/* -----------Active Status---------- */}
+              {/* -----------Notify Order---------- */}
 
               <View style={{flex: 1, marginTop: 20}}>
                 <Text style={[TYPOGRAPHY.h5]}>Notify Order</Text>
@@ -712,7 +729,7 @@ export default class UpdateProfile extends Component {
                         },
                       ]}>
                       <Text style={[TYPOGRAPHY.h5, {color: colors.darkGrey}]}>
-                        Select 
+                        Select
                       </Text>
                       <AntDesign name="caretdown" size={15} color="gray" />
                     </View>
@@ -730,7 +747,15 @@ export default class UpdateProfile extends Component {
                         },
                       ]}>
                       <Text style={[TYPOGRAPHY.h5]}>
-                        {this.state.notify_orders}
+                        {this.state.notify_orders == 1 ? (
+                          <>
+                            <Text>Yes</Text>
+                          </>
+                        ) : (
+                          <>
+                            <Text>No</Text>
+                          </>
+                        )}
                       </Text>
                       <AntDesign name="caretdown" size={16} color="black" />
                     </View>

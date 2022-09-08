@@ -198,9 +198,6 @@ export class Home extends Component {
               // margin: 5,
               // marginBottom: 15,
             }}>
-            <Text style={[TYPOGRAPHY.medium, {fontSize: 12}]}>
-              {description}
-            </Text>
             <View
               style={{
                 padding: 5,
@@ -213,8 +210,11 @@ export class Home extends Component {
                 source={{uri: `${item.picture}`}}
               />
             </View>
-            <Text style={[TYPOGRAPHY.h6, {color: colors.green}]}>
+            {/* <Text style={[TYPOGRAPHY.h6, {color: colors.green}]}>
               Customize
+            </Text> */}
+            <Text style={[TYPOGRAPHY.h6, {paddingBottom: 10}]}>
+              {description}
             </Text>
             <View
               style={{
@@ -385,7 +385,7 @@ export class Home extends Component {
                       }}>
                       <View
                         style={{flexDirection: 'row', alignItems: 'center'}}>
-                        <RadioButton value={item.id} />
+                        <RadioButton color={colors.red} value={item.id} />
                         <Text
                           style={[
                             TYPOGRAPHY.primary,

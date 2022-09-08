@@ -355,6 +355,7 @@ export default class AddStudent extends Component {
                   this.setState({email: value});
                 }}
                 placeholder="Student Email"
+                autoCapitalize="none"
                 placeholderTextColor={colors.darkGrey}
                 style={[INPUT.input, TYPOGRAPHY.h5]}
               />
@@ -541,6 +542,7 @@ export default class AddStudent extends Component {
                 placeholder="Password"
                 placeholderTextColor={colors.darkGrey}
                 style={[INPUT.input, TYPOGRAPHY.h5]}
+                secureTextEntry
               />
             </View>
 
@@ -555,6 +557,7 @@ export default class AddStudent extends Component {
                 placeholder="Password Confirmation"
                 placeholderTextColor={colors.darkGrey}
                 style={[INPUT.input, TYPOGRAPHY.h5]}
+                secureTextEntry
               />
             </View>
             {/* <View style={INPUT.inputContainer}>
@@ -752,15 +755,6 @@ export default class AddStudent extends Component {
             {/* ----------School Start------------ */}
             <View style={{flex: 1, marginBottom: 35}}>
               <Text style={[TYPOGRAPHY.h5]}>Select School</Text>
-              {/* <Picker
-                  selectedValue={this.state.selectedClass}
-                  style={{height: 50, width: width / 2 - 20}}
-                  onValueChange={(itemValue, itemIndex) => {
-                    this.setState({selectedClass: itemValue});
-                  }}>
-                  <Picker.Item label="1" value="1" />
-                  <Picker.Item label="2" value="2" />
-                </Picker> */}
 
               <TouchableOpacity
                 onPress={() => {

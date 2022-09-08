@@ -20,6 +20,9 @@ import {colors} from '../theme/colors';
 import {Picker} from '@react-native-picker/picker';
 import {connect} from 'react-redux';
 import {reset} from '../../redux/cartSlice';
+import {RadioButton} from 'react-native-paper';
+import Modal from 'react-native-modal';
+import AntDesign from 'react-native-vector-icons/AntDesign';
 
 export class TransactionForm extends Component {
   constructor(props) {
@@ -43,8 +46,14 @@ export class TransactionForm extends Component {
       cart_products: this.props.carts,
       schools_id: '',
       add_products: [],
+      isChildVisible: false,
+      selectChild: null,
     };
   }
+  toggleChild = () => {
+    this.setState({checked: this.state.selectChild});
+    this.setState({isChildVisible: !this.state.isChildVisible});
+  };
 
   studentlist = async () => {
     const user = await AsyncStorage.getItem('userInfo');
@@ -68,8 +77,9 @@ export class TransactionForm extends Component {
   clearCart = () => {
     this.props.reset();
   };
-  pickerActivity = async id => {
-    this.setState({selectedValue: id});
+  childActivity = async id => {
+    this.setState({selectChild: id});
+    this.setState({isChildVisible: !this.state.isChildVisible});
     // selectedValue={this.state.selectedValue}
   };
   products = this.props.carts;
@@ -101,7 +111,7 @@ export class TransactionForm extends Component {
       card_address: this.state.card_address,
       card_city: this.state.card_city,
       postal_code: this.state.postal_code,
-      student_id: this.state.selectedValue,
+      student_id: this.state.selectChild,
       order_type: this.state.order_type,
       payment_type: this.state.payment_type,
       products: this.state.add_products,
@@ -259,33 +269,164 @@ export class TransactionForm extends Component {
                 style={[INPUT.input, TYPOGRAPHY.h5]}
               />
             </View>
-            <Text style={[TYPOGRAPHY.h5]}>Select Child</Text>
-            <View
-              style={{
-                flexDirection: 'row',
-                alignItems: 'center',
-                // width: width / 2,
-              }}>
-              <Picker
-                selectedValue={this.state.selectedValue}
-                style={{height: 30, width: 200}}
-                // onValueChange={(modeValue, modeIndex) => this.setState({mode: modeValue})}>
-                // {this.state.dataSource.map((item, key)=>(
-                //         <Picker.Item label={item} value={item} key={key} />)
-                //         )}
-                onValueChange={(itemValue, itemIndex, id) => {
-                  this.pickerActivity(itemValue);
-                  // this.setState({selectedValue: itemValue});
+
+            {/* --------select child---------- */}
+            <View style={{flex: 1, marginBottom: 35}}>
+              <Text style={[TYPOGRAPHY.h5]}>Select Child</Text>
+
+              <TouchableOpacity
+                onPress={() => {
+                  this.toggleChild();
                 }}>
-                <Picker.Item label="Select a Child" value="0" />
-                {this.state.children.map(item => (
-                  // <TouchableOpacity>
-                  // console.log(item.id),
-                  <Picker.Item label={item.name} value={item.id} />
-                  // </TouchableOpacity>
-                ))}
-              </Picker>
+                {this.state.checked == null ? (
+                  <View
+                    style={[
+                      {
+                        flexDirection: 'row',
+                        justifyContent: 'space-between',
+                        borderWidth: 2,
+                        borderColor: colors.gray,
+                        borderRadius: 5,
+                        paddingHorizontal: 15,
+                        paddingVertical: 10,
+                      },
+                    ]}>
+                    <Text style={[TYPOGRAPHY.h5, {color: colors.darkGrey}]}>
+                      Select Child
+                    </Text>
+                    <AntDesign name="caretdown" size={16} color="gray" />
+                  </View>
+                ) : (
+                  this.state.children.map(
+                    item =>
+                      item.id === this.state.checked && (
+                        <View
+                          style={[
+                            {
+                              flexDirection: 'row',
+                              justifyContent: 'space-between',
+                              borderWidth: 2,
+                              borderColor: colors.gray,
+                              borderRadius: 5,
+                              paddingHorizontal: 15,
+                              paddingVertical: 10,
+                              alignItems: 'center',
+                            },
+                          ]}>
+                          <Text style={[TYPOGRAPHY.h5]}>{item.name}</Text>
+                          <AntDesign name="caretdown" size={16} color="black" />
+                        </View>
+                      ),
+                  )
+                )}
+              </TouchableOpacity>
             </View>
+
+            <Modal isVisible={this.state.isChildVisible}>
+              <View
+                style={{
+                  flex: 0.2,
+                  backgroundColor: colors.white,
+                  padding: 20,
+                  borderTopStartRadius: 10,
+                  borderTopEndRadius: 10,
+                }}>
+                <View>
+                  <Text style={[TYPOGRAPHY.medium, {fontSize: 20}]}>
+                    Select Child
+                  </Text>
+                </View>
+
+                <ScrollView showsVerticalScrollIndicator={false}>
+                  {this.state.children.map(item => (
+                    // <TouchableOpacity>
+                    // console.log(item.id),
+
+                    <RadioButton.Group
+                      value={this.state.checked}
+                      onValueChange={newValue => {
+                        this.setState({checked: newValue});
+                      }}>
+                      <View
+                        style={{flexDirection: 'row', alignItems: 'center'}}>
+                        <RadioButton color={colors.red} value={item.id} />
+                        <Text
+                          style={[
+                            TYPOGRAPHY.primary,
+                            {fontSize: 18, paddingRight: 15},
+                          ]}>
+                          {item.name}
+                        </Text>
+                      </View>
+                    </RadioButton.Group>
+                  ))}
+                </ScrollView>
+              </View>
+              <View
+                style={{
+                  backgroundColor: colors.red,
+                  flexDirection: 'row',
+                  justifyContent: 'space-evenly',
+                  borderBottomStartRadius: 10,
+                  borderBottomEndRadius: 10,
+                }}>
+                <TouchableOpacity
+                  onPress={() => this.toggleChild()}
+                  style={{
+                    backgroundColor: colors.red,
+                    flex: 1,
+                    borderBottomStartRadius: 10,
+                    // borderBottomEndRadius: 10,
+                  }}>
+                  <View>
+                    <Text
+                      style={[
+                        TYPOGRAPHY.h4,
+                        {
+                          textAlign: 'center',
+                          fontSize: 16,
+                          color: colors.white,
+                          paddingVertical: 10,
+                        },
+                      ]}>
+                      CANCEL
+                    </Text>
+                  </View>
+                </TouchableOpacity>
+                <View
+                  style={{
+                    borderRightWidth: 1.5,
+                    borderRightColor: colors.white,
+                  }}
+                />
+                <TouchableOpacity
+                  onPress={() => this.childActivity(this.state.checked)}
+                  style={{
+                    backgroundColor: colors.red,
+                    flex: 1,
+                    // borderBottomStartRadius: 10,
+                    borderBottomEndRadius: 10,
+                  }}>
+                  <View>
+                    <Text
+                      style={[
+                        TYPOGRAPHY.h4,
+                        {
+                          textAlign: 'center',
+                          fontSize: 16,
+                          color: colors.white,
+                          paddingVertical: 10,
+                        },
+                      ]}>
+                      OK
+                    </Text>
+                  </View>
+                </TouchableOpacity>
+              </View>
+            </Modal>
+
+            {/* --------end child---------- */}
+
             <Text style={[TYPOGRAPHY.h5]}>Notes</Text>
             <View
               style={[INPUT.inputContainer, {marginTop: 0, marginBottom: 35}]}>
